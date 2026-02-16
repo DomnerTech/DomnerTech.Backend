@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Items Solution/">
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="src/DomnerTech.Backend.Api/DomnerTech.Backend.Api.csproj" Id="1b0df121-bf16-4e94-a3b1-bbf09ee13ee7" />
+  <Project Path="src/DomnerTech.Backend.Application/DomnerTech.Backend.Application.csproj" Id="b18d86d6-890f-43fe-987b-ebb7acc79a2b" />
+  <Project Path="src/DomnerTech.Backend.Domain/DomnerTech.Backend.Domain.csproj" Id="5c715bd0-7d16-4e65-9ab4-63a86bf6b08f" />
+  <Project Path="src/DomnerTech.Backend.Infrastructure/DomnerTech.Backend.Infrastructure.csproj" Id="0101dcfc-cc98-4d54-90a8-14b4985f1dbd" />
+  <Project Path="src/DomnerTech.Backend.WorkerService/DomnerTech.Backend.WorkerService.csproj" Id="5cb15dc2-dc9a-457b-a13e-7606765afd9e" />
+</Solution>
