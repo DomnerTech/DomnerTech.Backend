@@ -23,6 +23,19 @@ public sealed class RoleRepo : IRoleRepo
         return entity.Id;
     }
 
+    public async Task<bool> CheckRoleNamesAsync(HashSet<string> names, CancellationToken cancellationToken = default)
+    {
+        // I want to check if all the role names in the "names" parameter exist in the db,
+        // if any of them does not exist, return false, otherwise return true
+        var filter = Builders<RoleEntity>.Filter.In(i => i.Name, names);
+        var existingNames = await _collection
+            .Find(filter)
+            .Project(x => x.Name)
+            .ToListAsync(cancellationToken);
+
+        return names.All(existingNames.Contains);
+    }
+
     public async Task<RoleEntity?> GetByIdAsync(ObjectId id, CancellationToken cancellationToken = default)
     {
         return await _collection.Find(i => i.Id == id)

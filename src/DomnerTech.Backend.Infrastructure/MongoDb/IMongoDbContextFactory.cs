@@ -5,7 +5,7 @@ namespace DomnerTech.Backend.Infrastructure.MongoDb;
 
 public interface IMongoDbContextFactory
 {
-    IMongoDbContext Create(string name);
+    IMongoDbContext Create(string dbName);
 }
 
 public sealed class MongoDbContextFactory(AppSettings appSettings) : IMongoDbContextFactory

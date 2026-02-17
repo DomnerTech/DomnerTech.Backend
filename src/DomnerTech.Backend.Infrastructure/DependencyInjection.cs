@@ -1,10 +1,10 @@
 ﻿using DomnerTech.Backend.Application;
+using DomnerTech.Backend.Application.Services;
 using DomnerTech.Backend.Infrastructure.Caching;
 using DomnerTech.Backend.Infrastructure.MongoDb;
 using DomnerTech.Backend.Infrastructure.Repo;
 using DomnerTech.Backend.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Mobile.CleanArchProjectTemplate.Application.Services;
 
 namespace DomnerTech.Backend.Infrastructure;
 

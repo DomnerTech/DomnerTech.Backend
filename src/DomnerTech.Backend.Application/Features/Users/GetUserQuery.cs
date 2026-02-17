@@ -5,4 +5,4 @@ using DomnerTech.Backend.Application.DTOs.Users;
 
 namespace DomnerTech.Backend.Application.Features.Users;
 
-public sealed record GetUserQuery(Guid UserId) : IRequest<BaseResponse<UserDto>>, ILogCreator, IValidatableRequest;
+public sealed record GetUserQuery(string UserId) : IRequest<BaseResponse<UserDto>>, ILogCreator, IValidatableRequest;

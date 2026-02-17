@@ -1,8 +1,10 @@
 ﻿using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
+using DomnerTech.Backend.Application.Errors;
 using DomnerTech.Backend.Application.Helpers;
 using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 
@@ -23,22 +25,31 @@ public sealed class CreateUserCommandHandler(
                 CompanyId = ObjectId.GenerateNewId(), // TODO: get from request
                 Username = request.Username,
                 PasswordHash = PasswordHashHelper.Hash(request.Pwd),
+                Policies = [],
                 IsDeleted = false,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
             await userRepo.CreateAsync(entity, cancellationToken);
+
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
         }
         catch (Exception e)
         {
             logger.LogError(e, "Failed to create user: {Error}", e.Message);
-            throw;
         }
-
         return new BaseResponse<bool>
         {
-            Data = true
+            Data = false,
+            Status = new ResponseStatus
+            {
+                StatusCode = StatusCodes.Status500InternalServerError,
+                ErrorCode = ErrorCodes.SystemError
+            }
         };
     }
 }

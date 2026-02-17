@@ -21,7 +21,6 @@ public sealed class GetUserQueryHandler(IRedisCache redisCache) : IRequestHandle
         {
             Username = "JohnDoe",
             EmpId = null,
-            PasswordHash = null,
             Id = null,
             CompanyId = null
         };

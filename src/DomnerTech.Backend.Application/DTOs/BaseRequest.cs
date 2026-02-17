@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DomnerTech.Backend.Application.DTOs;
+﻿namespace DomnerTech.Backend.Application.DTOs;
 
 public record BaseRequest
 {
-    [Required]
-    public Guid UserId { get; set; }
+    public required string UserId { get; set; }
+}
+
+public record BaseTenantRequest
+{
+    public required string CompanyId { get; set; }
+
 }

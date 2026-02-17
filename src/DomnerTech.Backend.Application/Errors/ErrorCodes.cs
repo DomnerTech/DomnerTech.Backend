@@ -10,4 +10,5 @@ public class ErrorCodes
     public const string Forbidden = "forbidden";
     public const string Internal = "internal_server_error";
     public const string HeaderMissing = "header_missing";
+    public const string SystemError = "SystemError";
 }

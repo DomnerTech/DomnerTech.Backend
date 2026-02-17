@@ -1,7 +1,9 @@
 ﻿using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
+using DomnerTech.Backend.Application.Errors;
 using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 
@@ -31,7 +33,15 @@ public sealed class CreateRoleCommandHandler(
         catch (Exception e)
         {
             logger.LogError(e, "Error create role: {Error}", e.Message);
-            throw;
         }
+        return new BaseResponse<bool>
+        {
+            Data = false,
+            Status = new ResponseStatus
+            {
+                StatusCode = StatusCodes.Status500InternalServerError,
+                ErrorCode = ErrorCodes.SystemError
+            }
+        };
     }
 }

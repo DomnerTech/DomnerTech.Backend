@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Mobile.CleanArchProjectTemplate.Application.Services;
+﻿using DomnerTech.Backend.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DomnerTech.Backend.Infrastructure.Services;
 

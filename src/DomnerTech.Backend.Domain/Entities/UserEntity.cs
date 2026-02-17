@@ -10,6 +10,7 @@ public class UserEntity : IBaseEntity, IAuditEntity, ISoftDeleteEntity, ITenantE
     public required ObjectId CompanyId { get; set; }
     public required string Username { get; set; }
     public required string PasswordHash { get; set; }
+    public required HashSet<string> Policies { get; set; }
     public DateTime? LastLoginAt { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
