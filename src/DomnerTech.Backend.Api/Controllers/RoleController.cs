@@ -4,10 +4,12 @@ using DomnerTech.Backend.Application.DTOs.Policies;
 using DomnerTech.Backend.Application.DTOs.Roles;
 using DomnerTech.Backend.Application.Features.Policies;
 using DomnerTech.Backend.Application.Features.Roles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api.Controllers;
 
+[Authorize(Policy = "AdminOnly")]
 public sealed class RoleController(ICommandQuery commandQuery) : BaseApiController
 {
     [HttpPost]

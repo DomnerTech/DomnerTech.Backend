@@ -1,5 +1,7 @@
 ﻿using DomnerTech.Backend.Application;
+using DomnerTech.Backend.Application.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -15,6 +17,7 @@ public static class Extensions
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
+            .AddCookie()
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = true;
@@ -31,7 +34,24 @@ public static class Extensions
                     ValidAudience = settings.BearerAuth.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.BearerAuth.SecretKey))
                 };
+
+                // 🔥 Read token from cookie
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var token = context.Request.Cookies[AuthConstant.TokenName];
+
+                        if (!string.IsNullOrEmpty(token))
+                        {
+                            context.Token = token;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
+        services.AddSingleton<IAuthorizationHandler, DynamicRoleHandler>();
+        services.AddSingleton<IAuthorizationPolicyProvider, PolicyProvider>();
         return services;
     }
 }

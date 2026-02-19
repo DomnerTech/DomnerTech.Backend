@@ -23,4 +23,22 @@ public static class Extensions
         };
     }
 
+    public static void SetCookie(this HttpResponse httpResponse, string name, string value)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddHours(1),
+            IsEssential = true
+        };
+
+        httpResponse.Cookies.Append(name, value, cookieOptions);
+    }
+
+    public static void RemoveCookie(this HttpResponse httpResponse, string name)
+    {
+        httpResponse.Cookies.Delete(name);
+    }
 }

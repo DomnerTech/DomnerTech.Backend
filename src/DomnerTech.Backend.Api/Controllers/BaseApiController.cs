@@ -6,6 +6,5 @@ namespace DomnerTech.Backend.Api.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
-//[Authorize]
-[AllowAnonymous]
+[Authorize]
 public class BaseApiController : ControllerBase;

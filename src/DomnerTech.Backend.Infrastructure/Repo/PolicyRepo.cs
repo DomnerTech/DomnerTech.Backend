@@ -28,6 +28,13 @@ public class PolicyRepo : IPolicyRepo
         return policy;
     }
 
+    public async Task<IEnumerable<PolicyEntity>> GetByNamesAsync(HashSet<string> names, CancellationToken cancellationToken)
+    {
+        var filter = Builders<PolicyEntity>.Filter.In(i => i.Name, names);
+        var policies = _collection.Find(filter).ToEnumerable(cancellationToken);
+        return await Task.FromResult(policies);
+    }
+
     public async Task<IEnumerable<PolicyEntity>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _collection.Find(Builders<PolicyEntity>.Filter.Empty).ToListAsync(cancellationToken);

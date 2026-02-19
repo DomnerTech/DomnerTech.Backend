@@ -6,12 +6,10 @@ using DomnerTech.Backend.Application.Exceptions;
 using DomnerTech.Backend.Application.Helpers;
 using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Application.Services;
-using Microsoft.Extensions.Logging;
 
 namespace DomnerTech.Backend.Application.Features.Auth.Handlers;
 
 public sealed class LoginCommandHandler(
-    ILogger<LoginCommandHandler> logger,
     IJwtService jwtService,
     IUserRepo userRepo) : IRequestHandler<LoginCommand, BaseResponse<LoginResDto>>
 {
@@ -26,6 +24,8 @@ public sealed class LoginCommandHandler(
         var token = await jwtService.CreateTokenAsync(user, cancellationToken);
         user.LastLoginAt = DateTime.UtcNow;
         await userRepo.UpdateAsync(user, cancellationToken);
+        // how to set the token in cookie
+
         return new BaseResponse<LoginResDto>
         {
             Data = new LoginResDto

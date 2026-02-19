@@ -10,7 +10,7 @@ public class BaseResponse
 public class BaseResponse<T>
 {
     public ResponseStatus Status { get; set; } = new();
-    public T? Data { get; set; }
+    public T Data { get; set; } = default!;
 }
 
 public class ResponseStatus
