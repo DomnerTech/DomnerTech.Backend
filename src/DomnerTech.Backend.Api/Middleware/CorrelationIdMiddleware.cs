@@ -13,20 +13,16 @@ public sealed class CorrelationIdMiddleware : IMiddleware
         {
             throw new CorrelationIdRequiredException();
         }
-
-        if (!context.Request.Headers.TryGetValue(HeaderConstants.UserId, out var appIdValue))
-        {
-            throw new UserIdRequiredException();
-        }
-
+        
         var correlationId = correlationIdValue.ToString();
         // Set APM label with correlation ID
         Agent.Tracer.CurrentTransaction?.SetLabel("correlationId", correlationId);
-        Agent.Tracer.CurrentTransaction?.SetLabel("userId", appIdValue);
+        var userId = context.User.Claims.FirstOrDefault(c => c.Type == ClaimConstant.UserId)?.Value ?? string.Empty;
+        Agent.Tracer.CurrentTransaction?.SetLabel("userId", userId);
         context.Items[HeaderConstants.CorrelationContextKey] = correlationId;
 
         context.Response.Headers[HeaderConstants.CorrelationId] = correlationId;
-        using (LogContext.PushProperty("UserId", appIdValue.ToString()))
+        using (LogContext.PushProperty("UserId", userId))
         {
             await next(context);
         }

@@ -50,8 +50,6 @@ public static class Extensions
                     }
                 };
             });
-        services.AddSingleton<IAuthorizationHandler, DynamicRoleHandler>();
-        services.AddSingleton<IAuthorizationPolicyProvider, PolicyProvider>();
         return services;
     }
 }

@@ -1,12 +1,11 @@
 ﻿namespace DomnerTech.Backend.Application.DTOs;
 
-public record BaseRequest
+public interface IBaseRequest
 {
-    public required string UserId { get; set; }
+    string UserReqId { get; set; }
 }
 
-public record BaseTenantRequest
+public interface IBaseTenantRequest
 {
-    public required string CompanyId { get; set; }
-
+    string CompanyId { get; set; }
 }

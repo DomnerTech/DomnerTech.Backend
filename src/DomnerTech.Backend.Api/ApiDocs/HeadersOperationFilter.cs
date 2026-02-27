@@ -21,16 +21,5 @@ public class HeadersOperationFilter : IOperationFilter
                 Type = JsonSchemaType.String
             }
         });
-        operation.Parameters.Add(new OpenApiParameter
-        {
-            Name = HeaderConstants.UserId,
-            In = ParameterLocation.Header,
-            Required = false,
-            Description = "UserId for request tracking",
-            Schema = new OpenApiSchema
-            {
-                Type = JsonSchemaType.String
-            }
-        });
     }
 }

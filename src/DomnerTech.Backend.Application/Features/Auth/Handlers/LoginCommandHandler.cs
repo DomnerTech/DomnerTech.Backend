@@ -18,7 +18,7 @@ public sealed class LoginCommandHandler(
         var user = await userRepo.GetByUsernameAsync(request.Username, cancellationToken);
         if (user == null || !PasswordHashHelper.Verify(request.Pwd, user.PasswordHash))
         {
-            throw new UnauthorizedException();
+            throw new InvalidCredentialException();
         }
 
         var token = await jwtService.CreateTokenAsync(user, cancellationToken);

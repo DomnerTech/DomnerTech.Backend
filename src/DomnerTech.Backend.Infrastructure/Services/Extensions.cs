@@ -9,9 +9,9 @@ public static class Extensions
     {
         services.Scan(s =>
             s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
-                .AddClasses(c => c.AssignableTo<IBaseService>())
-                .AsImplementedInterfaces()
-                .WithSingletonLifetime());
+            .AddClasses(c => c.AssignableTo<IBaseService>())
+            .AsImplementedInterfaces()
+            .WithSingletonLifetime());
         return services;
     }
 }

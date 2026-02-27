@@ -15,7 +15,7 @@ namespace DomnerTech.Backend.Infrastructure.Services;
 public sealed class JwtService(
     ILogger<JwtService> logger,
     AppSettings appSettings,
-    IPolicyRepo policyRepo) : IJwtService
+    IRoleRepo roleRepo) : IJwtService
 {
     public async Task<string> CreateTokenAsync(UserEntity user, CancellationToken cancellationToken = default)
     {
@@ -31,13 +31,13 @@ public sealed class JwtService(
                 new(ClaimTypes.NameIdentifier, user.Username)
             ];
 
-            var policies = await policyRepo.GetByNamesAsync(user.Policies, cancellationToken);
+            //var policies = await policyRepo.GetByNamesAsync(user.Policies, cancellationToken);
 
-            foreach (var policy in policies)
-            {
-                claims.AddRange(policy.RequiredRoles
-                    .Select(p => new Claim(ClaimConstant.Roles, p)));
-            }
+            //foreach (var policy in policies)
+            //{
+            //    claims.AddRange(policy.RequiredRoles
+            //        .Select(p => new Claim(ClaimConstant.Roles, p)));
+            //}
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

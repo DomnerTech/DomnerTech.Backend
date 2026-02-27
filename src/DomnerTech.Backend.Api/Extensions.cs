@@ -23,22 +23,25 @@ public static class Extensions
         };
     }
 
-    public static void SetCookie(this HttpResponse httpResponse, string name, string value)
+    extension(HttpResponse httpResponse)
     {
-        var cookieOptions = new CookieOptions
+        public void SetCookie(string name, string value)
         {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddHours(1),
-            IsEssential = true
-        };
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1),
+                IsEssential = true
+            };
 
-        httpResponse.Cookies.Append(name, value, cookieOptions);
-    }
+            httpResponse.Cookies.Append(name, value, cookieOptions);
+        }
 
-    public static void RemoveCookie(this HttpResponse httpResponse, string name)
-    {
-        httpResponse.Cookies.Delete(name);
+        public void RemoveCookie(string name)
+        {
+            httpResponse.Cookies.Delete(name);
+        }
     }
 }
