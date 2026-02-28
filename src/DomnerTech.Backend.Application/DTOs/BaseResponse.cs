@@ -11,6 +11,7 @@ public class BaseResponse<T>
 {
     public ResponseStatus Status { get; set; } = new();
     public T Data { get; set; } = default!;
+    public bool IsSuccess => Status.StatusCode is >= 200 and < 300;
 }
 
 public class ResponseStatus

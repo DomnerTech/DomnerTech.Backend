@@ -13,6 +13,8 @@ public class UserDto : IBaseDto, ITenantDto
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public required string CompanyId { get; set; }
+    public string PwdHash { get; set; } = string.Empty;
+    public HashSet<string> Roles { get; set; } = [];
 }
 
 public static class UserExtensions
@@ -29,8 +31,8 @@ public static class UserExtensions
             IsActive = dto.IsActive,
             CreatedAt = dto.CreatedAt,
             UpdatedAt = dto.UpdatedAt,
-            PasswordHash = "",
-            Policies = []
+            PasswordHash = dto.PwdHash,
+            Roles = dto.Roles
         };
     }
 
@@ -45,7 +47,9 @@ public static class UserExtensions
             LastLoginAt = entity.LastLoginAt,
             IsActive = entity.IsActive,
             CreatedAt = entity.CreatedAt,
-            UpdatedAt = entity.UpdatedAt
+            UpdatedAt = entity.UpdatedAt,
+            Roles = entity.Roles,
+            PwdHash = entity.PasswordHash
         };
     }
 }

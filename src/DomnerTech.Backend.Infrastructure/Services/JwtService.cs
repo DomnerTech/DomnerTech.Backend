@@ -2,22 +2,20 @@
 using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.Exceptions;
 using DomnerTech.Backend.Application.Services;
-using DomnerTech.Backend.Domain.Entities;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DomnerTech.Backend.Application.IRepo;
+using DomnerTech.Backend.Application.DTOs.Users;
 
 namespace DomnerTech.Backend.Infrastructure.Services;
 
 public sealed class JwtService(
     ILogger<JwtService> logger,
-    AppSettings appSettings,
-    IRoleRepo roleRepo) : IJwtService
+    AppSettings appSettings) : IJwtService
 {
-    public async Task<string> CreateTokenAsync(UserEntity user, CancellationToken cancellationToken = default)
+    public async Task<string> CreateTokenAsync(UserDto user, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -26,18 +24,12 @@ public sealed class JwtService(
 
             List<Claim> claims =
             [
-                new(ClaimConstant.UserId, user.Id.ToString()),
-                new(ClaimConstant.CompanyId, user.CompanyId.ToString()),
+                new(ClaimConstant.UserId, user.Id),
+                new(ClaimConstant.CompanyId, user.CompanyId),
                 new(ClaimTypes.NameIdentifier, user.Username)
             ];
 
-            //var policies = await policyRepo.GetByNamesAsync(user.Policies, cancellationToken);
-
-            //foreach (var policy in policies)
-            //{
-            //    claims.AddRange(policy.RequiredRoles
-            //        .Select(p => new Claim(ClaimConstant.Roles, p)));
-            //}
+            claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

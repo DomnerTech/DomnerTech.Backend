@@ -1,8 +1,8 @@
-﻿using DomnerTech.Backend.Domain.Entities;
+﻿using DomnerTech.Backend.Application.DTOs.Users;
 
 namespace DomnerTech.Backend.Application.Services;
 
 public interface IJwtService : IBaseService
 {
-    Task<string> CreateTokenAsync(UserEntity user, CancellationToken cancellationToken = default);
+    Task<string> CreateTokenAsync(UserDto user, CancellationToken cancellationToken = default);
 }

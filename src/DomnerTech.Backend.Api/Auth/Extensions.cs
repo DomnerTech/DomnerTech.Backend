@@ -50,6 +50,7 @@ public static class Extensions
                     }
                 };
             });
+        services.AddSingleton<IAuthorizationHandler, AdminRoleBypassHandler>();
         return services;
     }
 }

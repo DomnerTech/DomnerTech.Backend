@@ -1,8 +1,10 @@
 ﻿using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.Errors;
+using DomnerTech.Backend.Application.Extensions;
 using DomnerTech.Backend.Application.Helpers;
 using DomnerTech.Backend.Application.IRepo;
+using DomnerTech.Backend.Application.Services;
 using DomnerTech.Backend.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -12,7 +14,8 @@ namespace DomnerTech.Backend.Application.Features.Users.Handlers;
 
 public sealed class CreateUserCommandHandler(
     ILogger<CreateUserCommandHandler> logger,
-    IUserRepo userRepo) : IRequestHandler<CreateUserCommand, BaseResponse<bool>>
+    IUserRepo userRepo,
+    ITenantService tenantService) : IRequestHandler<CreateUserCommand, BaseResponse<bool>>
 {
     public async Task<BaseResponse<bool>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
@@ -22,10 +25,10 @@ public sealed class CreateUserCommandHandler(
             {
                 Id = ObjectId.GenerateNewId(),
                 EmpId = ObjectId.GenerateNewId(),
-                CompanyId = ObjectId.GenerateNewId(), // TODO: get from request
+                CompanyId = tenantService.CompanyId.ToObjectId(),
                 Username = request.Username,
                 PasswordHash = PasswordHashHelper.Hash(request.Pwd),
-                Policies = [],
+                Roles = [],
                 IsDeleted = false,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,

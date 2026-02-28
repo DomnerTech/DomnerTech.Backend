@@ -9,17 +9,24 @@ namespace DomnerTech.Backend.Api.Controllers;
 
 public sealed class UserController(ICommandQuery commandQuery) : BaseApiController
 {
-    [HttpPost("get-me")]
-    public async Task<ActionResult<BaseResponse<UserDto>>> GetMe([FromBody] GetUserReqDto r)
+    [HttpGet("get-me")]
+    public async Task<ActionResult<BaseResponse<UserDto>>> GetMe()
     {
         var user = await commandQuery.Send(new GetUserQuery(UserReqId), HttpContext.RequestAborted);
         return user.ReturnJson();
     }
 
-    [HttpPost, AllowAnonymous]
+    [HttpPost, Authorize(Roles = "UserWrite")]
     public async Task<ActionResult<BaseResponse<bool>>> CreateUser([FromBody] CreateUserDto r)
     {
         var result = await commandQuery.Send(new CreateUserCommand(r.Username, r.Pwd), HttpContext.RequestAborted);
+        return result.ReturnJson();
+    }
+
+    [HttpGet("all"), Authorize(Roles = "UserRead")]
+    public async Task<ActionResult<BaseResponse<bool>>> GetAllUser()
+    {
+        var result = await commandQuery.Send(new GetAllUsersQuery(), HttpContext.RequestAborted);
         return result.ReturnJson();
     }
 }
