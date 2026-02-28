@@ -9,6 +9,7 @@ public interface IRoleRepo : IBaseRepo
     Task<bool> CheckRoleNamesAsync(HashSet<string> names, CancellationToken cancellationToken = default);
     Task<RoleEntity?> GetByIdAsync(ObjectId id, CancellationToken cancellationToken = default);
     Task<RoleEntity?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
+    Task<IEnumerable<RoleEntity>> GetAllAsync(CancellationToken cancellationToken = default);
     Task UpdateAsync(RoleEntity entity, CancellationToken cancellationToken = default);
     Task DeleteAsync(ObjectId id, CancellationToken cancellationToken = default);
 }

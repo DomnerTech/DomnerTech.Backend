@@ -16,14 +16,14 @@ public sealed class UserController(ICommandQuery commandQuery) : BaseApiControll
         return user.ReturnJson();
     }
 
-    [HttpPost, Authorize(Roles = "UserWrite")]
+    [HttpPost, Authorize(Roles = "User.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> CreateUser([FromBody] CreateUserDto r)
     {
         var result = await commandQuery.Send(new CreateUserCommand(r.Username, r.Pwd), HttpContext.RequestAborted);
         return result.ReturnJson();
     }
 
-    [HttpGet("all"), Authorize(Roles = "UserRead")]
+    [HttpGet("all"), Authorize(Roles = "User.Read")]
     public async Task<ActionResult<BaseResponse<bool>>> GetAllUser()
     {
         var result = await commandQuery.Send(new GetAllUsersQuery(), HttpContext.RequestAborted);

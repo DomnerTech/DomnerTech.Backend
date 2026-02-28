@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Features\Auth\Validators\" />
-    <Folder Include="Features\Roles\Handlers\" />
     <Folder Include="Features\Roles\Validators\" />
   </ItemGroup>
   

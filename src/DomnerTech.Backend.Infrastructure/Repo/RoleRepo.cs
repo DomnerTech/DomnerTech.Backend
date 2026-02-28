@@ -44,6 +44,12 @@ public sealed class RoleRepo(
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<RoleEntity>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var data = await Collection.FindAsync(Builders<RoleEntity>.Filter.Empty, cancellationToken: cancellationToken);
+        return data.ToEnumerable(cancellationToken: cancellationToken);
+    }
+
     public async Task UpdateAsync(RoleEntity entity, CancellationToken cancellationToken = default)
     {
         var filter = Builders<RoleEntity>.Filter.Eq(i => i.Id, entity.Id);

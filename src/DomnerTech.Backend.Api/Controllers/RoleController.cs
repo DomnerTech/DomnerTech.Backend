@@ -1,4 +1,5 @@
 ﻿using Bas24.CommandQuery;
+using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Roles;
 using DomnerTech.Backend.Application.Features.Roles;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +9,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 
 public sealed class RoleController(ICommandQuery commandQuery) : BaseApiController
 {
-    [HttpPost, Authorize(Roles = "RoleWrite")]
+    [HttpPost, Authorize(Roles = "Role.Write")]
     public async Task<ActionResult> CreateRole([FromBody] CreateRoleReqDto req)
     {
         var res = await commandQuery.Send(
@@ -16,11 +17,19 @@ public sealed class RoleController(ICommandQuery commandQuery) : BaseApiControll
             HttpContext.RequestAborted);
         return res.ReturnJson();
     }
-    [HttpGet, Authorize(Roles = "RoleRead")]
-    public async Task<ActionResult> GetUserRoles([FromBody] CreateRoleReqDto req)
+
+    [HttpGet, Authorize("Role.Read")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<RoleDto>>>> GetAllRoles()
+    {
+        var res = await commandQuery.Send(new GetAllRolesQuery(), HttpContext.RequestAborted);
+        return res.ReturnJson();
+    }
+
+    [HttpGet("user-roles/{userId}"), Authorize(Roles = "Role.Read")]
+    public async Task<ActionResult> GetUserRoles(string userId)
     {
         var res = await commandQuery.Send(
-            new CreateRoleCommand(req.Name, req.Desc),
+            new GetUserRolesQuery(userId),
             HttpContext.RequestAborted);
         return res.ReturnJson();
     }
