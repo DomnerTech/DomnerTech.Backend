@@ -18,4 +18,6 @@ public interface IRedisCache : IBaseRepo
         CancellationToken cancellationToken = default);
 
     Task<T?> GetObjectAsync<T>(string key, CancellationToken cancellationToken = default);
+
+    Task RemoveAsync(string key, CancellationToken cancellationToken = default);
 }

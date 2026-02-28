@@ -23,7 +23,7 @@ public sealed class RoleRepo(
     {
         var filter = Builders<RoleEntity>.Filter.In(i => i.Name, names);
         var existingNames = await Collection
-            .Find(TenantFilter() & filter)
+            .Find(filter)
             .Project(x => x.Name)
             .ToListAsync(cancellationToken);
 
@@ -33,14 +33,14 @@ public sealed class RoleRepo(
     public async Task<RoleEntity?> GetByIdAsync(ObjectId id, CancellationToken cancellationToken = default)
     {
         var filter = Builders<RoleEntity>.Filter.Eq(i => i.Id, id);
-        return await Collection.Find(TenantFilter() & filter)
+        return await Collection.Find(filter)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<RoleEntity?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         var filter = Builders<RoleEntity>.Filter.Eq(i => i.Name, name);
-        return await Collection.Find(TenantFilter() & filter)
+        return await Collection.Find(filter)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -59,6 +59,6 @@ public sealed class RoleRepo(
     public async Task DeleteAsync(ObjectId id, CancellationToken cancellationToken = default)
     {
         var filter = Builders<RoleEntity>.Filter.Eq(i => i.Id, id);
-        await Collection.DeleteOneAsync(TenantFilter() & filter, cancellationToken);
+        await Collection.DeleteOneAsync(filter, cancellationToken);
     }
 }

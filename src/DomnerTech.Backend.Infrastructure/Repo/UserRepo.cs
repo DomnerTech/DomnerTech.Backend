@@ -10,7 +10,8 @@ namespace DomnerTech.Backend.Infrastructure.Repo;
 
 public sealed class UserRepo(
     IMongoDbContextFactory contextFactory, 
-    ITenantService tenantService) : 
+    ITenantService tenantService,
+    IRedisCache redisCache) : 
     BaseRepo<UserEntity>(contextFactory.Create(DatabaseNameConstant.DatabaseName).Database, tenantService),
     IUserRepo
 {
@@ -46,6 +47,7 @@ public sealed class UserRepo(
     {
         var filter = Builders<UserEntity>.Filter.Eq(i => i.Id, entity.Id);
         await Collection.ReplaceOneAsync(TenantFilter() & filter, entity, cancellationToken: cancellationToken);
+        await RemoveUserCache(entity.Id.ToString(), entity.Username, cancellationToken);
     }
 
     public async Task DeleteAsync(ObjectId id, CancellationToken cancellationToken = default)
@@ -53,5 +55,12 @@ public sealed class UserRepo(
         var filter = Builders<UserEntity>.Filter.Eq(i => i.Id, id);
         var update = Builders<UserEntity>.Update.Set(i => i.IsDeleted, true);
         await Collection.UpdateOneAsync(TenantFilter() & filter, update, cancellationToken: cancellationToken);
+    }
+
+    private async Task RemoveUserCache(string id, string username, CancellationToken cancellationToken = default)
+    {
+        await Task.WhenAll(
+            redisCache.RemoveAsync($":users:{id}", cancellationToken),
+            redisCache.RemoveAsync($":users:username:{username}", cancellationToken));
     }
 }

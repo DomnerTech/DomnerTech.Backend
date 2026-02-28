@@ -59,6 +59,19 @@ public class RedisCache(
         return default;
     }
 
+    public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var prefixedKey = new RedisKey($"{_instanceName}{key}");
+            await _database.KeyDeleteAsync(prefixedKey);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "redis: failed remove - {@Message}", e.Message);
+        }
+    }
+
     public async Task SetObjectAsync<T>(string key,
         T value,
         DistributedCacheEntryOptions options,
