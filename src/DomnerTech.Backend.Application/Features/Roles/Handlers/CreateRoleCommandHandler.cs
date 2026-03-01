@@ -30,6 +30,11 @@ public sealed class CreateRoleCommandHandler(
                 Data = true
             };
         }
+        catch (OperationCanceledException)
+        {
+            // Preserve cooperative cancellation semantics
+            throw;
+        }
         catch (Exception e)
         {
             logger.LogError(e, "Error create role: {Error}", e.Message);
