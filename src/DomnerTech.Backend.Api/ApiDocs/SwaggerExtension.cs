@@ -25,7 +25,7 @@ public static class SwaggerExtension
                 [new OpenApiSecuritySchemeReference("Bearer", document)] = []
             });
             c.OperationFilter<HeadersOperationFilter>();
-            c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlCommentFile));
+            c.IncludeXmlComments(Path.Join(AppContext.BaseDirectory, xmlCommentFile));
             c.DocumentFilter<BasePathDocumentFilter>();
             c.OperationFilter<SnakeCaseQueryParameterFilter>();
         });

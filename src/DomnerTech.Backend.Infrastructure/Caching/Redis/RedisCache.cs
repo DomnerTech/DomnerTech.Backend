@@ -77,9 +77,17 @@ public class RedisCache(
             var prefixedKey = new RedisKey($"{_instanceName}{key}");
             await _database.KeyDeleteAsync(prefixedKey);
         }
-        catch (Exception e)
+        catch (RedisConnectionException e)
         {
-            logger.LogError(e, "redis: failed remove - {@Message}", e.Message);
+            logger.LogError(e, "redis: failed removed - {@Message}", e.Message);
+        }
+        catch (RedisTimeoutException e)
+        {
+            logger.LogError(e, "redis: failed removed - {@Message}", e.Message);
+        }
+        catch (JsonException e)
+        {
+            logger.LogError(e, "redis: failed removed - {@Message}", e.Message);
         }
     }
 }
