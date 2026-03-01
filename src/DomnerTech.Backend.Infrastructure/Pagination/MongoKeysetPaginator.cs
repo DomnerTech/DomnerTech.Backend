@@ -181,7 +181,25 @@ public sealed class MongoKeysetPaginator<T>(
                 var func = expr.Compile();
                 value = func(entity);
             }
-            catch
+            catch (ArgumentException)
+            {
+                // fallback to reflection on top-level property name
+                var prop = typeof(T).GetProperty(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                value = prop?.GetValue(entity);
+            }
+            catch (InvalidOperationException)
+            {
+                // fallback to reflection on top-level property name
+                var prop = typeof(T).GetProperty(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                value = prop?.GetValue(entity);
+            }
+            catch (TargetInvocationException)
+            {
+                // fallback to reflection on top-level property name
+                var prop = typeof(T).GetProperty(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                value = prop?.GetValue(entity);
+            }
+            catch (NullReferenceException)
             {
                 // fallback to reflection on top-level property name
                 var prop = typeof(T).GetProperty(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
