@@ -25,6 +25,11 @@ public sealed class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> log
         }
         catch (Exception ex)
         {
+            if (ex is OperationCanceledException)
+            {
+                throw;
+            }
+
             logger.LogError(ex, "Unhandled exception");
             await WriteProblemDetails(context, ex);
         }
