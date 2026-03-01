@@ -16,7 +16,7 @@ public static class PasswordHashHelper
     {
         var salt = RandomNumberGenerator.GetBytes(SaltSize);
 
-        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
+        using var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
         {
             Salt = salt,
             DegreeOfParallelism = DegreeOfParallelism,
@@ -44,7 +44,7 @@ public static class PasswordHashHelper
         Buffer.BlockCopy(decoded, 0, salt, 0, SaltSize);
         Buffer.BlockCopy(decoded, SaltSize, hash, 0, HashSize);
 
-        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
+        using var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
         {
             Salt = salt,
             DegreeOfParallelism = DegreeOfParallelism,
