@@ -41,6 +41,11 @@ public sealed class CreateUserCommandHandler(
                 Data = true
             };
         }
+        catch (OperationCanceledException)
+        {
+            // Preserve cooperative cancellation semantics
+            throw;
+        }
         catch (Exception e)
         {
             logger.LogError(e, "Failed to create user: {Error}", e.Message);
