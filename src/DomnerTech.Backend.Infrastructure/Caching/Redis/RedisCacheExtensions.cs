@@ -1,47 +1,26 @@
-﻿using DomnerTech.Backend.Application.IRepo;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using DomnerTech.Backend.Application.Caching;
 
 namespace DomnerTech.Backend.Infrastructure.Caching.Redis;
 
 public static class RedisCacheExtensions
 {
-    extension(IRedisCache redis)
+    public static async Task<T?> RedisFallbackAsync<T>(
+        this IRedisCache redis,
+        string key,
+        CacheEntryOptions options,
+        Func<Task<T>> fallback)
     {
-        public async Task<T?> RedisFallbackAsync<T>(string key,
-            DistributedCacheEntryOptions options,
-            Func<Task<T>> fallback,
-            CancellationToken cancellationToken = default)
+        var value = await redis.GetObjectAsync<T>(key);
+
+        if (value is not null) return value;
+
+        value = await fallback.Invoke();
+
+        if (value is not null)
         {
-            var value = await redis.GetObjectAsync<T>(key, cancellationToken);
-
-            if (value is not null) return value;
-
-            value = await fallback.Invoke();
-
-            if (value is not null)
-            {
-                await redis.SetObjectAsync(key, value, options, cancellationToken);
-            }
-
-            return value;
+            await redis.SetObjectAsync(key, value, options);
         }
 
-        public async Task<T?> RedisFallbackAsync<T>(string key,
-            Func<Task<T>> fallback,
-            CancellationToken cancellationToken = default)
-        {
-            var value = await redis.GetObjectAsync<T>(key, cancellationToken);
-
-            if (value is not null) return value;
-
-            value = await fallback.Invoke();
-
-            if (value is not null)
-            {
-                await redis.SetObjectAsync(key, value, cancellationToken: cancellationToken);
-            }
-
-            return value;
-        }
+        return value;
     }
 }

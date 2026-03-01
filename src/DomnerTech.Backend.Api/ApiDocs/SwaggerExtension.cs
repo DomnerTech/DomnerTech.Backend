@@ -27,6 +27,7 @@ public static class SwaggerExtension
             c.OperationFilter<HeadersOperationFilter>();
             c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlCommentFile));
             c.DocumentFilter<BasePathDocumentFilter>();
+            c.OperationFilter<SnakeCaseQueryParameterFilter>();
         });
         return services;
     }

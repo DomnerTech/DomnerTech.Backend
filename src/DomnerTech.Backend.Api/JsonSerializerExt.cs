@@ -8,7 +8,7 @@ public static class JsonSerializerExt
     public static IServiceCollection AddControllerJsonSerializerOptions(this IServiceCollection services)
     {
         services.AddControllers()
-            .AddJsonOptions(options => 
+            .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

@@ -15,7 +15,8 @@ public static class DefaultJsonSerializerSettings
         PropertyNameCaseInsensitive = true,
         Converters =
         {
-            new JsonStringEnumConverter()
+            new JsonStringEnumConverter(),
+            new ObjectIdConverter()
         },
         WriteIndented = false,
         ReferenceHandler = ReferenceHandler.IgnoreCycles,
@@ -28,7 +29,8 @@ public static class DefaultJsonSerializerSettings
         PropertyNameCaseInsensitive = true,
         Converters =
         {
-            new JsonStringEnumConverter()
+            new JsonStringEnumConverter(),
+            new ObjectIdConverter()
         },
         WriteIndented = false,
         ReferenceHandler = ReferenceHandler.IgnoreCycles,

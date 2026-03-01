@@ -14,5 +14,4 @@
   <ItemGroup>
     <ProjectReference Include="..\DomnerTech.Backend.Application\DomnerTech.Backend.Application.csproj" />
   </ItemGroup>
-  
 </Project>

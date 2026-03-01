@@ -1,4 +1,5 @@
-﻿using DomnerTech.Backend.Application.Constants;
+﻿using DomnerTech.Backend.Application.Caching;
+using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Application.Services;
 using DomnerTech.Backend.Domain.Entities;
@@ -15,9 +16,11 @@ public sealed class UserRepo(
     BaseRepo<UserEntity>(contextFactory.Create(DatabaseNameConstant.DatabaseName).Database, tenantService),
     IUserRepo
 {
+    private readonly ITenantService _tenantService = tenantService;
     public async Task<ObjectId> CreateAsync(UserEntity entity, CancellationToken cancellationToken = default)
     {
         await Collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
+        await redisCache.RemoveAsync($":paging:count:{_tenantService.CompanyId}:{Collection.CollectionNamespace.CollectionName}");
         return entity.Id;
     }
 
@@ -47,7 +50,7 @@ public sealed class UserRepo(
     {
         var filter = Builders<UserEntity>.Filter.Eq(i => i.Id, entity.Id);
         await Collection.ReplaceOneAsync(TenantFilter() & filter, entity, cancellationToken: cancellationToken);
-        await RemoveUserCache(entity.Id.ToString(), entity.Username, cancellationToken);
+        await RemoveUserCache(entity.Id.ToString(), entity.Username);
     }
 
     public async Task DeleteAsync(ObjectId id, CancellationToken cancellationToken = default)
@@ -57,10 +60,10 @@ public sealed class UserRepo(
         await Collection.UpdateOneAsync(TenantFilter() & filter, update, cancellationToken: cancellationToken);
     }
 
-    private async Task RemoveUserCache(string id, string username, CancellationToken cancellationToken = default)
+    private async Task RemoveUserCache(string id, string username)
     {
         await Task.WhenAll(
-            redisCache.RemoveAsync($":users:{id}", cancellationToken),
-            redisCache.RemoveAsync($":users:username:{username}", cancellationToken));
+            redisCache.RemoveAsync($":users:{id}"),
+            redisCache.RemoveAsync($":users:username:{username}"));
     }
 }

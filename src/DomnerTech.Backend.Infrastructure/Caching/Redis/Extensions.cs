@@ -1,5 +1,5 @@
 ﻿using DomnerTech.Backend.Application;
-using DomnerTech.Backend.Application.IRepo;
+using DomnerTech.Backend.Application.Caching;
 using Elastic.Apm.StackExchange.Redis;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;

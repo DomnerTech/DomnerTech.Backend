@@ -2,6 +2,7 @@
 using DomnerTech.Backend.Application.Services;
 using DomnerTech.Backend.Infrastructure.Caching;
 using DomnerTech.Backend.Infrastructure.MongoDb;
+using DomnerTech.Backend.Infrastructure.Pagination;
 using DomnerTech.Backend.Infrastructure.Repo;
 using DomnerTech.Backend.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ public static class DependencyInjection
     {
         services.AddCache(appSettings)
             .AddMongoDb()
+            .AddPagination(appSettings)
             .AddRepo()
             .AddServices();
 

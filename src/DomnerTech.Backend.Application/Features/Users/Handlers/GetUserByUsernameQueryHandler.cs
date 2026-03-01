@@ -1,10 +1,10 @@
 ﻿using Bas24.CommandQuery;
+using DomnerTech.Backend.Application.Caching;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Users;
 using DomnerTech.Backend.Application.Errors;
 using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace DomnerTech.Backend.Application.Features.Users.Handlers;
 
@@ -15,7 +15,7 @@ public sealed class GetUserByUsernameQueryHandler(
     public async Task<BaseResponse<UserDto?>> Handle(GetUserByUsernameQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $":users:username:{request.Username}";
-        var userCache = await redisCache.GetObjectAsync<UserDto>(cacheKey, cancellationToken);
+        var userCache = await redisCache.GetObjectAsync<UserDto>(cacheKey);
         if (userCache is not null)
         {
             return new BaseResponse<UserDto?>
@@ -39,10 +39,10 @@ public sealed class GetUserByUsernameQueryHandler(
             };
         }
 
-        await redisCache.SetObjectAsync(cacheKey, userDto, new DistributedCacheEntryOptions
+        await redisCache.SetObjectAsync(cacheKey, userDto, new CacheEntryOptions
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(360)
-        }, cancellationToken);
+            AbsoluteExpiration = DateTime.UtcNow.AddSeconds(360)
+        });
 
         return new BaseResponse<UserDto?>
         {

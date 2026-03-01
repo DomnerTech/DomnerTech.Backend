@@ -55,10 +55,17 @@ public class SwaggerConfig
 public class MongoDatabases
 {
     public Dictionary<string, MongoDbConfig> ConnectionStrings { get; set; } = [];
+    public MongoDbPagingConfig Paging { get; set; } = new();
 }
 
 public class MongoDbConfig
 {
     public string ConnectionUri { get; set; } = string.Empty;
     public string Database { get; set; } = string.Empty;
+}
+
+public class MongoDbPagingConfig
+{
+    public string SecretKey { get; set; } = string.Empty;
+    public int CacheTtl { get; set; } = 60;
 }
