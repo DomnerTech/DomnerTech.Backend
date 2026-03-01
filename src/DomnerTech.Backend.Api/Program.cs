@@ -64,6 +64,10 @@ try
     await app.RunAsync();
 
 }
+catch (OperationCanceledException)
+{
+    Log.Information("Application shutdown was requested (operation canceled).");
+}
 catch (Exception ex)
 {
     Log.Fatal(ex, "Application terminated unexpectedly");
