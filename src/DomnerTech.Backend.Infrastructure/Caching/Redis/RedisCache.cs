@@ -40,7 +40,15 @@ public class RedisCache(
             await _database.HashSetAsync(prefixedKey, hashEntries);
             await _database.KeyExpireAsync(prefixedKey, expiry);
         }
-        catch (Exception e)
+        catch (RedisConnectionException e)
+        {
+            logger.LogError(e, "redis: failed setting - {@Message}", e.Message);
+        }
+        catch (RedisTimeoutException e)
+        {
+            logger.LogError(e, "redis: failed setting - {@Message}", e.Message);
+        }
+        catch (JsonException e)
         {
             logger.LogError(e, "redis: failed setting - {@Message}", e.Message);
         }
