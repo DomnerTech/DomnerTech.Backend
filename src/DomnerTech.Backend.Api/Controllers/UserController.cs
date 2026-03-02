@@ -2,26 +2,29 @@
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Users;
 using DomnerTech.Backend.Application.Features.Users;
+using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Application.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api.Controllers;
 
-public sealed class UserController(ICommandQuery commandQuery) : BaseApiController
+public sealed class UserController(
+    CommandQuery commandQuery,
+    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
 {
     [HttpGet("get-me")]
     public async Task<ActionResult<BaseResponse<UserDto>>> GetMe()
     {
         var user = await commandQuery.Send(new GetUserQuery(UserReqId), HttpContext.RequestAborted);
-        return user.ReturnJson();
+        return await ReturnJson(user);
     }
 
     [HttpPost, Authorize(Roles = "User.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> CreateUser([FromBody] CreateUserDto r)
     {
         var result = await commandQuery.Send(new CreateUserCommand(r.Username, r.Pwd), HttpContext.RequestAborted);
-        return result.ReturnJson();
+        return await ReturnJson(result  );
     }
 
     /// <summary>
@@ -56,6 +59,6 @@ public sealed class UserController(ICommandQuery commandQuery) : BaseApiControll
             PageSize = pageSize,
             SortKey = sortBy
         }, HttpContext.RequestAborted);
-        return result.ReturnJson();
+        return await ReturnJson(result);
     }
 }

@@ -2,12 +2,15 @@
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Roles;
 using DomnerTech.Backend.Application.Features.Roles;
+using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api.Controllers;
 
-public sealed class RoleController(ICommandQuery commandQuery) : BaseApiController
+public sealed class RoleController(
+    CommandQuery commandQuery,
+    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
 {
     [HttpPost, Authorize(Roles = "Role.Write")]
     public async Task<ActionResult> CreateRole([FromBody] CreateRoleReqDto req)
@@ -15,14 +18,14 @@ public sealed class RoleController(ICommandQuery commandQuery) : BaseApiControll
         var res = await commandQuery.Send(
             new CreateRoleCommand(req.Name, req.Desc),
             HttpContext.RequestAborted);
-        return res.ReturnJson();
+        return await ReturnJson(res);
     }
 
     [HttpGet, Authorize(Roles = "Role.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<RoleDto>>>> GetAllRoles()
     {
         var res = await commandQuery.Send(new GetAllRolesQuery(), HttpContext.RequestAborted);
-        return res.ReturnJson();
+        return await ReturnJson(res );
     }
 
     [HttpGet("user-roles/{userId}"), Authorize(Roles = "Role.Read")]
@@ -31,7 +34,7 @@ public sealed class RoleController(ICommandQuery commandQuery) : BaseApiControll
         var res = await commandQuery.Send(
             new GetUserRolesQuery(userId),
             HttpContext.RequestAborted);
-        return res.ReturnJson();
+        return await ReturnJson(res);
     }
 
     [HttpPost("upsert-user-role"), Authorize(Roles = "Role.Write")]
@@ -40,6 +43,6 @@ public sealed class RoleController(ICommandQuery commandQuery) : BaseApiControll
         var res = await commandQuery.Send(
             new UpsertUserRoleCommand(r.UserId, r.RoleName),
             HttpContext.RequestAborted);
-        return res.ReturnJson();
+        return await ReturnJson(res);
     }
 }

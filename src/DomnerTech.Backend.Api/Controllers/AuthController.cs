@@ -3,12 +3,15 @@ using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Auth;
 using DomnerTech.Backend.Application.Features.Auth;
+using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api.Controllers;
 
-public sealed class AuthController(ICommandQuery commandQuery) : BaseApiController
+public sealed class AuthController(
+    ICommandQuery commandQuery,
+    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
 {
     [HttpPost("login"), AllowAnonymous]
     public async Task<ActionResult<BaseResponse<LoginResDto>>> Login([FromBody] LoginReqDto req)
@@ -18,7 +21,7 @@ public sealed class AuthController(ICommandQuery commandQuery) : BaseApiControll
             HttpContext.RequestAborted);
         if (res.Status.StatusCode == StatusCodes.Status200OK)
             Response.SetCookie(AuthConstant.TokenName, res.Data.Token);
-        return res.ReturnJson();
+        return await ReturnJson(res);
     }
 
     [HttpPost("logout")]

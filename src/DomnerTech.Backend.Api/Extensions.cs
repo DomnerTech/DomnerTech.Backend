@@ -1,4 +1,5 @@
 ﻿using DomnerTech.Backend.Application.DTOs;
+using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api;
@@ -14,8 +15,9 @@ public static class Extensions
     /// object.</remarks>
     /// <typeparam name="T">The type of the data contained in the response.</typeparam>
     /// <param name="obj">The response object to serialize to JSON. Must not be null.</param>
+    /// <param name="errorMessageLocalize"></param>
     /// <returns>A JsonResult that serializes the specified response object and uses its status code.</returns>
-    public static JsonResult ReturnJson<T>(this BaseResponse<T> obj)
+    public static JsonResult ReturnJson<T>(this BaseResponse<T> obj, IErrorMessageLocalizeRepo errorMessageLocalize)
     {
         return new JsonResult(obj)
         {

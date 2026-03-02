@@ -11,9 +11,7 @@ using DomnerTech.Backend.Application.DTOs.Users;
 
 namespace DomnerTech.Backend.Infrastructure.Services;
 
-public sealed class JwtService(
-    ILogger<JwtService> logger,
-    AppSettings appSettings) : IJwtService
+public sealed class JwtService(AppSettings appSettings) : IJwtService
 {
     public async Task<string> CreateTokenAsync(UserDto user, CancellationToken cancellationToken = default)
     {
