@@ -1,4 +1,5 @@
 ﻿using Bas24.CommandQuery;
+using DomnerTech.Backend.Application.Caching;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.Enums;
 using DomnerTech.Backend.Application.Errors;
@@ -24,6 +25,16 @@ public sealed class ErrorMessageLocalizeUpsertCommandHandler(
                 .Where(languageSupportType => request.Messages.ContainsKey(languageSupportType.ToName(true)))
                 .ToDictionary(languageSupportType => languageSupportType.ToName(true),
                     languageSupportType => request.Messages[languageSupportType.ToName(true)]);
+
+            if (msg.Count == 0) return new BaseResponse<bool>
+            {
+                Status = new ResponseStatus
+                {
+                    ErrorCode = ErrorCodes.Validation,
+                    StatusCode = StatusCodes.Status400BadRequest
+                }
+            };
+
             var errorMsgExisted = await localizeRepo.GetByKeyAsync(request.Key, cancellationToken);
 
             if (errorMsgExisted != null)
@@ -43,7 +54,6 @@ public sealed class ErrorMessageLocalizeUpsertCommandHandler(
                     CreatedAt = DateTime.UtcNow
                 }, cancellationToken);
             }
-
             return new BaseResponse<bool>
             {
                 Data = true

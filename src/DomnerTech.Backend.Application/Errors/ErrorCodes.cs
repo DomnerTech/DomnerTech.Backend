@@ -7,13 +7,11 @@ public class ErrorCodes
 
     public const string SystemError = $"{Name}-SYSERR";
     public const string Validation = $"{Name}-VALIDATION-ERR";
-
-    public const string NotFound = "not_found";
-    public const string Conflict = "conflict";
-    public const string Unauthorized = "unauthorized";
-    public const string Forbidden = "forbidden";
-    public const string Internal = "internal_server_error";
-    public const string HeaderMissing = "header_missing";
+    public const string HeaderMissing = $"{Name}-HEADER-REQ";
+    public const string NotFound = $"{Name}-NOT-FOUND";
+    public const string Conflict = $"{Name}-CONFLICT";
+    public const string Unauthorized = $"{Name}-UNAUTHORIZED";
+    public const string Forbidden = $"{Name}-FORBIDDEN";
 
     public class Localize
     {

@@ -3,15 +3,8 @@ using DomnerTech.Backend.Application.Services;
 
 namespace DomnerTech.Backend.Api.Middleware;
 
-public class TenantMiddleware
+public class TenantMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public TenantMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
     public async Task InvokeAsync(HttpContext context, ITenantService tenantService)
     {
         if (context.User.Identity?.IsAuthenticated == true)
@@ -28,6 +21,6 @@ public class TenantMiddleware
             tenantService.SetTenant(companyId);
         }
 
-        await _next(context);
+        await next(context);
     }
 }

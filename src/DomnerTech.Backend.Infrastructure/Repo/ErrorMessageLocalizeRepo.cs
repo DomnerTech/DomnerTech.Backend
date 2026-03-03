@@ -19,20 +19,23 @@ public sealed class ErrorMessageLocalizeRepo(
         tenant),
     IErrorMessageLocalizeRepo
 {
+    private const string CacheKey = ":error-messages-localize";
     public async Task<string> ResolveAsync(string errorCode, string lang, CancellationToken cancellationToken = default)
     {
-        const string cacheKey = ":error-messages-localize";
-        var errorMessage = await redisCache.GetObjectAsync<Dictionary<string, Dictionary<string, string>>>(cacheKey);
+        var errorMessage = await redisCache.GetObjectAsync<Dictionary<string, Dictionary<string, string>>>(CacheKey);
         if (errorMessage == null)
         {
             var data = await Collection
                 .FindAsync(Builders<ErrorMessageLocalizeEntity>.Filter.Empty, cancellationToken: cancellationToken);
-            errorMessage = data.ToList(cancellationToken)
+            errorMessage = (await data.ToListAsync(cancellationToken))
                 .ToDictionary(k => k.Key, v => v.Messages);
-            await redisCache.SetObjectAsync(cacheKey, errorMessage, new CacheEntryOptions
+            if (errorMessage.Count > 0)
             {
-                AbsoluteExpiration = DateTime.UtcNow.AddDays(1)
-            });
+                await redisCache.SetObjectAsync(CacheKey, errorMessage, new CacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTime.UtcNow.AddDays(1)
+                });
+            }
         }
 
         var message = errorMessage.GetValueOrDefault(errorCode)?.GetValueOrDefault(lang);
@@ -42,6 +45,7 @@ public sealed class ErrorMessageLocalizeRepo(
     public async Task<ObjectId> CreateAsync(ErrorMessageLocalizeEntity entity, CancellationToken cancellationToken = default)
     {
         await Collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
+        await redisCache.RemoveAsync(CacheKey);
         return entity.Id;
     }
 
@@ -56,7 +60,7 @@ public sealed class ErrorMessageLocalizeRepo(
     {
         var filter = Builders<ErrorMessageLocalizeEntity>.Filter.Eq(i => i.Id, entity.Id);
         await Collection.ReplaceOneAsync(filter, entity, cancellationToken: cancellationToken);
-        await redisCache.RemoveAsync(":error-messages-localize");
+        await redisCache.RemoveAsync(CacheKey);
         return entity.Id;
     }
 
@@ -64,6 +68,6 @@ public sealed class ErrorMessageLocalizeRepo(
     {
         var filter = Builders<ErrorMessageLocalizeEntity>.Filter.Eq(i => i.Key, key);
         await Collection.DeleteOneAsync(filter, cancellationToken);
-        await redisCache.RemoveAsync(":error-messages-localize");
+        await redisCache.RemoveAsync(CacheKey);
     }
 }

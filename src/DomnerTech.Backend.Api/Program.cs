@@ -56,6 +56,7 @@ try
 
     app.UseHttpsRedirection();
     app.UseAuthentication();
+    app.UseMiddleware<RequiredHeadersMiddleware>();
     app.UseMiddleware<TenantMiddleware>();
     app.UseAuthorization();
 
@@ -64,9 +65,9 @@ try
     await app.RunAsync();
 
 }
-catch (OperationCanceledException)
+catch (OperationCanceledException oce)
 {
-    Log.Information("Application shutdown was requested (operation canceled).");
+    Log.Information(oce, "Application shutdown was requested (operation canceled).");
 }
 catch (Exception ex)
 {

@@ -10,7 +10,6 @@ using FluentValidation;
 namespace DomnerTech.Backend.Api.Middleware;
 
 public sealed class ErrorHandlingMiddleware(
-    ILogger<ErrorHandlingMiddleware> logger,
     IErrorMessageLocalizeRepo errorMessageResolver) : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -33,8 +32,6 @@ public sealed class ErrorHandlingMiddleware(
             {
                 throw;
             }
-
-            logger.LogError(ex, "Unhandled exception");
             await WriteInternal(context);
         }
     }
@@ -54,7 +51,7 @@ public sealed class ErrorHandlingMiddleware(
                 var resolvedMessage = await errorMessageResolver.ResolveAsync(error.ErrorCode, lang);
                 resolvedErrors.Add(resolvedMessage);
             }
-            errors[group.Key] = resolvedErrors.ToArray();
+            errors[group.Key] = [.. resolvedErrors];
         }
 
         var problem = new BaseResponse
@@ -101,14 +98,14 @@ public sealed class ErrorHandlingMiddleware(
     private async Task WriteInternal(HttpContext context)
     {
         var lang = context.GetCurrentLanguage();
-        var desc = await errorMessageResolver.ResolveAsync(ErrorCodes.Internal, lang);
+        var desc = await errorMessageResolver.ResolveAsync(ErrorCodes.SystemError, lang);
         var problem = new BaseResponse
         {
             Status = new ResponseStatus
             {
                 StatusCode = StatusCodes.Status500InternalServerError,
                 Desc = desc,
-                ErrorCode = ErrorCodes.Internal
+                ErrorCode = ErrorCodes.SystemError
             }
         };
 

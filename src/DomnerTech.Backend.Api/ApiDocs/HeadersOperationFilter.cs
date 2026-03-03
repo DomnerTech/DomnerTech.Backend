@@ -21,5 +21,27 @@ public class HeadersOperationFilter : IOperationFilter
                 Type = JsonSchemaType.String
             }
         });
+        operation.Parameters.Add(new OpenApiParameter
+        {
+            Name = HeaderConstants.Lang,
+            In = ParameterLocation.Header,
+            Required = true,
+            Description = "User language",
+            Schema = new OpenApiSchema
+            {
+                Type = JsonSchemaType.String
+            }
+        });
+        operation.Parameters.Add(new OpenApiParameter
+        {
+            Name = HeaderConstants.Platform,
+            In = ParameterLocation.Header,
+            Required = true,
+            Description = "User platform",
+            Schema = new OpenApiSchema
+            {
+                Type = JsonSchemaType.String
+            }
+        });
     }
 }

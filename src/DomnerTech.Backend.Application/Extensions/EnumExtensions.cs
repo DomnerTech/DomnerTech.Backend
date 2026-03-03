@@ -30,7 +30,7 @@ public static class EnumExtensions
         public T ToEnum<T>(bool ignoreCase = true)
             where T : struct, Enum
         {
-            return string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Value cannot be null or empty.", nameof(value)) : Enum.Parse<T>(value, ignoreCase);
+            return Enum.Parse<T>(value, ignoreCase);
         }
 
         public bool TryToEnum<T>(out T result, bool ignoreCase = true)

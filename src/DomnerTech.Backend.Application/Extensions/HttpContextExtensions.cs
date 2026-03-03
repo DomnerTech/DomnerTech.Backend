@@ -1,4 +1,5 @@
-﻿using DomnerTech.Backend.Application.Enums;
+﻿using DomnerTech.Backend.Application.Constants;
+using DomnerTech.Backend.Application.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace DomnerTech.Backend.Application.Extensions;
@@ -7,20 +8,20 @@ public static class HttpContextExtensions
 {
     public static string GetCurrentLanguage(this IHttpContextAccessor accessor)
     {
-        var lang = accessor.HttpContext?.Request.Headers["lang"].FirstOrDefault()?.ToLower() ?? "En";
+        var lang = accessor.HttpContext?.Items[HeaderConstants.Lang]?.ToString() ?? nameof(LanguageSupportType.En).ToLower();
         return GetCurrentLanguageInternal(lang);
     }
     public static string GetCurrentLanguage(this HttpContext httpContext)
     {
-        var lang = httpContext.Request.Headers["lang"].FirstOrDefault()?.ToLower() ?? "En";
+        var lang = httpContext.Items[HeaderConstants.Lang]?.ToString() ?? nameof(LanguageSupportType.En).ToLower();
         return GetCurrentLanguageInternal(lang);
     }
 
     private static string GetCurrentLanguageInternal(string lang)
     {
         var languageSupport = Enum.GetValues<LanguageSupportType>();
-        return languageSupport.Any(x => x.ToName().Equals(lang, StringComparison.CurrentCultureIgnoreCase))
+        return languageSupport.Any(x => x.ToName(true).Equals(lang, StringComparison.CurrentCultureIgnoreCase))
             ? lang
-            : LanguageSupportType.En.ToName().ToLower();
+            : nameof(LanguageSupportType.En).ToLower();
     }
 }
