@@ -44,7 +44,7 @@ public sealed class UserController(
     /// with the paginated user data and, if requested, the total user count.
     /// </returns>
     [HttpGet("all"), Authorize(Roles = "User.Read")]
-    public async Task<ActionResult<BaseResponse<bool>>> GetAllUser(
+    public async Task<ActionResult<BaseResponse<KeysetPageResult<UserDto>>>> GetAllUser(
         [FromQuery(Name = "cursor")] string? cursor,
         [FromQuery(Name = "page_size")] int pageSize,
         [FromQuery(Name = "direction")] CursorDirection direction,

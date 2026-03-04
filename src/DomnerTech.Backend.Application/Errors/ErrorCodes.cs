@@ -12,6 +12,7 @@ public class ErrorCodes
     public const string Conflict = $"{Name}-CONFLICT";
     public const string Unauthorized = $"{Name}-UNAUTHORIZED";
     public const string Forbidden = $"{Name}-FORBIDDEN";
+    public const string MaxPageSize = $"{Name}-MAX-PAGE-SIZE";
 
     public class Localize
     {

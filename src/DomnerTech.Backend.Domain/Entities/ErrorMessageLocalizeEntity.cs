@@ -5,6 +5,7 @@ namespace DomnerTech.Backend.Domain.Entities;
 [MongoCollection("errorMessageLocalizes")]
 public class ErrorMessageLocalizeEntity : IBaseEntity
 {
+    [Sortable(alias: "id")]
     public required ObjectId Id { get; set; }
     public required string Key { get; set; }
     public required Dictionary<string, string> Messages { get; set; } = [];

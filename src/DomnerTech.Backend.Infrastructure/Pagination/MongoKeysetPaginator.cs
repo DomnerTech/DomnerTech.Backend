@@ -21,7 +21,7 @@ public sealed class MongoKeysetPaginator<T>(
     AppSettings appSettings,
     SortProfile<T> sortProfile)
     : IKeysetPaginator<T>
-    where T : IBaseEntity, ITenantEntity
+    where T : IBaseEntity
 {
     public async Task<KeysetPageResult<T>> PaginateAsync(
         string dbName,
@@ -33,7 +33,9 @@ public sealed class MongoKeysetPaginator<T>(
         var collection = dbContextFactory.Create(dbName).Database.GetCollection<T>();
         var builder = Builders<T>.Filter;
 
-        var tenantFilter = builder.Eq(x => x.CompanyId, tenantId);
+        var tenantFilter = typeof(T).IsAssignableTo(typeof(ITenantEntity)) 
+            ? builder.Eq("companyId", tenantId)
+            : builder.Empty;
         // User filter
         var baseFilter = userFilter ?? builder.Empty;
         // Merge safely
