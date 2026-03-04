@@ -22,7 +22,7 @@ public class EmployeeEntity : IBaseEntity, ITenantEntity, IAuditEntity
     // Employment Details
     public required string Department { get; set; }
     public required string JobTitle { get; set; }
-    public required AddressValueObject Address { get; set; }
+    public AddressValueObject? Address { get; set; }
     public required string EmployeeNumber { get; set; }
 
     public DateTime CreatedAt { get; set; }

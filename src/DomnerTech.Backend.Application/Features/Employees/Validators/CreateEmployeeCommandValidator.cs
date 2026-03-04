@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using DomnerTech.Backend.Application.Errors;
+using FluentValidation;
 
 namespace DomnerTech.Backend.Application.Features.Employees.Validators;
 
@@ -6,58 +7,117 @@ public sealed class CreateEmployeeCommandValidator : AbstractValidator<CreateEmp
 {
     public CreateEmployeeCommandValidator()
     {
-        RuleFor(i => i.Dto.DateOfBirth)
-            .NotNull()
-            .Must(dob => {
-                var today = DateTime.UtcNow.Date;
-                var minDob = today.AddYears(-65);
-                var maxDob = today.AddYears(-18);
+        // ==============================
+        // Date of Birth
+        // ==============================
 
-                var birth = dob.Date;
+        RuleFor(x => x.Dto.DateOfBirth)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.Employee.DobReq)
+            .Must(BeBetween18And65)
+            .WithErrorCode(ErrorCodes.Employee.DobInvalidAge);
 
-                return birth >= minDob && birth <= maxDob;
-            })
-            .WithMessage("Age must be between 18 and 65 years.");
+        // ==============================
+        // Department
+        // ==============================
 
-        RuleFor(i => i.Dto.Department)
-            .NotNull()
-            .NotEmpty();
+        RuleFor(x => x.Dto.Department)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.Employee.DepartmentReq);
 
-        RuleFor(i => i.Dto.Email)
-            .NotNull()
-            .EmailAddress();
+        // ==============================
+        // Email
+        // ==============================
 
-        RuleFor(i => i.Dto.FirstName)
-            .NotNull()
-            .NotEmpty();
+        RuleFor(x => x.Dto.Email)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.Employee.EmailReq)
+            .EmailAddress()
+            .WithErrorCode(ErrorCodes.Employee.EmailInvalid);
 
-        RuleFor(i => i.Dto.HireDate)
-            .NotNull()
-            .NotEmpty();
+        // ==============================
+        // First Name
+        // ==============================
 
-        RuleFor(i => i.Dto.JobTitle)
-            .NotNull()
-            .NotEmpty();
+        RuleFor(x => x.Dto.FirstName)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.Employee.FirstNameReq);
 
-        RuleFor(i => i.Dto.LastName)
-            .NotNull()
-            .NotEmpty();
+        // ==============================
+        // Last Name
+        // ==============================
 
-        RuleFor(i => i.Dto.PhoneNumber)
-            .NotNull()
-            .NotEmpty();
+        RuleFor(x => x.Dto.LastName)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.Employee.LastNameReq);
 
-        RuleFor(i => i.Dto.Address.Street)
+        // ==============================
+        // Job Title
+        // ==============================
+
+        RuleFor(x => x.Dto.JobTitle)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.Employee.JobTitleReq);
+
+        // ==============================
+        // Phone Number
+        // ==============================
+
+        RuleFor(x => x.Dto.PhoneNumber)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.Employee.PhoneNumberReq);
+
+        // ==============================
+        // Hire Date
+        // ==============================
+
+        RuleFor(x => x.Dto.HireDate)
+            .NotEmpty()
+            .WithErrorCode(ErrorCodes.Employee.HireDateReq)
+            .Must(date => date.Date <= DateTime.UtcNow.Date)
+            .WithErrorCode(ErrorCodes.Employee.HireDateFuture);
+
+        // ==============================
+        // Address Object
+        // ==============================
+
+        RuleFor(x => x.Dto.Address)
             .NotNull()
-            .NotEmpty();
-        RuleFor(i => i.Dto.Address.City)
-            .NotNull()
-            .NotEmpty();
-        RuleFor(i => i.Dto.Address.PostalCode)
-            .NotNull()
-            .NotEmpty();
-        RuleFor(i => i.Dto.Address.Country)
-            .NotNull()
-            .NotEmpty();
+            .WithErrorCode(ErrorCodes.Employee.AddressReq);
+
+        When(x => x.Dto.Address != null, () =>
+        {
+            RuleFor(x => x.Dto.Address!.Street)
+                .NotEmpty()
+                .WithErrorCode(ErrorCodes.Employee.StreetReq);
+
+            RuleFor(x => x.Dto.Address!.City)
+                .NotEmpty()
+                .WithErrorCode(ErrorCodes.Employee.CityReq);
+
+            RuleFor(x => x.Dto.Address!.PostalCode)
+                .NotEmpty()
+                .WithErrorCode(ErrorCodes.Employee.PostalCodeReq);
+
+            RuleFor(x => x.Dto.Address!.Country)
+                .NotEmpty()
+                .WithErrorCode(ErrorCodes.Employee.CountryReq);
+        });
+    }
+
+    // ============================================
+    // Private Business Rule Methods
+    // ============================================
+
+    private static bool BeBetween18And65(DateTime dob)
+    {
+        var today = DateTime.UtcNow.Date;
+
+        var minDob = today.AddYears(-65);
+        var maxDob = today.AddYears(-18);
+
+        var birth = dob.Date;
+
+        return birth >= minDob && birth <= maxDob;
     }
 }

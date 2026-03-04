@@ -32,7 +32,7 @@ public sealed class CreateEmployeeCommandHandler(
                 PhoneNumber = r.PhoneNumber,
                 Department = r.Department,
                 JobTitle = r.JobTitle,
-                Address = r.Address.ToValueObject(),
+                Address = r.Address?.ToValueObject(),
                 EmployeeNumber = $"{StartingEmployeeNumber + empCount + 1}",
                 CompanyId = tenantService.CompanyId.ToObjectId(),
                 CreatedAt = date,

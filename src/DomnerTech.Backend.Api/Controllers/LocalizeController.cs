@@ -22,6 +22,19 @@ public sealed class LocalizeController(
             HttpContext.RequestAborted);
         return await ReturnJson(res);
     }
+    [HttpPost("error-messages/upserts"), Authorize(Roles = "Localize.Write")]
+    public async Task<ActionResult<BaseResponse<bool>>> ErrorMessageLocalizeUpserts(
+            [FromBody] List<ErrorMessageLocalizeUpsertReqDto> rs)
+    {
+        var tasks = rs.Select(async r =>
+            await commandQuery.Send(new ErrorMessageLocalizeUpsertCommand(r.Key, r.Messages),
+                HttpContext.RequestAborted));
+        await Task.WhenAll(tasks);
+        return await ReturnJson(new BaseResponse<bool>
+        {
+            Data = true
+        });
+    }
 
     /// <summary>
     /// Retrieves a paginated list of localized error messages, supporting cursor-based navigation and sorting options.

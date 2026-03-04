@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DomnerTech.Backend.Api.Controllers;
 
 public sealed class UserController(
-    CommandQuery commandQuery,
+    ICommandQuery commandQuery,
     IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
 {
     [HttpGet("get-me")]

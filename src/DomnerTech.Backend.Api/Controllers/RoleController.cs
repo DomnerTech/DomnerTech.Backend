@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DomnerTech.Backend.Api.Controllers;
 
 public sealed class RoleController(
-    CommandQuery commandQuery,
+    ICommandQuery commandQuery,
     IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
 {
     [HttpPost, Authorize(Roles = "Role.Write")]

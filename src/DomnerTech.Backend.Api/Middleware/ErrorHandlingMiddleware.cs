@@ -51,7 +51,9 @@ public sealed class ErrorHandlingMiddleware(
                 var resolvedMessage = await errorMessageResolver.ResolveAsync(error.ErrorCode, lang);
                 resolvedErrors.Add(resolvedMessage);
             }
-            errors[group.Key] = [.. resolvedErrors];
+
+            var keys = group.Key.Split('.');
+            errors[keys.Length > 1 ? keys[^1] : group.Key ] = [.. resolvedErrors];
         }
 
         var problem = new BaseResponse

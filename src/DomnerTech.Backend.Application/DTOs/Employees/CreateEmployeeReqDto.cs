@@ -11,5 +11,5 @@ public sealed class CreateEmployeeReqDto
 
     public string Department { get; set; } = string.Empty;
     public string JobTitle { get; set; } = string.Empty;
-    public AddressDto Address { get; set; } = new();
+    public AddressDto? Address { get; set; }
 }
