@@ -1,0 +1,44 @@
+using DomnerTech.Backend.Domain.Enums;
+
+namespace DomnerTech.Backend.Application.DTOs.Leaves.Holidays;
+
+/// <summary>
+/// DTO for creating a new holiday.
+/// </summary>
+public sealed record CreateHolidayReqDto
+{
+    /// <summary>
+    /// Gets or sets the name of the holiday.
+    /// </summary>
+    public required string Name { get; set; }
+
+    /// <summary>
+    /// Gets or sets the description of the holiday.
+    /// </summary>
+    public string? Description { get; set; }
+
+    /// <summary>
+    /// Gets or sets the holiday date.
+    /// </summary>
+    public required DateTime Date { get; set; }
+
+    /// <summary>
+    /// Gets or sets the type of holiday.
+    /// </summary>
+    public HolidayType Type { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether this holiday is recurring annually.
+    /// </summary>
+    public bool IsRecurring { get; set; }
+
+    /// <summary>
+    /// Gets or sets the country code (ISO 3166-1 alpha-2).
+    /// </summary>
+    public string? CountryCode { get; set; }
+
+    /// <summary>
+    /// Gets or sets the region/state.
+    /// </summary>
+    public string? Region { get; set; }
+}

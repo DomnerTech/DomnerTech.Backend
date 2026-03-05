@@ -15,8 +15,4 @@
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="3.6.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ValueObjects\" />
-  </ItemGroup>
 </Project>

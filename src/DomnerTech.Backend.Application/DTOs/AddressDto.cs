@@ -30,4 +30,19 @@ public static class AddressExtensions
             Country = dto.Country
         };
     }
+
+    public static AddressDto ToDto(this AddressValueObject valueObject)
+    {
+        return new AddressDto
+        {
+            Street = valueObject.Street,
+            Village = valueObject.Village,
+            Commune = valueObject.Commune,
+            District = valueObject.District,
+            City = valueObject.City,
+            State = valueObject.State,
+            PostalCode = valueObject.PostalCode,
+            Country = valueObject.Country
+        };
+    }
 }

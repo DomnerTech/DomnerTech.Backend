@@ -18,7 +18,7 @@ public sealed class ErrorHandlingMiddleware(
         {
             await next(context);
         }
-        catch (ValidationException ex)
+        catch (FluentValidation.ValidationException ex)
         {
             await WriteValidation(context, ex);
         }
@@ -38,7 +38,7 @@ public sealed class ErrorHandlingMiddleware(
 
     private async Task WriteValidation(
         HttpContext context,
-        ValidationException ex)
+        FluentValidation.ValidationException ex)
     {
         var lang = context.GetCurrentLanguage();
 
