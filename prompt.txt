@@ -1,0 +1,207 @@
+please create a copilot instruction file for this project with the following content:
+•	always use controllers for api endpoints
+•	always use dependency injection
+•	use the repository pattern
+•	use best practices
+•	always add XML summary comments
+•	use DTOd where it makes sense
+•	use individual files for classes, interfaces, dtos, records, enums, etc
+•	use fluentvalidation for validate
+•	use CQRS like I already used in this project
+•	define a meaning full for errors and invalid validations
+•	always keep the controllers as clean as possible
+•	use redis caching where it needed
+•	use xunit testing
+•	this api servers over 10M+ active users
+•	aways show me your plan first, before you start implementing
+
+
+- What is this project doing, how is it built, and what are the key components
+
+---------------------------------------------------------------------------------------
+1. Employee Leave Management
+
+Features used by employees.
+
+Leave Request
+- Apply for leave
+- Select leave type
+- Start date / End date
+- Half-day leave option
+- Attach supporting documents
+- Leave reason / note
+
+Leave Status Tracking
+- Pending
+- Approved
+- Rejected
+- Cancelled
+
+Leave History
+- View all past leave requests
+- Filter by date, type, status
+
+Leave Balance
+- Remaining leave days
+- Used leave
+- Upcoming leave
+
+Leave Calendar
+- Personal leave calendar
+- Team leave calendar
+
+2. Leave Types Management
+
+Admin configuration.
+
+Common leave types:
+- Annual Leave
+- Sick Leave
+- Maternity Leave
+- Paternity Leave
+- Unpaid Leave
+- Emergency Leave
+- Public Holiday Leave
+Admin features:
+- Create leave types
+- Set yearly allowance
+- Carry-forward rules
+- Expiry rules
+- Require document (e.g., medical certificate)
+3. Leave Approval Workflow
+Approval process for managers.
+Manager Actions
+- Approve leave
+- Reject leave
+- Request modification
+
+Multi-Level Approval
+
+Example workflow:
+Employee → Team Lead → HR → Final Approval
+
+Features:
+- Configurable approval levels
+- Automatic routing
+- Escalation rules
+
+4. Leave Balance Engine
+
+System automatically calculates leave.
+
+Features
+- Auto leave deduction
+- Accrual-based leave
+- Carry forward leave
+- Expiry calculation
+- Example rules:
+
+Annual Leave = 18 days / year
+Monthly Accrual = 1.5 days
+Max Carry Forward = 5 days
+
+5. Holiday Management
+
+Public holidays configuration.
+Features:
+- Create holiday calendar
+- Country-based holidays
+- Company holidays
+- Optional holidays
+
+Example:
+
+Khmer New Year
+Pchum Ben
+Independence Day
+
+6. Leave Policies
+
+Define company rules.
+Examples:
+- Maximum leave per request
+- Minimum notice period
+- Probation restrictions
+- Weekend counting rules
+Example rules:
+Minimum notice: 2 days
+Max leave per request: 10 days
+Probation: No annual leave
+-----------------------------------------
+7. Team Leave Visibility
+
+Managers can see team schedules.
+Features:
+- Team leave calendar
+- Conflict detection
+- Maximum employees on leave
+Example:
+Max 2 employees per team can take leave at same time
+
+8. Notifications
+System alerts.
+Channels:
+- Email
+- SMS
+- In-app notification
+Examples:
+Leave request submitted
+Leave approved
+Leave rejected
+Reminder before leave
+
+9. Reports & Analytics
+- HR reporting tools.
+Examples:
+- Leave usage report
+- Employee leave summary
+- Department leave statistics
+- Leave trend analysis
+Example metrics:
+Total leaves taken
+Unused leave
+Average leave per employee
+
+10. Admin Dashboard
+Overview for HR/admin.
+Features:
+- Pending approvals
+- Employees currently on leave
+- Upcoming leaves
+- Leave statistics
+
+11. Integration Features
+Useful for enterprise systems.
+Attendance System
+Auto sync leave with attendance.
+Example:
+If approved leave → mark attendance as Leave
+
+Payroll
+Deduct salary for unpaid leave.
+Calendar Integration
+- Google Calendar
+- Outlook
+
+12. Audit Logs
+
+Track all actions.
+Example logs:
+- Leave requested
+- Leave approved
+- Leave cancelled
+- Policy updated
+
+14. Advanced Enterprise Features
+
+For large organizations.
+
+Leave Forecast
+Predict leave balance.
+
+Auto Leave Deduction
+If employee absent without request.
+
+Leave Blackout Dates
+Example:
+No leave during company peak season
