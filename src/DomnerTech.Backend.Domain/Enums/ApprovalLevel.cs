@@ -18,7 +18,7 @@ public enum ApprovalLevel
     /// <summary>
     /// Human Resources approval level.
     /// </summary>
-    HR = 2,
+    Hr = 2,
 
     /// <summary>
     /// Final approval level (e.g., Director, CEO).

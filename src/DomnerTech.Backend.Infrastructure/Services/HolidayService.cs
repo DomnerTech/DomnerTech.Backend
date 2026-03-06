@@ -14,13 +14,13 @@ public sealed class HolidayService(IHolidayRepo holidayRepo) : IHolidayService
         var holidays = await holidayRepo.GetInRangeAsync(startDate.Date, endDate.Date, cancellationToken);
         var holidayDates = holidays.Select(h => h.Date.Date).ToHashSet();
 
-        int workingDays = 0;
+        var workingDays = 0;
         var currentDate = startDate.Date;
 
         while (currentDate <= endDate.Date)
         {
-            bool isWeekend = currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday;
-            bool isHoliday = holidayDates.Contains(currentDate);
+            var isWeekend = currentDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
+            var isHoliday = holidayDates.Contains(currentDate);
 
             if (!isHoliday)
             {

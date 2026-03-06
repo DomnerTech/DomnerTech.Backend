@@ -5,7 +5,7 @@ namespace DomnerTech.Backend.Domain.Entities;
 /// <summary>
 /// Represents a company leave policy configuration.
 /// </summary>
-[MongoCollection("leave_policies")]
+[MongoCollection("leavePolicies")]
 public sealed class LeavePolicyEntity : IBaseEntity, ITenantEntity, IAuditEntity, ISoftDeleteEntity
 {
     [Sortable(alias: "id", order: 1)]

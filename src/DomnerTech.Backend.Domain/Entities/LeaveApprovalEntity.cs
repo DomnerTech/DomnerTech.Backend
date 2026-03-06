@@ -6,7 +6,7 @@ namespace DomnerTech.Backend.Domain.Entities;
 /// <summary>
 /// Represents an approval step in the leave request workflow.
 /// </summary>
-[MongoCollection("leave_approvals")]
+[MongoCollection("leaveApprovals")]
 public sealed class LeaveApprovalEntity : IBaseEntity, ITenantEntity, IAuditEntity
 {
     [Sortable(alias: "id", order: 1)]

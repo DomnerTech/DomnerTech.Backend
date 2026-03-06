@@ -1,7 +1,5 @@
 using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Domain.Enums;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace DomnerTech.Backend.WorkerService.Workers;
 
@@ -36,7 +34,7 @@ public sealed class LeaveNotificationWorker(
                     .Where(r => (now - r.SubmittedAt).TotalDays > 2)
                     .ToList();
 
-                if (oldPendingRequests.Any())
+                if (oldPendingRequests.Count > 0)
                 {
                     logger.LogInformation(
                         "Found {Count} pending leave requests older than 2 days requiring attention",
@@ -59,7 +57,7 @@ public sealed class LeaveNotificationWorker(
                     .Where(r => r.Period.StartDate.Date == upcomingDate)
                     .ToList();
 
-                if (upcomingLeave.Any())
+                if (upcomingLeave.Count > 0)
                 {
                     logger.LogInformation(
                         "Found {Count} employees with leave starting in 3 days",
@@ -82,7 +80,7 @@ public sealed class LeaveNotificationWorker(
                     .Where(b => b.Allowance.RemainingDays < 5 && b.Allowance.RemainingDays > 0)
                     .ToList();
 
-                if (lowBalances.Any())
+                if (lowBalances.Count > 0)
                 {
                     logger.LogInformation(
                         "Found {Count} employees with low leave balances",
@@ -105,7 +103,7 @@ public sealed class LeaveNotificationWorker(
                                 b.Allowance.CarriedForwardDays > 0)
                     .ToList();
 
-                if (expiringCarryForward.Any())
+                if (expiringCarryForward.Count > 0)
                 {
                     logger.LogInformation(
                         "Found {Count} employees with expiring carry forward leave",

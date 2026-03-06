@@ -1,8 +1,6 @@
 ﻿using DomnerTech.Backend.Application;
 using DomnerTech.Backend.Application.Constants;
-using DomnerTech.Backend.Application.Exceptions;
 using DomnerTech.Backend.Application.Services;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

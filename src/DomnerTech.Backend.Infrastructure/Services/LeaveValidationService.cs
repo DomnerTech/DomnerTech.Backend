@@ -97,7 +97,7 @@ public sealed class LeaveValidationService(
             errors.Add($"Insufficient leave balance. Available: {available} days, Requested: {requestedDays} days");
         }
 
-        if (policy.AllowNegativeBalance && policy.MaxNegativeBalance.HasValue)
+        if (policy is { AllowNegativeBalance: true, MaxNegativeBalance: not null })
         {
             var negativeAmount = requestedDays - available;
             if (negativeAmount > policy.MaxNegativeBalance.Value)
@@ -107,7 +107,7 @@ public sealed class LeaveValidationService(
         }
 
         // Validate probation
-        if (!policy.AllowDuringProbation && policy.ProbationPeriodMonths.HasValue)
+        if (policy is { AllowDuringProbation: false, ProbationPeriodMonths: not null })
         {
             var employee = await employeeRepo.GetByIdAsync(employeeId, cancellationToken);
             if (employee != null)
@@ -152,11 +152,6 @@ public sealed class LeaveValidationService(
             policy.IncludeWeekends,
             cancellationToken);
 
-        if (isHalfDay)
-        {
-            return 0.5m;
-        }
-
-        return workingDays;
+        return isHalfDay ? 0.5m : workingDays;
     }
 }

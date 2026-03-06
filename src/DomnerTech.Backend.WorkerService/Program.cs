@@ -10,6 +10,7 @@ builder.Services.AddApplication();
 
 // Configure AppSettings
 var appSettings = builder.Configuration.Get<AppSettings>() ?? new AppSettings();
+builder.Services.AddSingleton(appSettings);
 
 // Add infrastructure services
 builder.Services.AddInfrastructure(appSettings);

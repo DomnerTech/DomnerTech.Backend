@@ -1,7 +1,4 @@
 using DomnerTech.Backend.Application.IRepo;
-using DomnerTech.Backend.Domain.ValueObjects;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace DomnerTech.Backend.WorkerService.Workers;
 
@@ -24,7 +21,7 @@ public sealed class LeaveAccrualWorker(
                 var now = DateTime.UtcNow;
                 
                 // Run on the 1st of each month at 1 AM
-                if (now.Day == 1 && now.Hour == 1)
+                if (now is { Day: 1, Hour: 1 })
                 {
                     logger.LogInformation("Processing monthly leave accruals at: {Time}", DateTimeOffset.Now);
                     
@@ -38,25 +35,22 @@ public sealed class LeaveAccrualWorker(
                     foreach (var balance in allBalances)
                     {
                         var leaveType = await leaveTypeRepo.GetByIdAsync(balance.LeaveTypeId, stoppingToken);
-                        
-                        if (leaveType?.IsAccrualBased == true && leaveType.MonthlyAccrualDays.HasValue)
-                        {
-                            // Check if already accrued this month
-                            if (balance.LastAccrualDate?.Month != now.Month)
-                            {
-                                balance.Allowance.TotalAllowance += leaveType.MonthlyAccrualDays.Value;
-                                balance.LastAccrualDate = now;
-                                balance.UpdatedAt = now;
 
-                                await leaveBalanceRepo.UpdateAsync(balance, stoppingToken);
+                        if (leaveType is not { IsAccrualBased: true, MonthlyAccrualDays: not null }
+                            || balance.LastAccrualDate?.Month == now.Month) continue;
+
+                        // Check if already accrued this month
+                        balance.Allowance.TotalAllowance += leaveType.MonthlyAccrualDays.Value;
+                        balance.LastAccrualDate = now;
+                        balance.UpdatedAt = now;
+
+                        await leaveBalanceRepo.UpdateAsync(balance, stoppingToken);
                                 
-                                logger.LogInformation(
-                                    "Accrued {Days} days for employee {EmployeeId}, leave type {LeaveTypeId}",
-                                    leaveType.MonthlyAccrualDays.Value,
-                                    balance.EmployeeId,
-                                    balance.LeaveTypeId);
-                            }
-                        }
+                        logger.LogInformation(
+                            "Accrued {Days} days for employee {EmployeeId}, leave type {LeaveTypeId}",
+                            leaveType.MonthlyAccrualDays.Value,
+                            balance.EmployeeId,
+                            balance.LeaveTypeId);
                     }
 
                     logger.LogInformation("Monthly leave accrual processing completed");

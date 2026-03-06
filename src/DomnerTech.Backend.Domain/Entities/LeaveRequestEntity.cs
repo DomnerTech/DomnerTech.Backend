@@ -7,7 +7,7 @@ namespace DomnerTech.Backend.Domain.Entities;
 /// <summary>
 /// Represents an employee leave request.
 /// </summary>
-[MongoCollection("leave_requests")]
+[MongoCollection("leaveRequests")]
 public sealed class LeaveRequestEntity : IBaseEntity, ITenantEntity, IAuditEntity, ISoftDeleteEntity
 {
     [Sortable(alias: "id", order: 1)]

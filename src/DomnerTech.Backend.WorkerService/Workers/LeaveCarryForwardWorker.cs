@@ -1,6 +1,4 @@
 using DomnerTech.Backend.Application.IRepo;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace DomnerTech.Backend.WorkerService.Workers;
 
@@ -23,7 +21,7 @@ public sealed class LeaveCarryForwardWorker(
                 var now = DateTime.UtcNow;
                 
                 // Run on January 1st at 2 AM
-                if (now.Month == 1 && now.Day == 1 && now.Hour == 2)
+                if (now is { Month: 1, Day: 1, Hour: 2 })
                 {
                     logger.LogInformation("Processing leave carry forwards at: {Time}", DateTimeOffset.Now);
                     
@@ -58,7 +56,7 @@ public sealed class LeaveCarryForwardWorker(
                             {
                                 currentYearBalance.Allowance.CarriedForwardDays = carriedForwardDays;
                                 
-                                if (leaveType.CarryForwardExpires && leaveType.CarryForwardExpiryDate.HasValue)
+                                if (leaveType is { CarryForwardExpires: true, CarryForwardExpiryDate: not null })
                                 {
                                     currentYearBalance.CarryForwardExpiryDate = new DateTime(
                                         currentYear,

@@ -1,6 +1,4 @@
 using DomnerTech.Backend.Application.IRepo;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace DomnerTech.Backend.WorkerService.Workers;
 
@@ -36,27 +34,24 @@ public sealed class LeaveExpiryWorker(
 
                     foreach (var balance in allBalances)
                     {
-                        if (balance.CarryForwardExpiryDate.HasValue && 
-                            balance.CarryForwardExpiryDate.Value.Date <= now.Date &&
-                            balance.Allowance.CarriedForwardDays > 0)
-                        {
-                            var leaveType = await leaveTypeRepo.GetByIdAsync(balance.LeaveTypeId, stoppingToken);
-                            
-                            if (leaveType?.CarryForwardExpires == true)
-                            {
-                                logger.LogInformation(
-                                    "Expiring {Days} carried forward days for employee {EmployeeId}, leave type {LeaveTypeId}",
-                                    balance.Allowance.CarriedForwardDays,
-                                    balance.EmployeeId,
-                                    balance.LeaveTypeId);
+                        if (!balance.CarryForwardExpiryDate.HasValue ||
+                            balance.CarryForwardExpiryDate.Value.Date > now.Date ||
+                            balance.Allowance.CarriedForwardDays <= 0) continue;
 
-                                balance.Allowance.CarriedForwardDays = 0;
-                                balance.CarryForwardExpiryDate = null;
-                                balance.UpdatedAt = now;
+                        var leaveType = await leaveTypeRepo.GetByIdAsync(balance.LeaveTypeId, stoppingToken);
+
+                        if (leaveType?.CarryForwardExpires != true) continue;
+                        logger.LogInformation(
+                            "Expiring {Days} carried forward days for employee {EmployeeId}, leave type {LeaveTypeId}",
+                            balance.Allowance.CarriedForwardDays,
+                            balance.EmployeeId,
+                            balance.LeaveTypeId);
+
+                        balance.Allowance.CarriedForwardDays = 0;
+                        balance.CarryForwardExpiryDate = null;
+                        balance.UpdatedAt = now;
                                 
-                                await leaveBalanceRepo.UpdateAsync(balance, stoppingToken);
-                            }
-                        }
+                        await leaveBalanceRepo.UpdateAsync(balance, stoppingToken);
                     }
 
                     logger.LogInformation("Leave expiry processing completed");

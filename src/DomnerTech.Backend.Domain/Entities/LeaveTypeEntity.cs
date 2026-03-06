@@ -1,4 +1,3 @@
-using DomnerTech.Backend.Domain.Enums;
 using MongoDB.Bson;
 
 namespace DomnerTech.Backend.Domain.Entities;
@@ -6,7 +5,7 @@ namespace DomnerTech.Backend.Domain.Entities;
 /// <summary>
 /// Represents a leave type configuration in the system.
 /// </summary>
-[MongoCollection("leave_types")]
+[MongoCollection("leaveTypes")]
 public sealed class LeaveTypeEntity : IBaseEntity, ITenantEntity, IAuditEntity, ISoftDeleteEntity
 {
     [Sortable(alias: "id", order: 1)]

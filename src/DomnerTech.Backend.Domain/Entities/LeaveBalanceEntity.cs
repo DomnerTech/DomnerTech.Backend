@@ -6,7 +6,7 @@ namespace DomnerTech.Backend.Domain.Entities;
 /// <summary>
 /// Represents an employee's leave balance for a specific leave type.
 /// </summary>
-[MongoCollection("leave_balances")]
+[MongoCollection("leaveBalances")]
 public sealed class LeaveBalanceEntity : IBaseEntity, ITenantEntity, IAuditEntity
 {
     [Sortable(alias: "id", order: 1)]
