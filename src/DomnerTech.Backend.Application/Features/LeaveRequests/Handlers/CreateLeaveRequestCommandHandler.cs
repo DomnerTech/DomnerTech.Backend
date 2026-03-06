@@ -1,4 +1,5 @@
 using Bas24.CommandQuery;
+using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.Errors;
 using DomnerTech.Backend.Application.Exceptions;
@@ -17,7 +18,6 @@ namespace DomnerTech.Backend.Application.Features.LeaveRequests.Handlers;
 public sealed class CreateLeaveRequestCommandHandler(
     ILogger<CreateLeaveRequestCommandHandler> logger,
     ILeaveRequestRepo leaveRequestRepo,
-    ILeaveBalanceRepo leaveBalanceRepo,
     ILeaveTypeRepo leaveTypeRepo,
     ILeaveValidationService leaveValidationService,
     ITenantService tenantService,
@@ -29,8 +29,7 @@ public sealed class CreateLeaveRequestCommandHandler(
         {
             var r = request.Dto;
             var leaveTypeId = ObjectId.Parse(r.LeaveTypeId);
-            var employeeId = httpContextAccessor.HttpContext?.User.Claims
-                .FirstOrDefault(c => c.Type == "EmployeeId")?.Value.ToObjectId() ?? ObjectId.Empty;
+            var employeeId = httpContextAccessor.HttpContext?.GetClaim(ClaimConstant.EmpId).ToObjectId() ?? ObjectId.Empty;
 
             if (employeeId == ObjectId.Empty)
             {
@@ -53,7 +52,7 @@ public sealed class CreateLeaveRequestCommandHandler(
 
             // Check document requirement
             var leaveType = await leaveTypeRepo.GetByIdAsync(leaveTypeId, cancellationToken);
-            if (leaveType?.RequiresDocument == true && (r.DocumentUrls == null || !r.DocumentUrls.Any()))
+            if (leaveType?.RequiresDocument == true && (r.DocumentUrls == null || r.DocumentUrls.Count == 0))
             {
                 throw new ValidationException("Supporting documents are required for this leave type");
             }
