@@ -1,7 +1,28 @@
 # Copilot Instructions for This Project
 
+## About this project
+
+- We are building Advance POS Management which having main features
+  - Sales & Billing
+  - Inventory
+  - Product Catalog
+  - CRM
+  - Employee Management
+  - Supplier & Purchase
+  - Multi-store Management
+  - Finance & Accounting
+  - Reports & Analytics
+  - Omnichannel Sales
+  - Marketing & Loyalty
+  - Payment & Hardware
+  - Security & Compliance
+  - AI / Smart automation
+  - Industry modules
+
 ## Architecture & Design Patterns
 
+- **Language**: C# 14
+- **Framework**: .NET10
 - **Clean Architecture**: Follow the existing clean architecture structure in this project
 - **CQRS Pattern**: Use Command Query Responsibility Segregation as already implemented in this project
 - **Repository Pattern**: Implement data access using the repository pattern

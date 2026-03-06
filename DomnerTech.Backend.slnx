@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Items Solution/">
     <File Path=".gitignore" />
+    <File Path="prompt.txt" />
     <File Path="README.md" />
   </Folder>
   <Project Path="src/DomnerTech.Backend.Api/DomnerTech.Backend.Api.csproj" Id="1b0df121-bf16-4e94-a3b1-bbf09ee13ee7" />
