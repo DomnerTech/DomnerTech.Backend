@@ -97,5 +97,7 @@ public class ErrorCodes
         public const string HolidayNameReq = $"{LvName}-HOLIDAY-NAME-REQ";
         public const string HolidayDateReq = $"{LvName}-HOLIDAY-DATE-REQ";
         public const string PolicyNameReq = $"{LvName}-POLICY-NAME-REQ";
+        public const string DepartmentReq = $"{LvName}-DEPARTMENT-REQ";
+        public const string MaxEmployeesReq = $"{LvName}-MAX-EMPLOYEES-REQ";
     }
 }
