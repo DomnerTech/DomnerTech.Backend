@@ -1,4 +1,5 @@
 using DomnerTech.Backend.Application.DTOs;
+using DomnerTech.Backend.Domain.Entities;
 using DomnerTech.Backend.Domain.Enums;
 
 namespace DomnerTech.Backend.Application.DTOs.Leaves.Holidays;
@@ -62,4 +63,25 @@ public sealed record HolidayDto : IBaseDto
     /// Gets or sets the last update date.
     /// </summary>
     public DateTime UpdatedAt { get; set; }
+}
+
+public static class HolidayDtoExtensions
+{
+    public static HolidayDto ToDto(this HolidayEntity entity)
+    {
+        return new HolidayDto
+        {
+            Id = entity.Id.ToString(),
+            Name = entity.Name,
+            Description = entity.Description,
+            Date = entity.Date,
+            Type = entity.Type,
+            IsRecurring = entity.IsRecurring,
+            CountryCode = entity.CountryCode,
+            Region = entity.Region,
+            IsActive = entity.IsActive,
+            CreatedAt = entity.CreatedAt,
+            UpdatedAt = entity.UpdatedAt
+        };
+    }
 }

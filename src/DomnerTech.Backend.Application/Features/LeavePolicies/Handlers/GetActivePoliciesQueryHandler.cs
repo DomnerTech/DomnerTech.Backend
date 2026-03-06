@@ -10,16 +10,16 @@ namespace DomnerTech.Backend.Application.Features.LeavePolicies.Handlers;
 
 public sealed class GetActivePoliciesQueryHandler(
     ILogger<GetActivePoliciesQueryHandler> logger,
-    ILeavePolicyRepo leavePolicyRepo) : IRequestHandler<GetActivePoliciesQuery, BaseResponse<List<LeavePolicyDto>>>
+    ILeavePolicyRepo leavePolicyRepo) : IRequestHandler<GetActivePoliciesQuery, BaseResponse<IEnumerable<LeavePolicyDto>>>
 {
-    public async Task<BaseResponse<List<LeavePolicyDto>>> Handle(GetActivePoliciesQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<IEnumerable<LeavePolicyDto>>> Handle(GetActivePoliciesQuery request, CancellationToken cancellationToken)
     {
         try
         {
             var entities = await leavePolicyRepo.GetAllActiveAsync(cancellationToken);
-            return new BaseResponse<List<LeavePolicyDto>>
+            return new BaseResponse<IEnumerable<LeavePolicyDto>>
             {
-                Data = [.. entities.Select(e => e.ToDto())]
+                Data = entities.Select(e => e.ToDto())
             };
         }
         catch (OperationCanceledException)
@@ -31,7 +31,7 @@ public sealed class GetActivePoliciesQueryHandler(
             logger.LogError(e, "Error getting active policies: {Error}", e.Message);
         }
 
-        return new BaseResponse<List<LeavePolicyDto>>
+        return new BaseResponse<IEnumerable<LeavePolicyDto>>
         {
             Data = [],
             Status = new ResponseStatus

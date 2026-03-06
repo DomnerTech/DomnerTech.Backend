@@ -59,7 +59,7 @@ public sealed class LeavePolicyController(
     /// Retrieves all active leave policies.
     /// </summary>
     [HttpGet, Authorize(Roles = "LeavePolicy.Read")]
-    public async Task<ActionResult<BaseResponse<List<LeavePolicyDto>>>> GetActivePolicies()
+    public async Task<ActionResult<BaseResponse<IEnumerable<LeavePolicyDto>>>> GetActivePolicies()
     {
         var result = await commandQuery.Send(new GetActivePoliciesQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
@@ -68,7 +68,7 @@ public sealed class LeavePolicyController(
     /// <summary>
     /// Retrieves the policy for a specific leave type.
     /// </summary>
-    [HttpGet("leavetype/{leaveTypeId}"), Authorize(Roles = "LeavePolicy.Read")]
+    [HttpGet("leave-type/{leaveTypeId}"), Authorize(Roles = "LeavePolicy.Read")]
     public async Task<ActionResult<BaseResponse<LeavePolicyDto>>> GetPolicyByLeaveType([FromRoute] string leaveTypeId)
     {
         var result = await commandQuery.Send(new GetPolicyByLeaveTypeQuery(leaveTypeId), HttpContext.RequestAborted);

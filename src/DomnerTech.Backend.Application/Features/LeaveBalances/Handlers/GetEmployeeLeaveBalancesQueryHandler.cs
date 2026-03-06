@@ -12,9 +12,9 @@ namespace DomnerTech.Backend.Application.Features.LeaveBalances.Handlers;
 public sealed class GetEmployeeLeaveBalancesQueryHandler(
     ILogger<GetEmployeeLeaveBalancesQueryHandler> logger,
     ILeaveBalanceRepo leaveBalanceRepo,
-    ILeaveTypeRepo leaveTypeRepo) : IRequestHandler<GetEmployeeLeaveBalancesQuery, BaseResponse<List<LeaveBalanceSummaryDto>>>
+    ILeaveTypeRepo leaveTypeRepo) : IRequestHandler<GetEmployeeLeaveBalancesQuery, BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>>
 {
-    public async Task<BaseResponse<List<LeaveBalanceSummaryDto>>> Handle(GetEmployeeLeaveBalancesQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>> Handle(GetEmployeeLeaveBalancesQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -36,7 +36,7 @@ public sealed class GetEmployeeLeaveBalancesQueryHandler(
                 };
             }).ToList();
 
-            return new BaseResponse<List<LeaveBalanceSummaryDto>> { Data = summary };
+            return new BaseResponse<IEnumerable<LeaveBalanceSummaryDto>> { Data = summary };
         }
         catch (OperationCanceledException)
         {
@@ -47,7 +47,7 @@ public sealed class GetEmployeeLeaveBalancesQueryHandler(
             logger.LogError(e, "Error getting employee leave balances: {Error}", e.Message);
         }
 
-        return new BaseResponse<List<LeaveBalanceSummaryDto>>
+        return new BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>
         {
             Data = [],
             Status = new ResponseStatus

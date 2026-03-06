@@ -11,17 +11,17 @@ namespace DomnerTech.Backend.Application.Features.LeaveApprovals.Handlers;
 
 public sealed class GetLeaveApprovalHistoryQueryHandler(
     ILogger<GetLeaveApprovalHistoryQueryHandler> logger,
-    ILeaveApprovalRepo leaveApprovalRepo) : IRequestHandler<GetLeaveApprovalHistoryQuery, BaseResponse<List<LeaveApprovalDto>>>
+    ILeaveApprovalRepo leaveApprovalRepo) : IRequestHandler<GetLeaveApprovalHistoryQuery, BaseResponse<IEnumerable<LeaveApprovalDto>>>
 {
-    public async Task<BaseResponse<List<LeaveApprovalDto>>> Handle(GetLeaveApprovalHistoryQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<IEnumerable<LeaveApprovalDto>>> Handle(GetLeaveApprovalHistoryQuery request, CancellationToken cancellationToken)
     {
         try
         {
             var leaveRequestId = ObjectId.Parse(request.LeaveRequestId);
             var entities = await leaveApprovalRepo.GetByLeaveRequestAsync(leaveRequestId, cancellationToken);
-            return new BaseResponse<List<LeaveApprovalDto>>
+            return new BaseResponse<IEnumerable<LeaveApprovalDto>>
             {
-                Data = [.. entities.Select(e => e.ToDto())]
+                Data = entities.Select(e => e.ToDto())
             };
         }
         catch (OperationCanceledException)
@@ -33,7 +33,7 @@ public sealed class GetLeaveApprovalHistoryQueryHandler(
             logger.LogError(e, "Error getting approval history: {Error}", e.Message);
         }
 
-        return new BaseResponse<List<LeaveApprovalDto>>
+        return new BaseResponse<IEnumerable<LeaveApprovalDto>>
         {
             Data = [],
             Status = new ResponseStatus

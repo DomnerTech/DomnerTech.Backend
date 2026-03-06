@@ -1,4 +1,5 @@
 using Bas24.CommandQuery;
+using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Leaves.LeaveApprovals;
 using DomnerTech.Backend.Application.Errors;
@@ -14,14 +15,13 @@ namespace DomnerTech.Backend.Application.Features.LeaveApprovals.Handlers;
 public sealed class GetPendingApprovalsQueryHandler(
     ILogger<GetPendingApprovalsQueryHandler> logger,
     ILeaveApprovalRepo leaveApprovalRepo,
-    IHttpContextAccessor httpContextAccessor) : IRequestHandler<GetPendingApprovalsQuery, BaseResponse<List<LeaveApprovalDto>>>
+    IHttpContextAccessor httpContextAccessor) : IRequestHandler<GetPendingApprovalsQuery, BaseResponse<IEnumerable<LeaveApprovalDto>>>
 {
-    public async Task<BaseResponse<List<LeaveApprovalDto>>> Handle(GetPendingApprovalsQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<IEnumerable<LeaveApprovalDto>>> Handle(GetPendingApprovalsQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            var approverId = httpContextAccessor.HttpContext?.User.Claims
-                .FirstOrDefault(c => c.Type == "EmployeeId")?.Value.ToObjectId() ?? ObjectId.Empty;
+            var approverId = httpContextAccessor.HttpContext?.GetClaim(ClaimConstant.EmpId).ToObjectId() ?? ObjectId.Empty;
 
             if (approverId == ObjectId.Empty)
             {
@@ -29,9 +29,9 @@ public sealed class GetPendingApprovalsQueryHandler(
             }
 
             var entities = await leaveApprovalRepo.GetPendingByApproverAsync(approverId, cancellationToken);
-            return new BaseResponse<List<LeaveApprovalDto>>
+            return new BaseResponse<IEnumerable<LeaveApprovalDto>>
             {
-                Data = [.. entities.Select(e => e.ToDto())]
+                Data = entities.Select(e => e.ToDto())
             };
         }
         catch (OperationCanceledException)
@@ -47,7 +47,7 @@ public sealed class GetPendingApprovalsQueryHandler(
             logger.LogError(e, "Error getting pending approvals: {Error}", e.Message);
         }
 
-        return new BaseResponse<List<LeaveApprovalDto>>
+        return new BaseResponse<IEnumerable<LeaveApprovalDto>>
         {
             Data = [],
             Status = new ResponseStatus

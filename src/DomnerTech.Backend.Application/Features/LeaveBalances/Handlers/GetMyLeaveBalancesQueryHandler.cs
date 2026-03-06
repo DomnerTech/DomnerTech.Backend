@@ -16,9 +16,9 @@ public sealed class GetMyLeaveBalancesQueryHandler(
     ILogger<GetMyLeaveBalancesQueryHandler> logger,
     ILeaveBalanceRepo leaveBalanceRepo,
     ILeaveTypeRepo leaveTypeRepo,
-    IHttpContextAccessor httpContextAccessor) : IRequestHandler<GetMyLeaveBalancesQuery, BaseResponse<List<LeaveBalanceSummaryDto>>>
+    IHttpContextAccessor httpContextAccessor) : IRequestHandler<GetMyLeaveBalancesQuery, BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>>
 {
-    public async Task<BaseResponse<List<LeaveBalanceSummaryDto>>> Handle(GetMyLeaveBalancesQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>> Handle(GetMyLeaveBalancesQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -44,9 +44,12 @@ public sealed class GetMyLeaveBalancesQueryHandler(
                     RemainingDays = b.Allowance.RemainingDays,
                     CarriedForwardDays = b.Allowance.CarriedForwardDays
                 };
-            }).ToList();
+            });
 
-            return new BaseResponse<List<LeaveBalanceSummaryDto>> { Data = summary };
+            return new BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>
+            {
+                Data = summary
+            };
         }
         catch (OperationCanceledException)
         {
@@ -61,7 +64,7 @@ public sealed class GetMyLeaveBalancesQueryHandler(
             logger.LogError(e, "Error getting my leave balances: {Error}", e.Message);
         }
 
-        return new BaseResponse<List<LeaveBalanceSummaryDto>>
+        return new BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>
         {
             Data = [],
             Status = new ResponseStatus

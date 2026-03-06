@@ -9,6 +9,6 @@ namespace DomnerTech.Backend.Application.Features.Holidays;
 /// Query to get holidays for a specific year.
 /// </summary>
 public sealed record GetHolidaysByYearQuery(int Year) :
-    IRequest<BaseResponse<List<HolidayDto>>>,
+    IRequest<BaseResponse<IEnumerable<HolidayDto>>>,
     ILogCreator,
     IValidatableRequest;

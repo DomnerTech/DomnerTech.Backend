@@ -39,7 +39,7 @@ public sealed class LeaveBalanceController(
     /// Retrieves the current user's leave balances.
     /// </summary>
     [HttpGet("my"), Authorize(Roles = "LeaveBalance.Read")]
-    public async Task<ActionResult<BaseResponse<List<LeaveBalanceSummaryDto>>>> GetMyLeaveBalances([FromQuery] int year)
+    public async Task<ActionResult<BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>>> GetMyLeaveBalances([FromQuery] int year)
     {
         var result = await commandQuery.Send(new GetMyLeaveBalancesQuery(year), HttpContext.RequestAborted);
         return await ReturnJson(result);
@@ -49,7 +49,7 @@ public sealed class LeaveBalanceController(
     /// Retrieves an employee's leave balances.
     /// </summary>
     [HttpGet("employee/{employeeId}"), Authorize(Roles = "LeaveBalance.Write")]
-    public async Task<ActionResult<BaseResponse<List<LeaveBalanceSummaryDto>>>> GetEmployeeLeaveBalances([FromRoute] string employeeId, [FromQuery] int year)
+    public async Task<ActionResult<BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>>> GetEmployeeLeaveBalances([FromRoute] string employeeId, [FromQuery] int year)
     {
         var result = await commandQuery.Send(new GetEmployeeLeaveBalancesQuery(employeeId, year), HttpContext.RequestAborted);
         return await ReturnJson(result);

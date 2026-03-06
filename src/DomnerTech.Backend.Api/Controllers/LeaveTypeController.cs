@@ -67,7 +67,7 @@ public sealed class LeaveTypeController(
     /// <returns>An <see cref="ActionResult{T}"/> containing a <see cref="BaseResponse{T}"/> with a list
     /// of <see cref="LeaveTypeDto"/> objects.</returns>
     [HttpGet, Authorize(Roles = "LeaveType.Read")]
-    public async Task<ActionResult<BaseResponse<List<LeaveTypeDto>>>> GetAllLeaveTypes()
+    public async Task<ActionResult<BaseResponse<IEnumerable<LeaveTypeDto>>>> GetAllLeaveTypes()
     {
         var result = await commandQuery.Send(new GetAllLeaveTypesQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);

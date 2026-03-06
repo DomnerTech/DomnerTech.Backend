@@ -13,33 +13,17 @@ namespace DomnerTech.Backend.Application.Features.Holidays.Handlers;
 /// </summary>
 public sealed class GetUpcomingHolidaysQueryHandler(
     ILogger<GetUpcomingHolidaysQueryHandler> logger,
-    IHolidayRepo holidayRepo) : IRequestHandler<GetUpcomingHolidaysQuery, BaseResponse<List<HolidayDto>>>
+    IHolidayRepo holidayRepo) : IRequestHandler<GetUpcomingHolidaysQuery, BaseResponse<IEnumerable<HolidayDto>>>
 {
-    public async Task<BaseResponse<List<HolidayDto>>> Handle(GetUpcomingHolidaysQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<IEnumerable<HolidayDto>>> Handle(GetUpcomingHolidaysQuery request, CancellationToken cancellationToken)
     {
         try
         {
             var fromDate = DateTime.UtcNow.Date;
             var entities = await holidayRepo.GetUpcomingAsync(fromDate, request.Count, cancellationToken);
-
-            var dtos = entities.Select(e => new HolidayDto
+            return new BaseResponse<IEnumerable<HolidayDto>>
             {
-                Id = e.Id.ToString(),
-                Name = e.Name,
-                Description = e.Description,
-                Date = e.Date,
-                Type = e.Type,
-                IsRecurring = e.IsRecurring,
-                CountryCode = e.CountryCode,
-                Region = e.Region,
-                IsActive = e.IsActive,
-                CreatedAt = e.CreatedAt,
-                UpdatedAt = e.UpdatedAt
-            }).ToList();
-
-            return new BaseResponse<List<HolidayDto>>
-            {
-                Data = dtos
+                Data = entities.Select(i => i.ToDto())
             };
         }
         catch (OperationCanceledException)
@@ -51,7 +35,7 @@ public sealed class GetUpcomingHolidaysQueryHandler(
             logger.LogError(e, "Error getting upcoming holidays: {Error}", e.Message);
         }
 
-        return new BaseResponse<List<HolidayDto>>
+        return new BaseResponse<IEnumerable<HolidayDto>>
         {
             Data = [],
             Status = new ResponseStatus

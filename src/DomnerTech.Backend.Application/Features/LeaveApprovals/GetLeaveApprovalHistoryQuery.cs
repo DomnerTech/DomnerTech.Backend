@@ -6,6 +6,6 @@ using DomnerTech.Backend.Application.DTOs.Leaves.LeaveApprovals;
 namespace DomnerTech.Backend.Application.Features.LeaveApprovals;
 
 public sealed record GetLeaveApprovalHistoryQuery(string LeaveRequestId) :
-    IRequest<BaseResponse<List<LeaveApprovalDto>>>,
+    IRequest<BaseResponse<IEnumerable<LeaveApprovalDto>>>,
     ILogCreator,
     IValidatableRequest;

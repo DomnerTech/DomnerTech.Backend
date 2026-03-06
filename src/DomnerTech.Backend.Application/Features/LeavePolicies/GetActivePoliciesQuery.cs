@@ -6,5 +6,5 @@ using DomnerTech.Backend.Application.DTOs.Leaves.LeavePolicies;
 namespace DomnerTech.Backend.Application.Features.LeavePolicies;
 
 public sealed record GetActivePoliciesQuery :
-    IRequest<BaseResponse<List<LeavePolicyDto>>>,
+    IRequest<BaseResponse<IEnumerable<LeavePolicyDto>>>,
     ILogCreator;

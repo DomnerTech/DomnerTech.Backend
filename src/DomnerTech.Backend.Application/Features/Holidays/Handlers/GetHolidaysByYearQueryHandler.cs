@@ -13,34 +13,18 @@ namespace DomnerTech.Backend.Application.Features.Holidays.Handlers;
 /// </summary>
 public sealed class GetHolidaysByYearQueryHandler(
     ILogger<GetHolidaysByYearQueryHandler> logger,
-    IHolidayRepo holidayRepo) : IRequestHandler<GetHolidaysByYearQuery, BaseResponse<List<HolidayDto>>>
+    IHolidayRepo holidayRepo) : IRequestHandler<GetHolidaysByYearQuery, BaseResponse<IEnumerable<HolidayDto>>>
 {
-    public async Task<BaseResponse<List<HolidayDto>>> Handle(GetHolidaysByYearQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<IEnumerable<HolidayDto>>> Handle(GetHolidaysByYearQuery request, CancellationToken cancellationToken)
     {
         try
         {
             var entities = await holidayRepo.GetByYearAsync(request.Year, cancellationToken);
-
-            var dtos = entities.Select(e => new HolidayDto
+            return new BaseResponse<IEnumerable<HolidayDto>>
             {
-                Id = e.Id.ToString(),
-                Name = e.Name,
-                Description = e.Description,
-                Date = e.Date,
-                Type = e.Type,
-                IsRecurring = e.IsRecurring,
-                CountryCode = e.CountryCode,
-                Region = e.Region,
-                IsActive = e.IsActive,
-                CreatedAt = e.CreatedAt,
-                UpdatedAt = e.UpdatedAt
-            })
-            .OrderBy(x => x.Date)
-            .ToList();
-
-            return new BaseResponse<List<HolidayDto>>
-            {
-                Data = dtos
+                Data = entities
+                    .Select(e => e.ToDto())
+                    .OrderBy(x => x.Date)
             };
         }
         catch (OperationCanceledException)
@@ -52,7 +36,7 @@ public sealed class GetHolidaysByYearQueryHandler(
             logger.LogError(e, "Error getting holidays by year: {Error}", e.Message);
         }
 
-        return new BaseResponse<List<HolidayDto>>
+        return new BaseResponse<IEnumerable<HolidayDto>>
         {
             Data = [],
             Status = new ResponseStatus

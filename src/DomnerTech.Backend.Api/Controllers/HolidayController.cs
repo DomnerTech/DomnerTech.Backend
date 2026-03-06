@@ -80,7 +80,7 @@ public sealed class HolidayController(
     /// <returns>An <see cref="ActionResult{T}"/> containing a <see cref="BaseResponse{T}"/> with a list
     /// of <see cref="HolidayDto"/> objects.</returns>
     [HttpGet("year/{year}"), Authorize(Roles = "Holiday.Read")]
-    public async Task<ActionResult<BaseResponse<List<HolidayDto>>>> GetHolidaysByYear([FromRoute] int year)
+    public async Task<ActionResult<BaseResponse<IEnumerable<HolidayDto>>>> GetHolidaysByYear([FromRoute] int year)
     {
         var result = await commandQuery.Send(new GetHolidaysByYearQuery(year), HttpContext.RequestAborted);
         return await ReturnJson(result);
@@ -94,7 +94,7 @@ public sealed class HolidayController(
     /// <returns>An <see cref="ActionResult{T}"/> containing a <see cref="BaseResponse{T}"/> with a list
     /// of upcoming <see cref="HolidayDto"/> objects.</returns>
     [HttpGet("upcoming"), Authorize(Roles = "Holiday.Read")]
-    public async Task<ActionResult<BaseResponse<List<HolidayDto>>>> GetUpcomingHolidays([FromQuery] int count = 10)
+    public async Task<ActionResult<BaseResponse<IEnumerable<HolidayDto>>>> GetUpcomingHolidays([FromQuery] int count = 10)
     {
         var result = await commandQuery.Send(new GetUpcomingHolidaysQuery(count), HttpContext.RequestAborted);
         return await ReturnJson(result);

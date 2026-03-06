@@ -47,7 +47,7 @@ public sealed class LeaveApprovalController(
     /// <remarks>This endpoint requires the 'LeaveApproval.Write' role. Returns all leave requests waiting for the user's approval.</remarks>
     /// <returns>An <see cref="ActionResult{T}"/> containing a <see cref="BaseResponse{T}"/> with a list of <see cref="LeaveApprovalDto"/> objects.</returns>
     [HttpGet("pending"), Authorize(Roles = "LeaveApproval.Write")]
-    public async Task<ActionResult<BaseResponse<List<LeaveApprovalDto>>>> GetPendingApprovals()
+    public async Task<ActionResult<BaseResponse<IEnumerable<LeaveApprovalDto>>>> GetPendingApprovals()
     {
         var result = await commandQuery.Send(new GetPendingApprovalsQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
@@ -60,7 +60,7 @@ public sealed class LeaveApprovalController(
     /// <param name="leaveRequestId">The leave request ID.</param>
     /// <returns>An <see cref="ActionResult{T}"/> containing a <see cref="BaseResponse{T}"/> with a list of <see cref="LeaveApprovalDto"/> objects.</returns>
     [HttpGet("history/{leaveRequestId}"), Authorize(Roles = "LeaveApproval.Write")]
-    public async Task<ActionResult<BaseResponse<List<LeaveApprovalDto>>>> GetApprovalHistory([FromRoute] string leaveRequestId)
+    public async Task<ActionResult<BaseResponse<IEnumerable<LeaveApprovalDto>>>> GetApprovalHistory([FromRoute] string leaveRequestId)
     {
         var result = await commandQuery.Send(new GetLeaveApprovalHistoryQuery(leaveRequestId), HttpContext.RequestAborted);
         return await ReturnJson(result);

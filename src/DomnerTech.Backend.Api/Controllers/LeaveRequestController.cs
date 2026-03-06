@@ -78,7 +78,7 @@ public sealed class LeaveRequestController(
     /// <returns>An <see cref="ActionResult{T}"/> containing a <see cref="BaseResponse{T}"/> with a list
     /// of <see cref="LeaveRequestDto"/> objects.</returns>
     [HttpGet("my"), Authorize(Roles = "LeaveRequest.Read")]
-    public async Task<ActionResult<BaseResponse<List<LeaveRequestDto>>>> GetMyLeaveRequests()
+    public async Task<ActionResult<BaseResponse<IEnumerable<LeaveRequestDto>>>> GetMyLeaveRequests()
     {
         var result = await commandQuery.Send(new GetMyLeaveRequestsQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
@@ -92,7 +92,7 @@ public sealed class LeaveRequestController(
     /// <returns>An <see cref="ActionResult{T}"/> containing a <see cref="BaseResponse{T}"/> with a list
     /// of <see cref="LeaveRequestDto"/> objects.</returns>
     [HttpGet("status/{status}"), Authorize(Roles = "LeaveRequest.Admin")]
-    public async Task<ActionResult<BaseResponse<List<LeaveRequestDto>>>> GetLeaveRequestsByStatus([FromRoute] string status)
+    public async Task<ActionResult<BaseResponse<IEnumerable<LeaveRequestDto>>>> GetLeaveRequestsByStatus([FromRoute] string status)
     {
         var result = await commandQuery.Send(new GetLeaveRequestsByStatusQuery(status), HttpContext.RequestAborted);
         return await ReturnJson(result);

@@ -6,5 +6,5 @@ using DomnerTech.Backend.Application.DTOs.Leaves.LeaveBalances;
 namespace DomnerTech.Backend.Application.Features.LeaveBalances;
 
 public sealed record GetMyLeaveBalancesQuery(int Year) :
-    IRequest<BaseResponse<List<LeaveBalanceSummaryDto>>>,
+    IRequest<BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>>,
     ILogCreator;

@@ -9,5 +9,5 @@ namespace DomnerTech.Backend.Application.Features.Holidays;
 /// Query to get upcoming holidays.
 /// </summary>
 public sealed record GetUpcomingHolidaysQuery(int Count = 10) :
-    IRequest<BaseResponse<List<HolidayDto>>>,
+    IRequest<BaseResponse<IEnumerable<HolidayDto>>>,
     ILogCreator;

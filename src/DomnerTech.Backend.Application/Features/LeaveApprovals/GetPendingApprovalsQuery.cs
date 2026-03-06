@@ -6,5 +6,5 @@ using DomnerTech.Backend.Application.DTOs.Leaves.LeaveApprovals;
 namespace DomnerTech.Backend.Application.Features.LeaveApprovals;
 
 public sealed record GetPendingApprovalsQuery :
-    IRequest<BaseResponse<List<LeaveApprovalDto>>>,
+    IRequest<BaseResponse<IEnumerable<LeaveApprovalDto>>>,
     ILogCreator;
