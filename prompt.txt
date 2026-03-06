@@ -161,7 +161,7 @@ Example metrics:
 Total leaves taken
 Unused leave
 Average leave per employee
-
+-----------------------------------------------
 10. Admin Dashboard
 Overview for HR/admin.
 Features:

@@ -18,8 +18,10 @@ namespace DomnerTech.Backend.Application.Features.LeaveRequests.Handlers;
 public sealed class CreateLeaveRequestCommandHandler(
     ILogger<CreateLeaveRequestCommandHandler> logger,
     ILeaveRequestRepo leaveRequestRepo,
+    ILeaveBalanceRepo leaveBalanceRepo,
     ILeaveTypeRepo leaveTypeRepo,
     ILeaveValidationService leaveValidationService,
+    INotificationService notificationService,
     ITenantService tenantService,
     IHttpContextAccessor httpContextAccessor) : IRequestHandler<CreateLeaveRequestCommand, BaseResponse<string>>
 {
@@ -82,6 +84,9 @@ public sealed class CreateLeaveRequestCommandHandler(
             };
 
             var id = await leaveRequestRepo.CreateAsync(entity, cancellationToken);
+
+            // Send notification
+            await notificationService.SendLeaveRequestSubmittedAsync(employeeId, id, cancellationToken);
 
             return new BaseResponse<string>
             {
