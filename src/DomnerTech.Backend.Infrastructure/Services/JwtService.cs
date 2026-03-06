@@ -20,6 +20,7 @@ public sealed class JwtService(AppSettings appSettings) : IJwtService
         [
             new(ClaimConstant.UserId, user.Id),
             new(ClaimConstant.CompanyId, user.CompanyId),
+            new(ClaimConstant.EmpId, user.EmpId),
             new(ClaimTypes.NameIdentifier, user.Username)
         ];
 

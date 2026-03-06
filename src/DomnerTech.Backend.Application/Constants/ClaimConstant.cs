@@ -6,4 +6,5 @@ public class ClaimConstant
     public const string UserId = "UserId";
     public const string CompanyId = "CompanyId";
     public const string Roles = "Role";
+    public const string EmpId = "EmployeeId";
 }

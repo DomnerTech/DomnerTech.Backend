@@ -17,6 +17,11 @@ public static class HttpContextExtensions
         return GetCurrentLanguageInternal(lang);
     }
 
+    public static string GetClaim(this HttpContext httpContext, string claimType)
+    {
+        return httpContext.User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value ?? string.Empty;
+    }
+
     private static string GetCurrentLanguageInternal(string lang)
     {
         var languageSupport = Enum.GetValues<LanguageSupportType>();
