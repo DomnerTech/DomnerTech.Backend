@@ -11,15 +11,18 @@ public static class HttpContextExtensions
         var lang = accessor.HttpContext?.Items[HeaderConstants.Lang]?.ToString() ?? nameof(LanguageSupportType.En).ToLower();
         return GetCurrentLanguageInternal(lang);
     }
-    public static string GetCurrentLanguage(this HttpContext httpContext)
+    extension(HttpContext httpContext)
     {
-        var lang = httpContext.Items[HeaderConstants.Lang]?.ToString() ?? nameof(LanguageSupportType.En).ToLower();
-        return GetCurrentLanguageInternal(lang);
-    }
+        public string GetCurrentLanguage()
+        {
+            var lang = httpContext.Items[HeaderConstants.Lang]?.ToString() ?? nameof(LanguageSupportType.En).ToLower();
+            return GetCurrentLanguageInternal(lang);
+        }
 
-    public static string GetClaim(this HttpContext httpContext, string claimType)
-    {
-        return httpContext.User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value ?? string.Empty;
+        public string GetClaim(string claimType)
+        {
+            return httpContext.User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value ?? string.Empty;
+        }
     }
 
     private static string GetCurrentLanguageInternal(string lang)
