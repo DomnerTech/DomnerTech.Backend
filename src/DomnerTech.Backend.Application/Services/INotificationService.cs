@@ -1,3 +1,5 @@
+using DomnerTech.Backend.Application.Constants;
+using DomnerTech.Backend.Application.DTOs.Notifications;
 using MongoDB.Bson;
 
 namespace DomnerTech.Backend.Application.Services;
@@ -11,38 +13,48 @@ public interface INotificationService : IBaseService
     /// Sends a notification to a recipient.
     /// </summary>
     Task SendNotificationAsync(
-        ObjectId recipientId,
-        string type,
-        string title,
-        string message,
-        ObjectId? relatedEntityId = null,
-        bool sendEmail = false,
-        bool sendSms = false,
-        string priority = "Normal",
+        SendNotificationParams param,
         CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sends a leave request submitted notification.
     /// </summary>
-    Task SendLeaveRequestSubmittedAsync(ObjectId employeeId, ObjectId leaveRequestId, CancellationToken cancellationToken = default);
+    Task SendLeaveRequestSubmittedAsync(
+        ObjectId employeeId,
+        ObjectId leaveRequestId,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sends a leave request approved notification.
     /// </summary>
-    Task SendLeaveRequestApprovedAsync(ObjectId employeeId, ObjectId leaveRequestId, CancellationToken cancellationToken = default);
+    Task SendLeaveRequestApprovedAsync(
+        ObjectId employeeId,
+        ObjectId leaveRequestId,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sends a leave request rejected notification.
     /// </summary>
-    Task SendLeaveRequestRejectedAsync(ObjectId employeeId, ObjectId leaveRequestId, string reason, CancellationToken cancellationToken = default);
+    Task SendLeaveRequestRejectedAsync(
+        ObjectId employeeId, 
+        ObjectId leaveRequestId, 
+        string reason,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sends a pending approval reminder to approver.
     /// </summary>
-    Task SendPendingApprovalReminderAsync(ObjectId approverId, ObjectId leaveRequestId, CancellationToken cancellationToken = default);
+    Task SendPendingApprovalReminderAsync(
+        ObjectId approverId,
+        ObjectId leaveRequestId,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sends an upcoming leave reminder.
     /// </summary>
-    Task SendUpcomingLeaveReminderAsync(ObjectId employeeId, ObjectId leaveRequestId, DateTime startDate, CancellationToken cancellationToken = default);
+    Task SendUpcomingLeaveReminderAsync(
+        ObjectId employeeId,
+        ObjectId leaveRequestId,
+        DateTime startDate,
+        CancellationToken cancellationToken = default);
 }

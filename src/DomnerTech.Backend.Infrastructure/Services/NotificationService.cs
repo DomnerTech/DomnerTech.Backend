@@ -1,3 +1,5 @@
+using DomnerTech.Backend.Application.Constants;
+using DomnerTech.Backend.Application.DTOs.Notifications;
 using DomnerTech.Backend.Application.Extensions;
 using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Application.Services;
@@ -13,14 +15,7 @@ public sealed class NotificationService(
     ITenantService tenantService) : INotificationService
 {
     public async Task SendNotificationAsync(
-        ObjectId recipientId,
-        string type,
-        string title,
-        string message,
-        ObjectId? relatedEntityId = null,
-        bool sendEmail = false,
-        bool sendSms = false,
-        string priority = "Normal",
+        SendNotificationParams param,
         CancellationToken cancellationToken = default)
     {
         try
@@ -30,15 +25,15 @@ public sealed class NotificationService(
             {
                 Id = ObjectId.GenerateNewId(),
                 CompanyId = tenantService.CompanyId.ToObjectId(),
-                RecipientId = recipientId,
-                Type = type,
-                Title = title,
-                Message = message,
-                RelatedEntityId = relatedEntityId,
+                RecipientId = param.RecipientId,
+                Type = param.Type,
+                Title = param.Title,
+                Message = param.Message,
+                RelatedEntityId = param.RelatedEntityId,
                 IsRead = false,
                 EmailSent = false,
                 SmsSent = false,
-                Priority = priority,
+                Priority = param.Priority,
                 CreatedAt = date,
                 UpdatedAt = date
             };
@@ -46,93 +41,100 @@ public sealed class NotificationService(
             await notificationRepo.CreateAsync(notification, cancellationToken);
 
             // TODO: Implement actual email/SMS sending
-            if (sendEmail)
+            if (param.SendEmail)
             {
-                logger.LogInformation("Email notification would be sent to {RecipientId}: {Title}", recipientId, title);
+                logger.LogInformation("Email notification would be sent to {RecipientId}: {Title}",
+                    param.RelatedEntityId, param.Title);
                 notification.EmailSent = true;
             }
 
-            if (sendSms)
+            if (param.SendSms)
             {
-                logger.LogInformation("SMS notification would be sent to {RecipientId}: {Title}", recipientId, title);
+                logger.LogInformation("SMS notification would be sent to {RecipientId}: {Title}",
+                    param.RelatedEntityId, param.Title);
                 notification.SmsSent = true;
             }
 
-            if (sendEmail || sendSms)
+            if (param.SendEmail || param.SendSms)
             {
                 await notificationRepo.UpdateAsync(notification, cancellationToken);
             }
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error sending notification to {RecipientId}", recipientId);
+            logger.LogError(ex, "Error sending notification to {RecipientId}", param.RecipientId);
         }
     }
 
     public async Task SendLeaveRequestSubmittedAsync(ObjectId employeeId, ObjectId leaveRequestId, CancellationToken cancellationToken = default)
     {
-        await SendNotificationAsync(
-            employeeId,
-            "LeaveRequestSubmitted",
-            "Leave Request Submitted",
-            "Your leave request has been submitted successfully and is pending approval.",
-            leaveRequestId,
-            sendEmail: true,
-            priority: "Normal",
-            cancellationToken: cancellationToken);
+        await SendNotificationAsync(new SendNotificationParams
+        {
+            RecipientId = employeeId,
+            Type = "LeaveRequestSubmitted",
+            Title = "Leave Request Submitted",
+            Message = "Your leave request has been submitted successfully and is pending approval.",
+            RelatedEntityId = leaveRequestId,
+            SendEmail = true,
+            Priority = NotificationPriority.Normal
+        }, cancellationToken);
     }
 
     public async Task SendLeaveRequestApprovedAsync(ObjectId employeeId, ObjectId leaveRequestId, CancellationToken cancellationToken = default)
     {
-        await SendNotificationAsync(
-            employeeId,
-            "LeaveRequestApproved",
-            "Leave Request Approved",
-            "Your leave request has been approved.",
-            leaveRequestId,
-            sendEmail: true,
-            sendSms: true,
-            priority: "High",
-            cancellationToken: cancellationToken);
+        await SendNotificationAsync(new SendNotificationParams
+        {
+            RecipientId = employeeId,
+            Type = "LeaveRequestApproved",
+            Title = "Leave Request Approved",
+            Message = "Your leave request has been approved.",
+            RelatedEntityId = leaveRequestId,
+            SendEmail = true,
+            SendSms = true,
+            Priority = NotificationPriority.High
+        }, cancellationToken);
     }
 
     public async Task SendLeaveRequestRejectedAsync(ObjectId employeeId, ObjectId leaveRequestId, string reason, CancellationToken cancellationToken = default)
     {
-        await SendNotificationAsync(
-            employeeId,
-            "LeaveRequestRejected",
-            "Leave Request Rejected",
-            $"Your leave request has been rejected. Reason: {reason}",
-            leaveRequestId,
-            sendEmail: true,
-            priority: "High",
-            cancellationToken: cancellationToken);
+        await SendNotificationAsync(new SendNotificationParams
+        {
+            RecipientId = employeeId,
+            Type = "LeaveRequestRejected",
+            Title = "Leave Request Rejected",
+            Message = $"Your leave request has been rejected. Reason: {reason}",
+            RelatedEntityId = leaveRequestId,
+            SendEmail = true,
+            Priority = NotificationPriority.High
+        }, cancellationToken);
     }
 
     public async Task SendPendingApprovalReminderAsync(ObjectId approverId, ObjectId leaveRequestId, CancellationToken cancellationToken = default)
     {
-        await SendNotificationAsync(
-            approverId,
-            "PendingApprovalReminder",
-            "Pending Leave Approval",
-            "You have a pending leave request waiting for your approval.",
-            leaveRequestId,
-            sendEmail: true,
-            priority: "Normal",
-            cancellationToken: cancellationToken);
+        await SendNotificationAsync(new SendNotificationParams
+        {
+            RecipientId = approverId,
+            Type = "PendingApprovalReminder",
+            Title = "Pending Leave Approval",
+            Message = "You have a pending leave request waiting for your approval.",
+            RelatedEntityId = leaveRequestId,
+            SendEmail = true,
+            Priority = NotificationPriority.Normal
+        }, cancellationToken);
     }
 
     public async Task SendUpcomingLeaveReminderAsync(ObjectId employeeId, ObjectId leaveRequestId, DateTime startDate, CancellationToken cancellationToken = default)
     {
         var daysUntil = (startDate.Date - DateTime.UtcNow.Date).Days;
-        await SendNotificationAsync(
-            employeeId,
-            "UpcomingLeaveReminder",
-            "Upcoming Leave Reminder",
-            $"Your approved leave starts in {daysUntil} days on {startDate:MMM dd, yyyy}.",
-            leaveRequestId,
-            sendEmail: true,
-            priority: "Normal",
-            cancellationToken: cancellationToken);
+        await SendNotificationAsync(new SendNotificationParams
+        {
+            RecipientId = employeeId,
+            Type = "UpcomingLeaveReminder",
+            Title = "Upcoming Leave Reminder",
+            Message = $"Your approved leave starts in {daysUntil} days on {startDate:MMM dd, yyyy}.",
+            RelatedEntityId = leaveRequestId,
+            SendEmail = true,
+            Priority = NotificationPriority.Normal
+        }, cancellationToken);
     }
 }

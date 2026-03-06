@@ -9,7 +9,7 @@ namespace DomnerTech.Backend.Application.Features.TeamLeave;
 /// Query to get team leave calendar for a date range.
 /// </summary>
 public sealed record GetTeamLeaveCalendarQuery(string Department, DateTime StartDate, DateTime EndDate) :
-    IRequest<BaseResponse<List<TeamLeaveCalendarDto>>>,
+    IRequest<BaseResponse<IEnumerable<TeamLeaveCalendarDto>>>,
     ILogCreator,
     IValidatableRequest;
 
@@ -33,6 +33,6 @@ public sealed record GetTeamLeaveStatsQuery(string Department) :
 /// Query to get upcoming team leave (next 30 days).
 /// </summary>
 public sealed record GetUpcomingTeamLeaveQuery(string Department) :
-    IRequest<BaseResponse<List<TeamLeaveCalendarDto>>>,
+    IRequest<BaseResponse<IEnumerable<TeamLeaveCalendarDto>>>,
     ILogCreator,
     IValidatableRequest;

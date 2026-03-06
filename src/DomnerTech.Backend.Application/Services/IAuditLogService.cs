@@ -1,3 +1,4 @@
+using DomnerTech.Backend.Application.DTOs;
 using MongoDB.Bson;
 
 namespace DomnerTech.Backend.Application.Services;
@@ -11,14 +12,7 @@ public interface IAuditLogService : IBaseService
     /// Logs an action to the audit trail.
     /// </summary>
     Task LogActionAsync(
-        ObjectId userId,
-        string userName,
-        string action,
-        string entityType,
-        ObjectId? entityId,
-        string description,
-        string? oldValues = null,
-        string? newValues = null,
+        LogActionParams param,
         CancellationToken cancellationToken = default);
 
     /// <summary>

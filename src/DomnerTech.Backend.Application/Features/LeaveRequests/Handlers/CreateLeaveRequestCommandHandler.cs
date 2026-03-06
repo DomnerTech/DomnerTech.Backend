@@ -18,7 +18,6 @@ namespace DomnerTech.Backend.Application.Features.LeaveRequests.Handlers;
 public sealed class CreateLeaveRequestCommandHandler(
     ILogger<CreateLeaveRequestCommandHandler> logger,
     ILeaveRequestRepo leaveRequestRepo,
-    ILeaveBalanceRepo leaveBalanceRepo,
     ILeaveTypeRepo leaveTypeRepo,
     ILeaveValidationService leaveValidationService,
     INotificationService notificationService,

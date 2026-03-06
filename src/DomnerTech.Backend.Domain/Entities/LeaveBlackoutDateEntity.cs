@@ -5,7 +5,7 @@ namespace DomnerTech.Backend.Domain.Entities;
 /// <summary>
 /// Represents a blackout date period where leave requests are not allowed.
 /// </summary>
-[MongoCollection("leave_blackout_dates")]
+[MongoCollection("leaveBlackoutDates")]
 public sealed class LeaveBlackoutDateEntity : IBaseEntity, ITenantEntity, IAuditEntity, ISoftDeleteEntity
 {
     [Sortable(alias: "id", order: 1)]

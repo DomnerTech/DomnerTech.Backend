@@ -5,7 +5,7 @@ namespace DomnerTech.Backend.Domain.Entities;
 /// <summary>
 /// Represents an audit log entry tracking system actions.
 /// </summary>
-[MongoCollection("audit_logs")]
+[MongoCollection("auditLogs")]
 public sealed class AuditLogEntity : IBaseEntity, ITenantEntity
 {
     [Sortable(alias: "id", order: 1)]

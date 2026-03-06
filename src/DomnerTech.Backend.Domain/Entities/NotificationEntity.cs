@@ -1,4 +1,3 @@
-using DomnerTech.Backend.Domain.Enums;
 using MongoDB.Bson;
 
 namespace DomnerTech.Backend.Domain.Entities;

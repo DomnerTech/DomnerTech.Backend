@@ -6,7 +6,6 @@ using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 
 namespace DomnerTech.Backend.Application.Features.TeamLeave.Handlers;
 
@@ -14,9 +13,9 @@ public sealed class GetTeamLeaveCalendarQueryHandler(
     ILogger<GetTeamLeaveCalendarQueryHandler> logger,
     ILeaveRequestRepo leaveRequestRepo,
     IEmployeeRepo employeeRepo,
-    ILeaveTypeRepo leaveTypeRepo) : IRequestHandler<GetTeamLeaveCalendarQuery, BaseResponse<List<TeamLeaveCalendarDto>>>
+    ILeaveTypeRepo leaveTypeRepo) : IRequestHandler<GetTeamLeaveCalendarQuery, BaseResponse<IEnumerable<TeamLeaveCalendarDto>>>
 {
-    public async Task<BaseResponse<List<TeamLeaveCalendarDto>>> Handle(GetTeamLeaveCalendarQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<IEnumerable<TeamLeaveCalendarDto>>> Handle(GetTeamLeaveCalendarQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -49,9 +48,9 @@ public sealed class GetTeamLeaveCalendarQueryHandler(
                 });
             }
 
-            return new BaseResponse<List<TeamLeaveCalendarDto>>
+            return new BaseResponse<IEnumerable<TeamLeaveCalendarDto>>
             {
-                Data = result.OrderBy(x => x.StartDate).ToList()
+                Data = result.OrderBy(x => x.StartDate)
             };
         }
         catch (OperationCanceledException)
@@ -63,7 +62,7 @@ public sealed class GetTeamLeaveCalendarQueryHandler(
             logger.LogError(e, "Error getting team leave calendar: {Error}", e.Message);
         }
 
-        return new BaseResponse<List<TeamLeaveCalendarDto>>
+        return new BaseResponse<IEnumerable<TeamLeaveCalendarDto>>
         {
             Data = [],
             Status = new ResponseStatus
@@ -96,12 +95,10 @@ public sealed class CheckTeamLeaveConflictQueryHandler(
             foreach (var req in relevantRequests)
             {
                 var employee = await employeeRepo.GetByIdAsync(req.EmployeeId, cancellationToken);
-                if (employee?.Department == r.Department)
+                if (employee?.Department != r.Department) continue;
+                if (string.IsNullOrEmpty(r.ExcludeEmployeeId) || employee.Id.ToString() != r.ExcludeEmployeeId)
                 {
-                    if (string.IsNullOrEmpty(r.ExcludeEmployeeId) || employee.Id.ToString() != r.ExcludeEmployeeId)
-                    {
-                        departmentRequests.Add((req, employee));
-                    }
+                    departmentRequests.Add((req, employee));
                 }
             }
 
@@ -122,7 +119,7 @@ public sealed class CheckTeamLeaveConflictQueryHandler(
                         Date = currentDate,
                         EmployeesOnLeave = employeesOnLeave.Count,
                         MaxAllowed = r.MaxEmployeesOnLeave,
-                        EmployeeNames = employeesOnLeave.Select(x => $"{x.Employee.FirstName} {x.Employee.LastName}").ToList()
+                        EmployeeNames = [.. employeesOnLeave.Select(x => $"{x.Employee.FirstName} {x.Employee.LastName}")]
                     };
                 }
 
@@ -131,7 +128,7 @@ public sealed class CheckTeamLeaveConflictQueryHandler(
 
             return new BaseResponse<List<TeamLeaveConflictDto>>
             {
-                Data = conflicts.Values.Where(c => c.HasConflict).OrderBy(c => c.Date).ToList()
+                Data = [.. conflicts.Values.Where(c => c.HasConflict).OrderBy(c => c.Date)]
             };
         }
         catch (OperationCanceledException)
@@ -158,7 +155,6 @@ public sealed class CheckTeamLeaveConflictQueryHandler(
 public sealed class GetTeamLeaveStatsQueryHandler(
     ILogger<GetTeamLeaveStatsQueryHandler> logger,
     ILeaveRequestRepo leaveRequestRepo,
-    ILeaveBalanceRepo leaveBalanceRepo,
     IEmployeeRepo employeeRepo) : IRequestHandler<GetTeamLeaveStatsQuery, BaseResponse<TeamLeaveStatsDto>>
 {
     public async Task<BaseResponse<TeamLeaveStatsDto>> Handle(GetTeamLeaveStatsQuery request, CancellationToken cancellationToken)
@@ -170,12 +166,10 @@ public sealed class GetTeamLeaveStatsQueryHandler(
             var pendingRequests = await leaveRequestRepo.GetByStatusAsync(LeaveRequestStatus.Pending, cancellationToken);
             
             var today = DateTime.UtcNow.Date;
-            var currentYear = DateTime.UtcNow.Year;
-
-            int totalEmployees = 0;
-            int employeesOnLeaveToday = 0;
-            int pendingCount = 0;
-            decimal totalLeaveUsage = 0;
+            var totalEmployees = 0;
+            var employeesOnLeaveToday = 0;
+            var pendingCount = 0;
+            const decimal totalLeaveUsage = 0;
 
             // This is simplified - in production, you'd query employees by department directly
             var todayLeave = allRequests.Where(r => r.Period.StartDate.Date <= today && r.Period.EndDate.Date >= today).ToList();
@@ -192,11 +186,9 @@ public sealed class GetTeamLeaveStatsQueryHandler(
             foreach (var req in pendingRequests)
             {
                 var employee = await employeeRepo.GetByIdAsync(req.EmployeeId, cancellationToken);
-                if (employee?.Department == request.Department)
-                {
-                    pendingCount++;
-                    if (totalEmployees == 0) totalEmployees++; // Count unique employees
-                }
+                if (employee?.Department != request.Department) continue;
+                pendingCount++;
+                if (totalEmployees == 0) totalEmployees++; // Count unique employees
             }
 
             var stats = new TeamLeaveStatsDto
@@ -235,9 +227,9 @@ public sealed class GetUpcomingTeamLeaveQueryHandler(
     ILogger<GetUpcomingTeamLeaveQueryHandler> logger,
     ILeaveRequestRepo leaveRequestRepo,
     IEmployeeRepo employeeRepo,
-    ILeaveTypeRepo leaveTypeRepo) : IRequestHandler<GetUpcomingTeamLeaveQuery, BaseResponse<List<TeamLeaveCalendarDto>>>
+    ILeaveTypeRepo leaveTypeRepo) : IRequestHandler<GetUpcomingTeamLeaveQuery, BaseResponse<IEnumerable<TeamLeaveCalendarDto>>>
 {
-    public async Task<BaseResponse<List<TeamLeaveCalendarDto>>> Handle(GetUpcomingTeamLeaveQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<IEnumerable<TeamLeaveCalendarDto>>> Handle(GetUpcomingTeamLeaveQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -272,9 +264,9 @@ public sealed class GetUpcomingTeamLeaveQueryHandler(
                 });
             }
 
-            return new BaseResponse<List<TeamLeaveCalendarDto>>
+            return new BaseResponse<IEnumerable<TeamLeaveCalendarDto>>
             {
-                Data = result.OrderBy(x => x.StartDate).ToList()
+                Data = result.OrderBy(x => x.StartDate)
             };
         }
         catch (OperationCanceledException)
@@ -286,7 +278,7 @@ public sealed class GetUpcomingTeamLeaveQueryHandler(
             logger.LogError(e, "Error getting upcoming team leave: {Error}", e.Message);
         }
 
-        return new BaseResponse<List<TeamLeaveCalendarDto>>
+        return new BaseResponse<IEnumerable<TeamLeaveCalendarDto>>
         {
             Data = [],
             Status = new ResponseStatus

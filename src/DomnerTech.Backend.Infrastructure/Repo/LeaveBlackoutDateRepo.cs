@@ -57,10 +57,8 @@ public sealed class LeaveBlackoutDateRepo(
     {
         var filter = Builders<LeaveBlackoutDateEntity>.Filter.Eq(i => i.IsActive, true) &
                      Builders<LeaveBlackoutDateEntity>.Filter.Eq(i => i.IsDeleted, false) &
-                     (
-                         (Builders<LeaveBlackoutDateEntity>.Filter.Lte(i => i.StartDate, endDate) &
-                          Builders<LeaveBlackoutDateEntity>.Filter.Gte(i => i.EndDate, startDate))
-                     );
+                     (Builders<LeaveBlackoutDateEntity>.Filter.Lte(i => i.StartDate, endDate) &
+                      Builders<LeaveBlackoutDateEntity>.Filter.Gte(i => i.EndDate, startDate));
 
         // If department specified, check if blackout applies to it or to all departments
         if (!string.IsNullOrEmpty(department))
@@ -77,10 +75,8 @@ public sealed class LeaveBlackoutDateRepo(
     {
         var filter = Builders<LeaveBlackoutDateEntity>.Filter.Eq(i => i.IsActive, true) &
                      Builders<LeaveBlackoutDateEntity>.Filter.Eq(i => i.IsDeleted, false) &
-                     (
-                         (Builders<LeaveBlackoutDateEntity>.Filter.Lte(i => i.StartDate, endDate) &
-                          Builders<LeaveBlackoutDateEntity>.Filter.Gte(i => i.EndDate, startDate))
-                     );
+                     (Builders<LeaveBlackoutDateEntity>.Filter.Lte(i => i.StartDate, endDate) &
+                      Builders<LeaveBlackoutDateEntity>.Filter.Gte(i => i.EndDate, startDate));
 
         return await Collection.Find(TenantFilter() & filter)
             .SortBy(x => x.StartDate)

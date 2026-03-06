@@ -11,15 +11,14 @@ namespace DomnerTech.Backend.Application.Features.Dashboard.Handlers;
 
 public sealed class GetAdminDashboardStatsQueryHandler(
     ILogger<GetAdminDashboardStatsQueryHandler> logger,
-    ILeaveRequestRepo leaveRequestRepo,
-    IEmployeeRepo employeeRepo) : IRequestHandler<GetAdminDashboardStatsQuery, BaseResponse<AdminDashboardStatsDto>>
+    ILeaveRequestRepo leaveRequestRepo) : IRequestHandler<GetAdminDashboardStatsQuery, BaseResponse<AdminDashboardStatsDto>>
 {
     public async Task<BaseResponse<AdminDashboardStatsDto>> Handle(GetAdminDashboardStatsQuery request, CancellationToken cancellationToken)
     {
         try
         {
             var today = DateTime.UtcNow.Date;
-            var startOfMonth = new DateTime(today.Year, today.Month, 1);
+            var startOfMonth = new DateTime(today.Year, today.Month, 1, 0, 0, 0, DateTimeKind.Utc);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
             var approvedRequests = await leaveRequestRepo.GetByStatusAsync(LeaveRequestStatus.Approved, cancellationToken);

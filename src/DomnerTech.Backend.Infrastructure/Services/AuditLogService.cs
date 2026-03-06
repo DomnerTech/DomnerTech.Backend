@@ -1,3 +1,5 @@
+using DomnerTech.Backend.Application.Constants;
+using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.Extensions;
 using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Application.Services;
@@ -15,14 +17,7 @@ public sealed class AuditLogService(
     IHttpContextAccessor httpContextAccessor) : IAuditLogService
 {
     public async Task LogActionAsync(
-        ObjectId userId,
-        string userName,
-        string action,
-        string entityType,
-        ObjectId? entityId,
-        string description,
-        string? oldValues = null,
-        string? newValues = null,
+        LogActionParams param,
         CancellationToken cancellationToken = default)
     {
         try
@@ -34,16 +29,16 @@ public sealed class AuditLogService(
             {
                 Id = ObjectId.GenerateNewId(),
                 CompanyId = tenantService.CompanyId.ToObjectId(),
-                UserId = userId,
-                UserName = userName,
-                Action = action,
-                EntityType = entityType,
-                EntityId = entityId,
-                Description = description,
-                OldValues = oldValues,
-                NewValues = newValues,
+                UserId = param.UserId,
+                UserName = param.Username,
+                Action = param.Action,
+                EntityType = param.EntityType,
+                EntityId = param.EntityId,
+                Description = param.Description,
+                OldValues = param.OldValues,
+                NewValues = param.NewValues,
                 IpAddress = httpContext?.Connection.RemoteIpAddress?.ToString(),
-                UserAgent = httpContext?.Request.Headers["User-Agent"].ToString(),
+                UserAgent = httpContext?.Request.Headers.UserAgent.ToString(),
                 CreatedAt = date,
                 UpdatedAt = date
             };
@@ -52,69 +47,97 @@ public sealed class AuditLogService(
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error logging audit action: {Action}", action);
+            logger.LogError(ex, "Error logging audit action: {Action}", param.Action);
         }
     }
 
-    public async Task LogLeaveRequestCreatedAsync(ObjectId userId, string userName, ObjectId leaveRequestId, CancellationToken cancellationToken = default)
+    public async Task LogLeaveRequestCreatedAsync(
+        ObjectId userId,
+        string userName,
+        ObjectId leaveRequestId,
+        CancellationToken cancellationToken = default)
     {
-        await LogActionAsync(
-            userId,
-            userName,
-            "LeaveRequestCreated",
-            "LeaveRequest",
-            leaveRequestId,
-            $"Leave request created by {userName}",
-            cancellationToken: cancellationToken);
+        await LogActionAsync(new LogActionParams
+        {
+            UserId = userId,
+            Username = userName,
+            Action = "LeaveRequestCreated",
+            EntityType = LogAuditActivity.LeaveRequest,
+            Description = $"Leave request created by {userName}",
+            EntityId = leaveRequestId
+        }, cancellationToken);
     }
 
-    public async Task LogLeaveRequestApprovedAsync(ObjectId userId, string userName, ObjectId leaveRequestId, CancellationToken cancellationToken = default)
+    public async Task LogLeaveRequestApprovedAsync(
+        ObjectId userId,
+        string userName,
+        ObjectId leaveRequestId,
+        CancellationToken cancellationToken = default)
     {
-        await LogActionAsync(
-            userId,
-            userName,
-            "LeaveRequestApproved",
-            "LeaveRequest",
-            leaveRequestId,
-            $"Leave request approved by {userName}",
-            cancellationToken: cancellationToken);
+        await LogActionAsync(new LogActionParams
+        {
+            UserId = userId,
+            Username = userName,
+            Action = "LeaveRequestApproved",
+            EntityType = LogAuditActivity.LeaveRequest,
+            EntityId = leaveRequestId,
+            Description = $"Leave request approved by {userName}"
+        }, cancellationToken);
     }
 
-    public async Task LogLeaveRequestRejectedAsync(ObjectId userId, string userName, ObjectId leaveRequestId, string reason, CancellationToken cancellationToken = default)
+    public async Task LogLeaveRequestRejectedAsync(
+        ObjectId userId,
+        string userName,
+        ObjectId leaveRequestId,
+        string reason,
+        CancellationToken cancellationToken = default)
     {
-        await LogActionAsync(
-            userId,
-            userName,
-            "LeaveRequestRejected",
-            "LeaveRequest",
-            leaveRequestId,
-            $"Leave request rejected by {userName}. Reason: {reason}",
-            cancellationToken: cancellationToken);
+        await LogActionAsync(new LogActionParams
+        {
+            UserId = userId,
+            Username = userName,
+            Action = "LeaveRequestRejected",
+            EntityType = LogAuditActivity.LeaveRequest,
+            EntityId = leaveRequestId,
+            Description = $"Leave request rejected by {userName}. Reason: {reason}"
+        }, cancellationToken);
     }
 
-    public async Task LogLeaveRequestCancelledAsync(ObjectId userId, string userName, ObjectId leaveRequestId, CancellationToken cancellationToken = default)
+    public async Task LogLeaveRequestCancelledAsync(
+        ObjectId userId,
+        string userName,
+        ObjectId leaveRequestId,
+        CancellationToken cancellationToken = default)
     {
-        await LogActionAsync(
-            userId,
-            userName,
-            "LeaveRequestCancelled",
-            "LeaveRequest",
-            leaveRequestId,
-            $"Leave request cancelled by {userName}",
-            cancellationToken: cancellationToken);
+        await LogActionAsync(new LogActionParams
+        {
+            UserId = userId,
+            Username = userName,
+            Action = "LeaveRequestCancelled",
+            EntityType = LogAuditActivity.LeaveRequest,
+            EntityId = leaveRequestId,
+            Description = "Leave request cancelled by {userName}"
+        }, cancellationToken);
     }
 
-    public async Task LogPolicyUpdatedAsync(ObjectId userId, string userName, ObjectId policyId, string oldValues, string newValues, CancellationToken cancellationToken = default)
+    public async Task LogPolicyUpdatedAsync(
+        ObjectId userId,
+        string userName,
+        ObjectId policyId,
+        string oldValues,
+        string newValues,
+        CancellationToken cancellationToken = default)
     {
-        await LogActionAsync(
-            userId,
-            userName,
-            "PolicyUpdated",
-            "LeavePolicy",
-            policyId,
-            $"Leave policy updated by {userName}",
-            oldValues,
-            newValues,
-            cancellationToken);
+        await LogActionAsync(new LogActionParams
+        {
+            UserId = userId,
+            Username = userName,
+            Action = "PolicyUpdated",
+            EntityType = LogAuditActivity.LeavePolicy,
+            EntityId = policyId,
+            Description = $"Leave policy updated by {userName}",
+            OldValues = oldValues,
+            NewValues = newValues
+        }, cancellationToken);
     }
 }
