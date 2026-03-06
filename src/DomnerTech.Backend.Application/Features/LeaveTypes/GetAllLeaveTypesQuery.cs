@@ -9,5 +9,5 @@ namespace DomnerTech.Backend.Application.Features.LeaveTypes;
 /// Query to get all active leave types.
 /// </summary>
 public sealed record GetAllLeaveTypesQuery :
-    IRequest<BaseResponse<List<LeaveTypeDto>>>,
+    IRequest<BaseResponse<IEnumerable<LeaveTypeDto>>>,
     ILogCreator;

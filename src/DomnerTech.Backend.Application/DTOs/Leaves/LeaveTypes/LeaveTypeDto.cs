@@ -1,4 +1,4 @@
-using DomnerTech.Backend.Application.DTOs;
+using DomnerTech.Backend.Domain.Entities;
 
 namespace DomnerTech.Backend.Application.DTOs.Leaves.LeaveTypes;
 
@@ -86,4 +86,32 @@ public sealed record LeaveTypeDto : IBaseDto
     /// Gets or sets the last update date.
     /// </summary>
     public DateTime UpdatedAt { get; set; }
+}
+public static class LeaveTypeExtensions
+{
+    /// <summary>
+    /// Converts a <see cref="LeaveTypeEntity"/> to a <see cref="LeaveTypeDto"/>.
+    /// </summary>
+    public static LeaveTypeDto ToDto(this LeaveTypeEntity entity)
+    {
+        return new LeaveTypeDto
+        {
+            Id = entity.Id.ToString(),
+            Name = entity.Name,
+            Description = entity.Description,
+            Code = entity.Code,
+            YearlyAllowance = entity.YearlyAllowance,
+            IsAccrualBased = entity.IsAccrualBased,
+            MonthlyAccrualDays = entity.MonthlyAccrualDays,
+            MaxCarryForwardDays = entity.MaxCarryForwardDays,
+            CarryForwardExpires = entity.CarryForwardExpires,
+            CarryForwardExpiryDate = entity.CarryForwardExpiryDate,
+            RequiresDocument = entity.RequiresDocument,
+            IsPaid = entity.IsPaid,
+            IsActive = entity.IsActive,
+            DisplayOrder = entity.DisplayOrder,
+            CreatedAt = entity.CreatedAt,
+            UpdatedAt = entity.UpdatedAt
+        };
+    }
 }

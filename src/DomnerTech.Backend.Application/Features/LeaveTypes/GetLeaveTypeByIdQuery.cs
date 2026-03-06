@@ -9,6 +9,6 @@ namespace DomnerTech.Backend.Application.Features.LeaveTypes;
 /// Query to get a leave type by ID.
 /// </summary>
 public sealed record GetLeaveTypeByIdQuery(string Id) :
-    IRequest<BaseResponse<LeaveTypeDto>>,
+    IRequest<BaseResponse<LeaveTypeDto?>>,
     ILogCreator,
     IValidatableRequest;

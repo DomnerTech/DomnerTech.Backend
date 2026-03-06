@@ -15,9 +15,9 @@ namespace DomnerTech.Backend.Application.Features.LeaveTypes.Handlers;
 /// </summary>
 public sealed class GetLeaveTypeByIdQueryHandler(
     ILogger<GetLeaveTypeByIdQueryHandler> logger,
-    ILeaveTypeRepo leaveTypeRepo) : IRequestHandler<GetLeaveTypeByIdQuery, BaseResponse<LeaveTypeDto>>
+    ILeaveTypeRepo leaveTypeRepo) : IRequestHandler<GetLeaveTypeByIdQuery, BaseResponse<LeaveTypeDto?>>
 {
-    public async Task<BaseResponse<LeaveTypeDto>> Handle(GetLeaveTypeByIdQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<LeaveTypeDto?>> Handle(GetLeaveTypeByIdQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -29,29 +29,9 @@ public sealed class GetLeaveTypeByIdQueryHandler(
                 throw new NotFoundException("Leave type not found");
             }
 
-            var dto = new LeaveTypeDto
+            return new BaseResponse<LeaveTypeDto?>
             {
-                Id = entity.Id.ToString(),
-                Name = entity.Name,
-                Description = entity.Description,
-                Code = entity.Code,
-                YearlyAllowance = entity.YearlyAllowance,
-                IsAccrualBased = entity.IsAccrualBased,
-                MonthlyAccrualDays = entity.MonthlyAccrualDays,
-                MaxCarryForwardDays = entity.MaxCarryForwardDays,
-                CarryForwardExpires = entity.CarryForwardExpires,
-                CarryForwardExpiryDate = entity.CarryForwardExpiryDate,
-                RequiresDocument = entity.RequiresDocument,
-                IsPaid = entity.IsPaid,
-                IsActive = entity.IsActive,
-                DisplayOrder = entity.DisplayOrder,
-                CreatedAt = entity.CreatedAt,
-                UpdatedAt = entity.UpdatedAt
-            };
-
-            return new BaseResponse<LeaveTypeDto>
-            {
-                Data = dto
+                Data = entity.ToDto()
             };
         }
         catch (OperationCanceledException)
@@ -67,9 +47,9 @@ public sealed class GetLeaveTypeByIdQueryHandler(
             logger.LogError(e, "Error getting leave type by ID: {Error}", e.Message);
         }
 
-        return new BaseResponse<LeaveTypeDto>
+        return new BaseResponse<LeaveTypeDto?>
         {
-            Data = null!,
+            Data = null,
             Status = new ResponseStatus
             {
                 StatusCode = StatusCodes.Status500InternalServerError,
