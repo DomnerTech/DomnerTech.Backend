@@ -19,41 +19,18 @@ public sealed class GetPolicyByLeaveTypeQueryHandler(
         try
         {
             var leaveTypeId = ObjectId.Parse(request.LeaveTypeId);
-            var entity = await leavePolicyRepo.GetByLeaveTypeIdAsync(leaveTypeId, cancellationToken);
-
-            if (entity is null)
-            {
-                entity = await leavePolicyRepo.GetDefaultPolicyAsync(cancellationToken);
-            }
+            var entity = await leavePolicyRepo.GetByLeaveTypeIdAsync(leaveTypeId, cancellationToken) 
+                         ?? await leavePolicyRepo.GetDefaultPolicyAsync(cancellationToken);
 
             if (entity is null)
             {
                 throw new NotFoundException("No policy found for this leave type");
             }
 
-            var dto = new LeavePolicyDto
+            return new BaseResponse<LeavePolicyDto>
             {
-                Id = entity.Id.ToString(),
-                PolicyName = entity.PolicyName,
-                LeaveTypeId = entity.LeaveTypeId?.ToString(),
-                MinimumNoticeDays = entity.MinimumNoticeDays,
-                MaxConsecutiveDays = entity.MaxConsecutiveDays,
-                IncludeWeekends = entity.IncludeWeekends,
-                IncludePublicHolidays = entity.IncludePublicHolidays,
-                AllowDuringProbation = entity.AllowDuringProbation,
-                ProbationPeriodMonths = entity.ProbationPeriodMonths,
-                AllowNegativeBalance = entity.AllowNegativeBalance,
-                MaxNegativeBalance = entity.MaxNegativeBalance,
-                AllowBackdatedRequests = entity.AllowBackdatedRequests,
-                MaxBackdatedDays = entity.MaxBackdatedDays,
-                IsActive = entity.IsActive,
-                EffectiveFrom = entity.EffectiveFrom,
-                EffectiveTo = entity.EffectiveTo,
-                CreatedAt = entity.CreatedAt,
-                UpdatedAt = entity.UpdatedAt
+                Data = entity.ToDto()
             };
-
-            return new BaseResponse<LeavePolicyDto> { Data = dto };
         }
         catch (OperationCanceledException)
         {

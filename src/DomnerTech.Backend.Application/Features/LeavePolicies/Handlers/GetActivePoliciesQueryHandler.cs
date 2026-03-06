@@ -17,29 +17,10 @@ public sealed class GetActivePoliciesQueryHandler(
         try
         {
             var entities = await leavePolicyRepo.GetAllActiveAsync(cancellationToken);
-            var dtos = entities.Select(e => new LeavePolicyDto
+            return new BaseResponse<List<LeavePolicyDto>>
             {
-                Id = e.Id.ToString(),
-                PolicyName = e.PolicyName,
-                LeaveTypeId = e.LeaveTypeId?.ToString(),
-                MinimumNoticeDays = e.MinimumNoticeDays,
-                MaxConsecutiveDays = e.MaxConsecutiveDays,
-                IncludeWeekends = e.IncludeWeekends,
-                IncludePublicHolidays = e.IncludePublicHolidays,
-                AllowDuringProbation = e.AllowDuringProbation,
-                ProbationPeriodMonths = e.ProbationPeriodMonths,
-                AllowNegativeBalance = e.AllowNegativeBalance,
-                MaxNegativeBalance = e.MaxNegativeBalance,
-                AllowBackdatedRequests = e.AllowBackdatedRequests,
-                MaxBackdatedDays = e.MaxBackdatedDays,
-                IsActive = e.IsActive,
-                EffectiveFrom = e.EffectiveFrom,
-                EffectiveTo = e.EffectiveTo,
-                CreatedAt = e.CreatedAt,
-                UpdatedAt = e.UpdatedAt
-            }).ToList();
-
-            return new BaseResponse<List<LeavePolicyDto>> { Data = dtos };
+                Data = [.. entities.Select(e => e.ToDto())]
+            };
         }
         catch (OperationCanceledException)
         {

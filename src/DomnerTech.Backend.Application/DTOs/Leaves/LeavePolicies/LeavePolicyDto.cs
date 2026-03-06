@@ -1,4 +1,4 @@
-using DomnerTech.Backend.Application.DTOs;
+using DomnerTech.Backend.Domain.Entities;
 
 namespace DomnerTech.Backend.Application.DTOs.Leaves.LeavePolicies;
 
@@ -96,4 +96,37 @@ public sealed record LeavePolicyDto : IBaseDto
     /// Gets or sets the last update date.
     /// </summary>
     public DateTime UpdatedAt { get; set; }
+}
+
+public static class LeavePolicyExtensions
+{
+    /// <summary>
+    /// Converts a <see cref="LeavePolicyEntity"/> to a <see cref="LeavePolicyDto"/>.
+    /// </summary>
+    /// <param name="entity">The leave policy entity.</param>
+    /// <returns>The corresponding leave policy DTO.</returns>
+    public static LeavePolicyDto ToDto(this LeavePolicyEntity entity)
+    {
+        return new LeavePolicyDto
+        {
+            Id = entity.Id.ToString(),
+            PolicyName = entity.PolicyName,
+            LeaveTypeId = entity.LeaveTypeId?.ToString(),
+            MinimumNoticeDays = entity.MinimumNoticeDays,
+            MaxConsecutiveDays = entity.MaxConsecutiveDays,
+            IncludeWeekends = entity.IncludeWeekends,
+            IncludePublicHolidays = entity.IncludePublicHolidays,
+            AllowDuringProbation = entity.AllowDuringProbation,
+            ProbationPeriodMonths = entity.ProbationPeriodMonths,
+            AllowNegativeBalance = entity.AllowNegativeBalance,
+            MaxNegativeBalance = entity.MaxNegativeBalance,
+            AllowBackdatedRequests = entity.AllowBackdatedRequests,
+            MaxBackdatedDays = entity.MaxBackdatedDays,
+            IsActive = entity.IsActive,
+            EffectiveFrom = entity.EffectiveFrom,
+            EffectiveTo = entity.EffectiveTo,
+            CreatedAt = entity.CreatedAt,
+            UpdatedAt = entity.UpdatedAt
+        };
+    }
 }

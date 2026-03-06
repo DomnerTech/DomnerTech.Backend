@@ -4,7 +4,6 @@ using DomnerTech.Backend.Application.DTOs.Leaves.LeavePolicies;
 using DomnerTech.Backend.Application.Errors;
 using DomnerTech.Backend.Application.Exceptions;
 using DomnerTech.Backend.Application.IRepo;
-using DomnerTech.Backend.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
@@ -26,9 +25,10 @@ public sealed class GetLeavePolicyByIdQueryHandler(
             {
                 throw new NotFoundException("Leave policy not found");
             }
-
-            var dto = MapToDto(entity);
-            return new BaseResponse<LeavePolicyDto> { Data = dto };
+            return new BaseResponse<LeavePolicyDto>
+            {
+                Data = entity.ToDto()
+            };
         }
         catch (OperationCanceledException)
         {
@@ -53,26 +53,4 @@ public sealed class GetLeavePolicyByIdQueryHandler(
             }
         };
     }
-
-    private static LeavePolicyDto MapToDto(LeavePolicyEntity entity) => new()
-    {
-        Id = entity.Id.ToString(),
-        PolicyName = entity.PolicyName,
-        LeaveTypeId = entity.LeaveTypeId?.ToString(),
-        MinimumNoticeDays = entity.MinimumNoticeDays,
-        MaxConsecutiveDays = entity.MaxConsecutiveDays,
-        IncludeWeekends = entity.IncludeWeekends,
-        IncludePublicHolidays = entity.IncludePublicHolidays,
-        AllowDuringProbation = entity.AllowDuringProbation,
-        ProbationPeriodMonths = entity.ProbationPeriodMonths,
-        AllowNegativeBalance = entity.AllowNegativeBalance,
-        MaxNegativeBalance = entity.MaxNegativeBalance,
-        AllowBackdatedRequests = entity.AllowBackdatedRequests,
-        MaxBackdatedDays = entity.MaxBackdatedDays,
-        IsActive = entity.IsActive,
-        EffectiveFrom = entity.EffectiveFrom,
-        EffectiveTo = entity.EffectiveTo,
-        CreatedAt = entity.CreatedAt,
-        UpdatedAt = entity.UpdatedAt
-    };
 }
