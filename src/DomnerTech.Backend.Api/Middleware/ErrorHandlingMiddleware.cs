@@ -5,11 +5,11 @@ using DomnerTech.Backend.Application.Extensions;
 using DomnerTech.Backend.Application.Helpers;
 using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Application.Json;
-using FluentValidation;
 
 namespace DomnerTech.Backend.Api.Middleware;
 
 public sealed class ErrorHandlingMiddleware(
+    ILogger<ErrorHandlingMiddleware> logger,
     IErrorMessageLocalizeRepo errorMessageResolver) : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -32,6 +32,7 @@ public sealed class ErrorHandlingMiddleware(
             {
                 throw;
             }
+            logger.LogError(ex, "Unhandled exception");
             await WriteInternal(context);
         }
     }

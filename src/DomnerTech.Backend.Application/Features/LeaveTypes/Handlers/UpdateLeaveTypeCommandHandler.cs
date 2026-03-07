@@ -26,7 +26,15 @@ public sealed class UpdateLeaveTypeCommandHandler(
             var existing = await leaveTypeRepo.GetByIdAsync(leaveTypeId, cancellationToken);
             if (existing is null)
             {
-                throw new NotFoundException("Leave type not found");
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        ErrorCode = ErrorCodes.Leave.TypeNotFound
+                    }
+                };
             }
 
             existing.Name = r.Name;

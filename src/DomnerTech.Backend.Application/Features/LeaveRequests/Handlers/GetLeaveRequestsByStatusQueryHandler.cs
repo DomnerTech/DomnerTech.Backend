@@ -20,7 +20,19 @@ public sealed class GetLeaveRequestsByStatusQueryHandler(
         {
             if (!Enum.TryParse<LeaveRequestStatus>(request.Status, true, out var status))
             {
-                throw new ValidationException("Invalid leave request status");
+                return new BaseResponse<IEnumerable<LeaveRequestDto>>
+                {
+                    Data = [],
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        ErrorCode = ErrorCodes.Validation,
+                        Errors = new Dictionary<string, string[]>
+                        {
+                            { "status", ["Invalid leave request status"] }
+                        }
+                    }
+                };
             }
 
             var entities = await leaveRequestRepo.GetByStatusAsync(status, cancellationToken);

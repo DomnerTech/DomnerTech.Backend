@@ -12,7 +12,7 @@ public sealed class LeaveValidationService(
     IEmployeeRepo employeeRepo,
     IHolidayService holidayService) : ILeaveValidationService
 {
-    public async Task<(bool IsValid, List<string> Errors)> ValidateLeaveRequestAsync(
+    public async Task<(bool IsValid, Dictionary<string, string[]> errors)> ValidateLeaveRequestAsync(
         ObjectId employeeId,
         ObjectId leaveTypeId,
         DateTime startDate,
@@ -21,13 +21,13 @@ public sealed class LeaveValidationService(
         ObjectId? excludeRequestId = null,
         CancellationToken cancellationToken = default)
     {
-        var errors = new List<string>();
+        var errors = new Dictionary<string, string[]>();
 
         // Get leave type
         var leaveType = await leaveTypeRepo.GetByIdAsync(leaveTypeId, cancellationToken);
         if (leaveType == null)
         {
-            errors.Add("Leave type not found");
+            errors.Add("leave_type", ["Leave type not found"]);
             return (false, errors);
         }
 
@@ -37,14 +37,15 @@ public sealed class LeaveValidationService(
 
         if (policy == null)
         {
-            errors.Add("No policy found for this leave type");
+            errors.Add("policy", ["No policy found for this leave type"]);
             return (false, errors);
         }
 
+        List<string> startDateErrors = [];
         // Validate dates
         if (startDate.Date < DateTime.UtcNow.Date && !policy.AllowBackdatedRequests)
         {
-            errors.Add("Backdated leave requests are not allowed");
+            startDateErrors.Add("Backdated leave requests are not allowed");
         }
 
         if (startDate.Date < DateTime.UtcNow.Date && policy.AllowBackdatedRequests)
@@ -52,33 +53,38 @@ public sealed class LeaveValidationService(
             var daysDiff = (DateTime.UtcNow.Date - startDate.Date).Days;
             if (policy.MaxBackdatedDays.HasValue && daysDiff > policy.MaxBackdatedDays.Value)
             {
-                errors.Add($"Cannot request leave more than {policy.MaxBackdatedDays.Value} days in the past");
+                startDateErrors.Add($"Cannot request leave more than {policy.MaxBackdatedDays.Value} days in the past");
             }
+        }
+
+        if (startDateErrors.Count > 0)
+        {
+            errors.Add("start_date", [.. startDateErrors]);
         }
 
         if (endDate < startDate)
         {
-            errors.Add("End date must be after start date");
+            errors.Add("end_date", ["End date must be after start date"]);
         }
 
         // Validate minimum notice
         var noticeDays = (startDate.Date - DateTime.UtcNow.Date).Days;
         if (noticeDays < policy.MinimumNoticeDays)
         {
-            errors.Add($"Minimum notice period is {policy.MinimumNoticeDays} days");
+            errors.Add("notice_days", [$"Minimum notice period is {policy.MinimumNoticeDays} days"]);
         }
 
         // Validate maximum consecutive days
         var totalDays = (endDate.Date - startDate.Date).Days + 1;
         if (totalDays > policy.MaxConsecutiveDays)
         {
-            errors.Add($"Maximum consecutive days allowed is {policy.MaxConsecutiveDays}");
+            errors.Add("total_days", [$"Maximum consecutive days allowed is {policy.MaxConsecutiveDays}"]);
         }
 
         // Check for overlapping requests
         if (await leaveRequestRepo.HasOverlappingRequestAsync(employeeId, startDate.Date, endDate.Date, excludeRequestId, cancellationToken))
         {
-            errors.Add("You have an overlapping leave request");
+            errors.Add("overlap", ["You have an overlapping leave request"]);
         }
 
         // Validate balance
@@ -87,14 +93,14 @@ public sealed class LeaveValidationService(
         
         if (balance == null)
         {
-            errors.Add("Leave balance not initialized for this leave type");
+            errors.Add("balance", ["Leave balance not initialized for this leave type"]);
             return (false, errors);
         }
 
         var available = balance.Allowance.TotalAllowance + balance.Allowance.CarriedForwardDays - balance.Allowance.UsedDays;
         if (available < requestedDays && !policy.AllowNegativeBalance)
         {
-            errors.Add($"Insufficient leave balance. Available: {available} days, Requested: {requestedDays} days");
+            errors.Add("avl", [$"Insufficient leave balance. Available: {available} days, Requested: {requestedDays} days"]);
         }
 
         if (policy is { AllowNegativeBalance: true, MaxNegativeBalance: not null })
@@ -102,7 +108,7 @@ public sealed class LeaveValidationService(
             var negativeAmount = requestedDays - available;
             if (negativeAmount > policy.MaxNegativeBalance.Value)
             {
-                errors.Add($"Negative balance limit exceeded. Maximum allowed: {policy.MaxNegativeBalance.Value} days");
+                errors.Add("negative_amt", [$"Negative balance limit exceeded. Maximum allowed: {policy.MaxNegativeBalance.Value} days"]);
             }
         }
 
@@ -115,7 +121,7 @@ public sealed class LeaveValidationService(
                 var monthsSinceHire = (DateTime.UtcNow - employee.HireDate).Days / 30;
                 if (monthsSinceHire < policy.ProbationPeriodMonths.Value)
                 {
-                    errors.Add($"Cannot apply for leave during probation period ({policy.ProbationPeriodMonths.Value} months)");
+                    errors.Add("probation", [$"Cannot apply for leave during probation period ({policy.ProbationPeriodMonths.Value} months)"]);
                 }
             }
         }

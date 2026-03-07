@@ -34,7 +34,14 @@ public sealed class CreateLeaveRequestCommandHandler(
 
             if (employeeId == ObjectId.Empty)
             {
-                throw new UnauthorizedException();
+                return new BaseResponse<string>
+                {
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status403Forbidden,
+                        ErrorCode = ErrorCodes.Forbidden
+                    }
+                };
             }
 
             // Calculate leave days
@@ -48,14 +55,33 @@ public sealed class CreateLeaveRequestCommandHandler(
 
             if (!isValid)
             {
-                throw new ValidationException(string.Join(", ", errors));
+                return new BaseResponse<string>
+                {
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        ErrorCode = ErrorCodes.Validation,
+                        Errors = errors
+                    }
+                };
             }
 
             // Check document requirement
             var leaveType = await leaveTypeRepo.GetByIdAsync(leaveTypeId, cancellationToken);
             if (leaveType?.RequiresDocument == true && (r.DocumentUrls == null || r.DocumentUrls.Count == 0))
             {
-                throw new ValidationException("Supporting documents are required for this leave type");
+                return new BaseResponse<string>
+                {
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        ErrorCode = ErrorCodes.Validation,
+                        Errors = new Dictionary<string, string[]>
+                        {
+                            {"requires_document", ["Supporting documents are required for this leave type"]}
+                        }
+                    }
+                };
             }
 
             var date = DateTime.UtcNow;

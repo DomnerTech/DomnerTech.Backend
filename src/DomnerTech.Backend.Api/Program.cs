@@ -51,7 +51,6 @@ try
     app.UseCorrelate();
     app.UseMiddleware<CorrelationIdMiddleware>();
 
-    app.UseSerilogRequestLogging();
     app.UseMiddleware<RequestTimingMiddleware>();
 
     app.UseHttpsRedirection();

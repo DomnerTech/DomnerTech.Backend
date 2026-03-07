@@ -1,5 +1,3 @@
-using DomnerTech.Backend.Application.DTOs;
-
 namespace DomnerTech.Backend.Application.DTOs.Leaves.LeaveTypes;
 
 /// <summary>

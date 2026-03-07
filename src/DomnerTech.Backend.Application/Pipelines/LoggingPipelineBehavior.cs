@@ -1,5 +1,6 @@
 ﻿using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.Abstractions;
+using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.Json;
 using Microsoft.Extensions.Logging;
 
@@ -8,6 +9,7 @@ namespace DomnerTech.Backend.Application.Pipelines;
 public class LoggingPipelineBehavior<TRequest, TResponse>(ILogger<LoggingPipelineBehavior<TRequest, TResponse>> logger)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
+    where TResponse : BaseResponse
 {
     public async Task<TResponse> Handle(
         TRequest request,
@@ -20,13 +22,16 @@ public class LoggingPipelineBehavior<TRequest, TResponse>(ILogger<LoggingPipelin
         {
             logger.LogDebug("Handling {RequestName}: {Request}", requestName, JsonConvert.SerializeObject(request));
         }
-
-        if (request is not ILogCreator && request is not ILogResCreator)
-        {
-            return await next(cancellationToken);
-        }
-
         var response = await next(cancellationToken);
+
+        if ((request is not ILogCreator && request is not ILogResCreator) || !response.IsSuccess)
+        {
+            if(!response.IsSuccess)
+                logger.LogError("Handled {RequestName} with response: {Response}", requestName, JsonConvert.SerializeObject(response));
+
+            return response;
+        }
+        
         logger.LogDebug("Handled {RequestName} with response: {Response}", requestName, JsonConvert.SerializeObject(response));
         return response;
     }

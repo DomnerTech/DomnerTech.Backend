@@ -25,7 +25,15 @@ public sealed class GetMyLeaveRequestsQueryHandler(
 
             if (string.IsNullOrEmpty(employeeId) || !ObjectId.TryParse(employeeId, out var empId))
             {
-                throw new UnauthorizedException();
+                return new BaseResponse<IEnumerable<LeaveRequestDto>>
+                {
+                    Data = [],
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status403Forbidden,
+                        ErrorCode = ErrorCodes.Forbidden
+                    }
+                };
             }
 
             var entities = await leaveRequestRepo.GetByEmployeeAsync(empId, cancellationToken);

@@ -26,7 +26,15 @@ public sealed class GetLeaveTypeByIdQueryHandler(
 
             if (entity is null)
             {
-                throw new NotFoundException("Leave type not found");
+                return new BaseResponse<LeaveTypeDto?>
+                {
+                    Data = null,
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        ErrorCode = ErrorCodes.Leave.TypeNotFound
+                    }
+                };
             }
 
             return new BaseResponse<LeaveTypeDto?>

@@ -24,17 +24,46 @@ public sealed class CancelLeaveRequestCommandHandler(
             var existing = await leaveRequestRepo.GetByIdAsync(requestId, cancellationToken);
             if (existing is null)
             {
-                throw new NotFoundException("Leave request not found");
+                return new BaseResponse<bool>
+                {
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        ErrorCode = ErrorCodes.Leave.RequestNotFound
+                    }
+                };
             }
 
             if (existing.Status == LeaveRequestStatus.Cancelled)
             {
-                throw new ValidationException("Leave request is already cancelled");
+                return new BaseResponse<bool>
+                {
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        ErrorCode = ErrorCodes.Validation,
+                        Errors = new Dictionary<string, string[]>
+                        {
+                            {"status", ["Leave request is already cancelled"]}
+                        }
+                    }
+                };
             }
 
             if (existing.Status == LeaveRequestStatus.Rejected)
             {
-                throw new ValidationException("Cannot cancel a rejected leave request");
+                return new BaseResponse<bool>
+                {
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        ErrorCode = ErrorCodes.Validation,
+                        Errors = new Dictionary<string, string[]>
+                        {
+                            {"status", ["Cannot cancel a rejected leave request"]}
+                        }
+                    }
+                };
             }
 
             existing.Status = LeaveRequestStatus.Cancelled;

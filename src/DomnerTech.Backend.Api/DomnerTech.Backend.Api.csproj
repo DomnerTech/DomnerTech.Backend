@@ -26,5 +26,9 @@
     <ProjectReference Include="..\DomnerTech.Backend.Application\DomnerTech.Backend.Application.csproj" />
     <ProjectReference Include="..\DomnerTech.Backend.Infrastructure\DomnerTech.Backend.Infrastructure.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Transformer\" />
+  </ItemGroup>
 
 </Project>

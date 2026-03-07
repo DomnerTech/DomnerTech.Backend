@@ -11,7 +11,7 @@ public interface ILeaveValidationService : IBaseService
     /// <summary>
     /// Validates a leave request against policies and rules.
     /// </summary>
-    Task<(bool IsValid, List<string> Errors)> ValidateLeaveRequestAsync(
+    Task<(bool IsValid, Dictionary<string, string[]> errors)> ValidateLeaveRequestAsync(
         ObjectId employeeId,
         ObjectId leaveTypeId,
         DateTime startDate,

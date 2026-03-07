@@ -25,7 +25,15 @@ public sealed class GetLeaveRequestByIdQueryHandler(
 
             if (entity is null)
             {
-                throw new NotFoundException("Leave request not found");
+                return new BaseResponse<LeaveRequestDetailDto>
+                {
+                    Data = null!,
+                    Status = new ResponseStatus
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        ErrorCode = ErrorCodes.Leave.RequestNotFound
+                    }
+                };
             }
 
             var leaveType = await leaveTypeRepo.GetByIdAsync(entity.LeaveTypeId, cancellationToken);

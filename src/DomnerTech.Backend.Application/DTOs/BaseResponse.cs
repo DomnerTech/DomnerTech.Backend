@@ -5,13 +5,12 @@ namespace DomnerTech.Backend.Application.DTOs;
 public class BaseResponse
 {
     public ResponseStatus Status { get; set; } = new();
+    public bool IsSuccess => Status.StatusCode is >= 200 and < 300;
 }
 
-public class BaseResponse<T>
+public class BaseResponse<T> : BaseResponse
 {
-    public ResponseStatus Status { get; set; } = new();
     public T Data { get; set; } = default!;
-    public bool IsSuccess => Status.StatusCode is >= 200 and < 300;
 }
 
 public class ResponseStatus

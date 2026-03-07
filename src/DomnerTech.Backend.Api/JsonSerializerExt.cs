@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using DomnerTech.Backend.Api.Transformer;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace DomnerTech.Backend.Api;
 
@@ -7,7 +9,12 @@ public static class JsonSerializerExt
 {
     public static IServiceCollection AddControllerJsonSerializerOptions(this IServiceCollection services)
     {
-        services.AddControllers()
+        services.AddControllers(options =>
+            {
+                options.Conventions.Add(
+                    new RouteTokenTransformerConvention(
+                        new KebabCaseParameterTransformer()));
+            })
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
