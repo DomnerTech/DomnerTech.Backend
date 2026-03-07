@@ -40,36 +40,36 @@ Manages user notifications for leave-related events including request submission
     "items": [
       {
         "id": "678cf2a4b3945e0001ac4dc0",
-        "userId": "678cf2a4b3945e0001ac4d3a",
+        "user_id": "678cf2a4b3945e0001ac4d3a",
         "type": "LeaveRequestApproved",
         "title": "Leave Request Approved",
         "message": "Your annual leave request from March 16 to March 22 has been approved by Michael Chen",
-        "relatedEntityType": "LeaveRequest",
-        "relatedEntityId": "678cf2a4b3945e0001ac4d70",
-        "isRead": false,
-        "createdAt": "2025-01-20T14:30:00Z"
+        "related_entity_type": "LeaveRequest",
+        "related_entity_id": "678cf2a4b3945e0001ac4d70",
+        "is_read": false,
+        "created_at": "2025-01-20T14:30:00Z"
       },
       {
         "id": "678cf2a4b3945e0001ac4dc1",
-        "userId": "678cf2a4b3945e0001ac4d3a",
+        "user_id": "678cf2a4b3945e0001ac4d3a",
         "type": "LeaveBalanceUpdated",
         "title": "Leave Balance Updated",
         "message": "Your annual leave balance has been adjusted. You now have 22 days available.",
-        "relatedEntityType": "LeaveBalance",
-        "relatedEntityId": "678cf2a4b3945e0001ac4d80",
-        "isRead": true,
-        "createdAt": "2025-01-15T10:00:00Z",
-        "readAt": "2025-01-15T10:05:00Z"
+        "related_entity_type": "LeaveBalance",
+        "related_entity_id": "678cf2a4b3945e0001ac4d80",
+        "is_read": true,
+        "created_at": "2025-01-15T10:00:00Z",
+        "read_at": "2025-01-15T10:05:00Z"
       }
     ],
-    "nextCursor": "eyJpZCI6IjY3OGNmMmE0YjM5NDVlMDAwMWFjNGRjMSJ9",
-    "previousCursor": null,
-    "hasPrevious": false,
-    "hasNext": true,
-    "totalCount": 45
+    "next_cursor": "eyJpZCI6IjY3OGNmMmE0YjM5NDVlMDAwMWFjNGRjMSJ9",
+    "previous_cursor": null,
+    "has_previous": false,
+    "has_next": true,
+    "total_count": 45
   },
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -90,22 +90,22 @@ Manages user notifications for leave-related events including request submission
       "type": "LeaveRequestApproved",
       "title": "Leave Request Approved",
       "message": "Your annual leave request from March 16 to March 22 has been approved by Michael Chen",
-      "relatedEntityType": "LeaveRequest",
-      "relatedEntityId": "678cf2a4b3945e0001ac4d70",
-      "createdAt": "2025-01-20T14:30:00Z"
+      "related_entity_type": "LeaveRequest",
+      "related_entity_id": "678cf2a4b3945e0001ac4d70",
+      "created_at": "2025-01-20T14:30:00Z"
     },
     {
       "id": "678cf2a4b3945e0001ac4dc2",
       "type": "PendingApproval",
       "title": "New Leave Request",
       "message": "Sarah Johnson has submitted a leave request that requires your approval",
-      "relatedEntityType": "LeaveRequest",
-      "relatedEntityId": "678cf2a4b3945e0001ac4d71",
-      "createdAt": "2025-01-20T10:00:00Z"
+      "related_entity_type": "LeaveRequest",
+      "related_entity_id": "678cf2a4b3945e0001ac4d71",
+      "created_at": "2025-01-20T10:00:00Z"
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -122,7 +122,7 @@ Manages user notifications for leave-related events including request submission
 {
   "data": 5,
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -144,7 +144,7 @@ Manages user notifications for leave-related events including request submission
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Notification marked as read"
   }
 }
@@ -162,7 +162,7 @@ Manages user notifications for leave-related events including request submission
 {
   "data": 5,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "5 notifications marked as read"
   }
 }
@@ -228,15 +228,15 @@ Users can configure notification preferences:
 ```json
 {
   "channels": {
-    "inApp": true,
+    "in_app": true,
     "email": true,
     "push": false
   },
   "types": {
-    "leaveApproved": { "inApp": true, "email": true, "push": false },
-    "leaveRejected": { "inApp": true, "email": true, "push": false },
-    "pendingApproval": { "inApp": true, "email": true, "push": true },
-    "leaveReminder": { "inApp": true, "email": false, "push": true }
+    "leave_approved": { "in_app": true, "email": true, "push": false },
+    "leave_rejected": { "in_app": true, "email": true, "push": false },
+    "pending_approval": { "in_app": true, "email": true, "push": true },
+    "leave_reminder": { "in_app": true, "email": false, "push": true }
   }
 }
 ```

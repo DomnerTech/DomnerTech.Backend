@@ -5,6 +5,7 @@ This directory contains comprehensive API documentation for the DomnerTech Backe
 ## ?? Documentation Files
 
 ### Getting Started
+
 - [**README.md**](./README.md) - Main documentation hub with overview and common information
 - [**INDEX.md**](./INDEX.md) - This file - complete navigation index
 - [**DOCUMENTATION-STATUS.md**](./DOCUMENTATION-STATUS.md) - Documentation progress and statistics
@@ -12,6 +13,7 @@ This directory contains comprehensive API documentation for the DomnerTech Backe
 ### API Endpoints by Controller
 
 #### Core APIs ?
+
 1. [**Authentication API**](./01-authentication.md) ?
    - POST `/auth/login` - User login
    - POST `/auth/logout` - User logout
@@ -33,6 +35,7 @@ This directory contains comprehensive API documentation for the DomnerTech Backe
    - POST `/role/upsert-user-role` - Assign role to user
 
 #### Leave Management APIs ?
+
 5. [**Leave Types API**](./05-leave-types.md) ?
    - POST `/leave-type` - Create leave type
    - PUT `/leave-type` - Update leave type
@@ -69,6 +72,7 @@ This directory contains comprehensive API documentation for the DomnerTech Backe
    - GET `/leave-approval/history/{leaveRequestId}` - Get approval history
 
 #### Calendar & Planning APIs ?
+
 10. [**Holidays API**](./10-holidays.md) ?
     - POST `/holiday` - Create holiday
     - POST `/holiday/bulk` - Bulk create holidays
@@ -84,6 +88,7 @@ This directory contains comprehensive API documentation for the DomnerTech Backe
     - GET `/team-leave/upcoming/{department}` - Get upcoming leaves
 
 #### Reporting & Analytics APIs ?
+
 12. [**Leave Reports API**](./12-leave-reports.md) ?
     - GET `/leave-report/usage` - Leave usage report
     - GET `/leave-report/department-stats` - Department statistics
@@ -97,6 +102,7 @@ This directory contains comprehensive API documentation for the DomnerTech Backe
     - GET `/admin-dashboard/pending-approvals` - Pending approvals
 
 #### System APIs ?
+
 14. [**Notifications API**](./14-notifications.md) ?
     - GET `/notification` - Get my notifications
     - GET `/notification/unread` - Get unread notifications
@@ -110,6 +116,7 @@ This directory contains comprehensive API documentation for the DomnerTech Backe
     - GET `/localize/error-messages` - Get error messages (paginated)
 
 #### Reference Documentation ?
+
 16. [**Error Responses**](./16-error-responses.md) ? - Common error codes and handling
 
 ---
@@ -117,16 +124,20 @@ This directory contains comprehensive API documentation for the DomnerTech Backe
 ## ?? Quick Reference
 
 ### Base URL
+
 ```
 https://api.domnertech.com/api/v1
 ```
 
 ### Authentication
+
 All endpoints (except `/auth/login`) require authentication via:
+
 - Bearer token in `Authorization` header, OR
 - HTTP-only `authToken` cookie
 
 ### Required Headers
+
 ```http
 Authorization: Bearer {token}
 X-Company-Id: {companyId}
@@ -135,18 +146,23 @@ Content-Type: application/json
 ```
 
 ### Response Format
+
 ```json
 {
-  "data": { /* response data */ },
+  "data": {
+    /* response data */
+  },
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Success message"
   }
 }
 ```
 
 ### Pagination
+
 All list endpoints support cursor-based pagination with these parameters:
+
 - `cursor` - Position cursor (null for first page)
 - `page_size` - Items per page (1-100)
 - `direction` - Forward or Backward
@@ -154,30 +170,31 @@ All list endpoints support cursor-based pagination with these parameters:
 - `include_total_count` - Boolean
 
 ### Date Format
+
 ISO 8601 with UTC timezone: `2025-01-20T14:30:00Z`
 
 ---
 
 ## ?? Documentation Status
 
-| Controller | Status | File | Endpoints |
-|------------|--------|------|-----------|
-| Authentication | ? Complete | [01-authentication.md](./01-authentication.md) | 2 |
-| User Management | ? Complete | [02-user-management.md](./02-user-management.md) | 3 |
-| Employee Management | ? Complete | [03-employee-management.md](./03-employee-management.md) | 3 |
-| Role Management | ? Complete | [04-role-management.md](./04-role-management.md) | 4 |
-| Leave Types | ? Complete | [05-leave-types.md](./05-leave-types.md) | 5 |
-| Leave Requests | ? Complete | [06-leave-requests.md](./06-leave-requests.md) | 6 |
-| Leave Balances | ? Complete | [07-leave-balances.md](./07-leave-balances.md) | 4 |
-| Leave Policies | ? Complete | [08-leave-policies.md](./08-leave-policies.md) | 6 |
-| Leave Approvals | ? Complete | [09-leave-approvals.md](./09-leave-approvals.md) | 4 |
-| Holidays | ? Complete | [10-holidays.md](./10-holidays.md) | 6 |
-| Team Leave | ? Complete | [11-team-leave.md](./11-team-leave.md) | 4 |
-| Leave Reports | ? Complete | [12-leave-reports.md](./12-leave-reports.md) | 4 |
-| Admin Dashboard | ? Complete | [13-admin-dashboard.md](./13-admin-dashboard.md) | 4 |
-| Notifications | ? Complete | [14-notifications.md](./14-notifications.md) | 5 |
-| Localization | ? Complete | [15-localization.md](./15-localization.md) | 3 |
-| Error Responses | ? Complete | [16-error-responses.md](./16-error-responses.md) | Reference |
+| Controller          | Status     | File                                                     | Endpoints |
+| ------------------- | ---------- | -------------------------------------------------------- | --------- |
+| Authentication      | ? Complete | [01-authentication.md](./01-authentication.md)           | 2         |
+| User Management     | ? Complete | [02-user-management.md](./02-user-management.md)         | 3         |
+| Employee Management | ? Complete | [03-employee-management.md](./03-employee-management.md) | 3         |
+| Role Management     | ? Complete | [04-role-management.md](./04-role-management.md)         | 4         |
+| Leave Types         | ? Complete | [05-leave-types.md](./05-leave-types.md)                 | 5         |
+| Leave Requests      | ? Complete | [06-leave-requests.md](./06-leave-requests.md)           | 6         |
+| Leave Balances      | ? Complete | [07-leave-balances.md](./07-leave-balances.md)           | 4         |
+| Leave Policies      | ? Complete | [08-leave-policies.md](./08-leave-policies.md)           | 6         |
+| Leave Approvals     | ? Complete | [09-leave-approvals.md](./09-leave-approvals.md)         | 4         |
+| Holidays            | ? Complete | [10-holidays.md](./10-holidays.md)                       | 6         |
+| Team Leave          | ? Complete | [11-team-leave.md](./11-team-leave.md)                   | 4         |
+| Leave Reports       | ? Complete | [12-leave-reports.md](./12-leave-reports.md)             | 4         |
+| Admin Dashboard     | ? Complete | [13-admin-dashboard.md](./13-admin-dashboard.md)         | 4         |
+| Notifications       | ? Complete | [14-notifications.md](./14-notifications.md)             | 5         |
+| Localization        | ? Complete | [15-localization.md](./15-localization.md)               | 3         |
+| Error Responses     | ? Complete | [16-error-responses.md](./16-error-responses.md)         | Reference |
 
 **Progress: 18/18 files complete (100%)** ??
 
@@ -196,25 +213,30 @@ Each documentation file includes:
 ? **Business rules and constraints**  
 ? **Common use cases with code**  
 ? **Cross-references to related endpoints**  
-? **Professional formatting**  
+? **Professional formatting**
 
 ---
 
 ## ?? Documentation Modules
 
 ### Core Module (4 endpoints + User + Employee + Role Management)
+
 Handles authentication, user management, employee records, and role-based access control.
 
 ### Leave Management Module (30+ endpoints)
+
 Complete leave management system including types, requests, balances, policies, and approvals.
 
 ### Calendar & Planning Module (10 endpoints)
+
 Holiday management and team leave planning with conflict detection.
 
 ### Reporting & Analytics Module (8 endpoints)
+
 Comprehensive reporting, analytics, and administrative dashboard.
 
 ### System Module (8 endpoints)
+
 Notifications system and multi-language localization support.
 
 ---
@@ -222,6 +244,7 @@ Notifications system and multi-language localization support.
 ## ?? Finding What You Need
 
 ### By Feature
+
 - **Authentication:** Start with [Authentication API](./01-authentication.md)
 - **User Setup:** [User Management](./02-user-management.md) ? [Employee Management](./03-employee-management.md) ? [Role Management](./04-role-management.md)
 - **Leave Setup:** [Leave Types](./05-leave-types.md) ? [Leave Policies](./08-leave-policies.md) ? [Leave Balances](./07-leave-balances.md)
@@ -231,6 +254,7 @@ Notifications system and multi-language localization support.
 - **System:** [Notifications](./14-notifications.md) ? [Localization](./15-localization.md)
 
 ### By Role
+
 - **Developers:** Start with [README.md](./README.md) and [Authentication](./01-authentication.md)
 - **Product Managers:** Review business rules in each documentation file
 - **QA Engineers:** Use error scenarios and sample data for testing
@@ -241,6 +265,7 @@ Notifications system and multi-language localization support.
 ## ?? Getting Started
 
 ### For New Developers
+
 1. Read [README.md](./README.md) for API overview
 2. Review [Authentication API](./01-authentication.md)
 3. Understand [Error Responses](./16-error-responses.md)
@@ -248,6 +273,7 @@ Notifications system and multi-language localization support.
 5. Copy and adapt code examples
 
 ### For Integration
+
 1. Set up authentication (see [01-authentication.md](./01-authentication.md))
 2. Create users (see [02-user-management.md](./02-user-management.md))
 3. Set up employees (see [03-employee-management.md](./03-employee-management.md))
@@ -255,6 +281,7 @@ Notifications system and multi-language localization support.
 5. Start using leave management features
 
 ### For Testing
+
 1. Use sample data from documentation
 2. Follow error scenarios for negative testing
 3. Test pagination with different parameters
@@ -266,16 +293,19 @@ Notifications system and multi-language localization support.
 ## ?? Additional Resources
 
 ### Code Examples
+
 - **cURL:** Every endpoint includes cURL command
 - **JavaScript:** Axios examples for common operations
 - **Error Handling:** Client-side error handling patterns
 
 ### Business Logic
+
 - **Validation Rules:** Documented per endpoint
 - **Workflows:** Approval workflows, status transitions
 - **Calculations:** Leave balance calculations, day counting
 
 ### Best Practices
+
 - **Authentication:** Token management and security
 - **Pagination:** Efficient data retrieval
 - **Error Handling:** Retry logic and user feedback
@@ -286,12 +316,14 @@ Notifications system and multi-language localization support.
 ## ?? Support
 
 ### Get Help
+
 - **Email:** api-support@domnertech.com
 - **Documentation:** https://docs.domnertech.com
 - **Status Page:** https://status.domnertech.com
 - **GitHub Issues:** https://github.com/DomnerTech/DomnerTech-Backend/issues
 
 ### Report Issues
+
 - Documentation errors or typos
 - Missing information
 - Unclear explanations
@@ -302,6 +334,7 @@ Notifications system and multi-language localization support.
 ## ?? Contributing
 
 When updating documentation:
+
 1. Follow the existing structure and format
 2. Include real sample data with realistic values
 3. Add code examples (cURL and JavaScript)
@@ -315,6 +348,7 @@ When updating documentation:
 ## ?? Achievements
 
 ### Documentation Metrics
+
 - **Total Files:** 18
 - **Total Endpoints:** 63+
 - **Code Examples:** 100+
@@ -324,6 +358,7 @@ When updating documentation:
 - **Business Rules:** 200+
 
 ### Quality Standards Met
+
 ? Comprehensive coverage  
 ? Consistent formatting  
 ? Real sample data  
@@ -331,13 +366,14 @@ When updating documentation:
 ? Error documentation  
 ? Business rules  
 ? Cross-references  
-? Professional presentation  
+? Professional presentation
 
 ---
 
 ## ?? Version History
 
 ### Version 1.0 (January 20, 2025)
+
 - ? Initial complete documentation
 - ? All 18 files created
 - ? 63+ endpoints documented
@@ -347,6 +383,6 @@ When updating documentation:
 
 ---
 
-*Last Updated: January 20, 2025*  
-*Documentation Version: 1.0*  
-*Status: ? COMPLETE*
+_Last Updated: January 20, 2025_  
+_Documentation Version: 1.0_  
+_Status: ? COMPLETE_

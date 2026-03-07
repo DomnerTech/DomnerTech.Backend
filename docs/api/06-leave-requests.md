@@ -1,6 +1,7 @@
 # Leave Requests API
 
 ## Overview
+
 Manages employee leave requests including submission, updates, cancellation, and retrieval of leave requests.
 
 **Base Path:** `/api/v1/leave-request`
@@ -9,14 +10,14 @@ Manages employee leave requests including submission, updates, cancellation, and
 
 ## Endpoints Summary
 
-| Method | Endpoint | Description | Authorization |
-|--------|----------|-------------|---------------|
-| POST | `/leave-request` | Create leave request | `LeaveRequest.Write` |
-| PUT | `/leave-request` | Update leave request | `LeaveRequest.Write` |
-| POST | `/leave-request/cancel` | Cancel leave request | `LeaveRequest.Write` |
-| GET | `/leave-request/{id}` | Get request by ID | `LeaveRequest.Read` |
-| GET | `/leave-request/my` | Get my requests | `LeaveRequest.Read` |
-| GET | `/leave-request/status/{status}` | Get requests by status | `LeaveRequest.Admin` |
+| Method | Endpoint                         | Description            | Authorization        |
+| ------ | -------------------------------- | ---------------------- | -------------------- |
+| POST   | `/leave-request`                 | Create leave request   | `LeaveRequest.Write` |
+| PUT    | `/leave-request`                 | Update leave request   | `LeaveRequest.Write` |
+| POST   | `/leave-request/cancel`          | Cancel leave request   | `LeaveRequest.Write` |
+| GET    | `/leave-request/{id}`            | Get request by ID      | `LeaveRequest.Read`  |
+| GET    | `/leave-request/my`              | Get my requests        | `LeaveRequest.Read`  |
+| GET    | `/leave-request/status/{status}` | Get requests by status | `LeaveRequest.Admin` |
 
 ---
 
@@ -32,12 +33,12 @@ Submit a new leave request.
 
 ```json
 {
-  "employeeId": "678cf2a4b3945e0001ac4d40",
-  "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-  "startDate": "2025-03-15T00:00:00Z",
-  "endDate": "2025-03-20T00:00:00Z",
+  "employee_id": "678cf2a4b3945e0001ac4d40",
+  "leave_type_id": "678cf2a4b3945e0001ac4d60",
+  "start_date": "2025-03-15T00:00:00Z",
+  "end_date": "2025-03-20T00:00:00Z",
   "reason": "Family vacation to Hawaii",
-  "attachmentUrls": [
+  "attachment_urls": [
     "https://storage.domnertech.com/attachments/flight-booking-12345.pdf"
   ]
 }
@@ -49,7 +50,7 @@ Submit a new leave request.
 {
   "data": "678cf2a4b3945e0001ac4d70",
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Leave request submitted successfully"
   }
 }
@@ -58,23 +59,25 @@ Submit a new leave request.
 ### Common Errors
 
 **Insufficient Balance:** `422`
+
 ```json
 {
   "status": {
-    "statusCode": 422,
+    "status_code": 422,
     "message": "Insufficient leave balance. You have 3 days remaining but requested 5 days.",
-    "errorCode": "ERR_INSUFFICIENT_BALANCE"
+    "error_code": "ERR_INSUFFICIENT_BALANCE"
   }
 }
 ```
 
 **Conflicting Leave:** `409`
+
 ```json
 {
   "status": {
-    "statusCode": 409,
+    "status_code": 409,
     "message": "Leave request conflicts with existing approved leave from 2025-03-18 to 2025-03-20",
-    "errorCode": "ERR_LEAVE_CONFLICT"
+    "error_code": "ERR_LEAVE_CONFLICT"
   }
 }
 ```
@@ -94,11 +97,11 @@ Update a pending leave request.
 ```json
 {
   "id": "678cf2a4b3945e0001ac4d70",
-  "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-  "startDate": "2025-03-16T00:00:00Z",
-  "endDate": "2025-03-22T00:00:00Z",
+  "leave_type_id": "678cf2a4b3945e0001ac4d60",
+  "start_date": "2025-03-16T00:00:00Z",
+  "end_date": "2025-03-22T00:00:00Z",
   "reason": "Extended family vacation to Hawaii",
-  "attachmentUrls": [
+  "attachment_urls": [
     "https://storage.domnertech.com/attachments/flight-booking-12345.pdf",
     "https://storage.domnertech.com/attachments/hotel-booking-67890.pdf"
   ]
@@ -111,13 +114,14 @@ Update a pending leave request.
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Leave request updated successfully"
   }
 }
 ```
 
 ### Business Rules
+
 - Only pending requests can be updated
 - Cannot modify approved or rejected requests
 - Must still pass balance and conflict checks
@@ -137,7 +141,7 @@ Cancel a pending or approved leave request.
 ```json
 {
   "id": "678cf2a4b3945e0001ac4d70",
-  "cancellationReason": "Plans changed, vacation postponed"
+  "cancellation_reason": "Plans changed, vacation postponed"
 }
 ```
 
@@ -147,13 +151,14 @@ Cancel a pending or approved leave request.
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Leave request cancelled successfully"
   }
 }
 ```
 
 ### Business Rules
+
 - Can cancel pending or approved requests
 - Cannot cancel rejected or already cancelled requests
 - Leave balance is restored upon cancellation
@@ -175,27 +180,27 @@ Retrieve detailed information about a specific leave request.
 {
   "data": {
     "id": "678cf2a4b3945e0001ac4d70",
-    "employeeId": "678cf2a4b3945e0001ac4d40",
-    "employeeName": "Sarah Johnson",
-    "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-    "leaveTypeName": "Annual Leave",
-    "startDate": "2025-03-16T00:00:00Z",
-    "endDate": "2025-03-22T00:00:00Z",
-    "totalDays": 5,
+    "employee_id": "678cf2a4b3945e0001ac4d40",
+    "employee_name": "Sarah Johnson",
+    "leave_type_id": "678cf2a4b3945e0001ac4d60",
+    "leave_type_name": "Annual Leave",
+    "start_date": "2025-03-16T00:00:00Z",
+    "end_date": "2025-03-22T00:00:00Z",
+    "total_days": 5,
     "status": "Pending",
     "reason": "Extended family vacation to Hawaii",
-    "attachmentUrls": [
+    "attachment_urls": [
       "https://storage.domnertech.com/attachments/flight-booking-12345.pdf",
       "https://storage.domnertech.com/attachments/hotel-booking-67890.pdf"
     ],
-    "submittedAt": "2025-01-20T10:30:00Z",
-    "approvedAt": null,
-    "approvedBy": null,
-    "rejectedAt": null,
-    "rejectionReason": null
+    "submitted_at": "2025-01-20T10:30:00Z",
+    "approved_at": null,
+    "approved_by": null,
+    "rejected_at": null,
+    "rejection_reason": null
   },
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -217,31 +222,31 @@ Retrieve all leave requests for the authenticated user.
   "data": [
     {
       "id": "678cf2a4b3945e0001ac4d70",
-      "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-      "leaveTypeName": "Annual Leave",
-      "startDate": "2025-03-16T00:00:00Z",
-      "endDate": "2025-03-22T00:00:00Z",
-      "totalDays": 5,
+      "leave_type_id": "678cf2a4b3945e0001ac4d60",
+      "leave_type_name": "Annual Leave",
+      "start_date": "2025-03-16T00:00:00Z",
+      "end_date": "2025-03-22T00:00:00Z",
+      "total_days": 5,
       "status": "Pending",
       "reason": "Extended family vacation to Hawaii",
-      "submittedAt": "2025-01-20T10:30:00Z"
+      "submitted_at": "2025-01-20T10:30:00Z"
     },
     {
       "id": "678cf2a4b3945e0001ac4d71",
-      "leaveTypeId": "678cf2a4b3945e0001ac4d61",
-      "leaveTypeName": "Sick Leave",
-      "startDate": "2024-12-10T00:00:00Z",
-      "endDate": "2024-12-11T00:00:00Z",
-      "totalDays": 2,
+      "leave_type_id": "678cf2a4b3945e0001ac4d61",
+      "leave_type_name": "Sick Leave",
+      "start_date": "2024-12-10T00:00:00Z",
+      "end_date": "2024-12-11T00:00:00Z",
+      "total_days": 2,
       "status": "Approved",
       "reason": "Flu and fever",
-      "submittedAt": "2024-12-09T08:00:00Z",
-      "approvedAt": "2024-12-09T09:15:00Z",
-      "approvedBy": "Manager Name"
+      "submitted_at": "2024-12-09T08:00:00Z",
+      "approved_at": "2024-12-09T09:15:00Z",
+      "approved_by": "Manager Name"
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -265,21 +270,21 @@ Retrieve all leave requests with a specific status (Admin only).
   "data": [
     {
       "id": "678cf2a4b3945e0001ac4d70",
-      "employeeId": "678cf2a4b3945e0001ac4d40",
-      "employeeName": "Sarah Johnson",
+      "employee_id": "678cf2a4b3945e0001ac4d40",
+      "employee_name": "Sarah Johnson",
       "department": "Engineering",
-      "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-      "leaveTypeName": "Annual Leave",
-      "startDate": "2025-03-16T00:00:00Z",
-      "endDate": "2025-03-22T00:00:00Z",
-      "totalDays": 5,
+      "leave_type_id": "678cf2a4b3945e0001ac4d60",
+      "leave_type_name": "Annual Leave",
+      "start_date": "2025-03-16T00:00:00Z",
+      "end_date": "2025-03-22T00:00:00Z",
+      "total_days": 5,
       "status": "Pending",
       "reason": "Extended family vacation to Hawaii",
-      "submittedAt": "2025-01-20T10:30:00Z"
+      "submitted_at": "2025-01-20T10:30:00Z"
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -298,19 +303,20 @@ Retrieve all leave requests with a specific status (Admin only).
 
 ### Status Definitions
 
-| Status | Description | Can Edit | Can Cancel |
-|--------|-------------|----------|------------|
-| `Pending` | Awaiting approval | Yes | Yes |
-| `Approved` | Approved by manager | No | Yes (before start date) |
-| `Rejected` | Rejected by manager | No | No |
-| `Cancelled` | Cancelled by employee | No | No |
-| `Completed` | Leave period finished | No | No |
+| Status      | Description           | Can Edit | Can Cancel              |
+| ----------- | --------------------- | -------- | ----------------------- |
+| `Pending`   | Awaiting approval     | Yes      | Yes                     |
+| `Approved`  | Approved by manager   | No       | Yes (before start date) |
+| `Rejected`  | Rejected by manager   | No       | No                      |
+| `Cancelled` | Cancelled by employee | No       | No                      |
+| `Completed` | Leave period finished | No       | No                      |
 
 ---
 
 ## Business Rules
 
 ### Submission Rules
+
 1. Start date must be in the future
 2. End date must be after start date
 3. Must have sufficient leave balance (unless negative allowed)
@@ -319,11 +325,13 @@ Retrieve all leave requests with a specific status (Admin only).
 6. Must meet minimum service period (if applicable)
 
 ### Update Rules
+
 1. Only pending requests can be updated
 2. Same validation rules as submission apply
 3. Updates trigger re-approval workflow if configured
 
 ### Cancellation Rules
+
 1. Can cancel pending or approved requests
 2. Cannot cancel rejected or already cancelled requests
 3. Can only cancel approved leave before start date
@@ -331,6 +339,7 @@ Retrieve all leave requests with a specific status (Admin only).
 5. Balance is automatically restored
 
 ### Date Calculation
+
 - Excludes weekends (Saturday, Sunday)
 - Excludes company holidays
 - Counts only business days
@@ -339,6 +348,7 @@ Retrieve all leave requests with a specific status (Admin only).
 ---
 
 ## Related Endpoints
+
 - [Leave Types](./05-leave-types.md) - Configure leave types
 - [Leave Balances](./07-leave-balances.md) - Check available balance
 - [Leave Approvals](./09-leave-approvals.md) - Approve/reject requests

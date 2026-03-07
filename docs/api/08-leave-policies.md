@@ -31,15 +31,15 @@ Manages leave policy configurations that define rules for leave types including 
 ```json
 {
   "name": "Standard Annual Leave Policy",
-  "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-  "defaultAllowance": 20.0,
-  "accrualType": "Yearly",
-  "accrualRate": 1.67,
-  "maxCarryForward": 5.0,
+  "leave_type_id": "678cf2a4b3945e0001ac4d60",
+  "default_allowance": 20.0,
+  "accrual_type": "Yearly",
+  "accrual_rate": 1.67,
+  "max_carry_forward": 5.0,
   "carryForwardExpiry Months": 3,
-  "minServiceMonths": 6,
-  "effectiveFrom": "2025-01-01T00:00:00Z",
-  "effectiveTo": null
+  "min_service_months": 6,
+  "effective_from": "2025-01-01T00:00:00Z",
+  "effective_to": null
 }
 ```
 
@@ -49,7 +49,7 @@ Manages leave policy configurations that define rules for leave types including 
 {
   "data": "678cf2a4b3945e0001ac4d90",
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Leave policy created successfully"
   }
 }
@@ -67,14 +67,14 @@ Manages leave policy configurations that define rules for leave types including 
 {
   "id": "678cf2a4b3945e0001ac4d90",
   "name": "Enhanced Annual Leave Policy",
-  "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-  "defaultAllowance": 22.0,
-  "accrualType": "Monthly",
-  "accrualRate": 1.83,
-  "maxCarryForward": 7.0,
-  "carryForwardExpiryMonths": 3,
-  "minServiceMonths": 3,
-  "effectiveFrom": "2025-01-01T00:00:00Z"
+  "leave_type_id": "678cf2a4b3945e0001ac4d60",
+  "default_allowance": 22.0,
+  "accrual_type": "Monthly",
+  "accrual_rate": 1.83,
+  "max_carry_forward": 7.0,
+  "carry_forward_expiry_months": 3,
+  "min_service_months": 3,
+  "effective_from": "2025-01-01T00:00:00Z"
 }
 ```
 
@@ -84,7 +84,7 @@ Manages leave policy configurations that define rules for leave types including 
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Leave policy updated successfully"
   }
 }
@@ -102,7 +102,7 @@ Manages leave policy configurations that define rules for leave types including 
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Leave policy deleted successfully"
   }
 }
@@ -121,20 +121,20 @@ Manages leave policy configurations that define rules for leave types including 
   "data": {
     "id": "678cf2a4b3945e0001ac4d90",
     "name": "Enhanced Annual Leave Policy",
-    "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-    "leaveTypeName": "Annual Leave",
-    "defaultAllowance": 22.0,
-    "accrualType": "Monthly",
-    "accrualRate": 1.83,
-    "maxCarryForward": 7.0,
-    "carryForwardExpiryMonths": 3,
-    "minServiceMonths": 3,
-    "effectiveFrom": "2025-01-01T00:00:00Z",
-    "effectiveTo": null,
-    "isActive": true
+    "leave_type_id": "678cf2a4b3945e0001ac4d60",
+    "leave_type_name": "Annual Leave",
+    "default_allowance": 22.0,
+    "accrual_type": "Monthly",
+    "accrual_rate": 1.83,
+    "max_carry_forward": 7.0,
+    "carry_forward_expiry_months": 3,
+    "min_service_months": 3,
+    "effective_from": "2025-01-01T00:00:00Z",
+    "effective_to": null,
+    "is_active": true
   },
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -153,16 +153,16 @@ Manages leave policy configurations that define rules for leave types including 
     {
       "id": "678cf2a4b3945e0001ac4d90",
       "name": "Enhanced Annual Leave Policy",
-      "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-      "leaveTypeName": "Annual Leave",
-      "defaultAllowance": 22.0,
-      "accrualType": "Monthly",
-      "maxCarryForward": 7.0,
-      "isActive": true
+      "leave_type_id": "678cf2a4b3945e0001ac4d60",
+      "leave_type_name": "Annual Leave",
+      "default_allowance": 22.0,
+      "accrual_type": "Monthly",
+      "max_carry_forward": 7.0,
+      "is_active": true
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -180,18 +180,18 @@ Manages leave policy configurations that define rules for leave types including 
   "data": {
     "id": "678cf2a4b3945e0001ac4d90",
     "name": "Enhanced Annual Leave Policy",
-    "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-    "leaveTypeName": "Annual Leave",
-    "defaultAllowance": 22.0,
-    "accrualType": "Monthly",
-    "accrualRate": 1.83,
-    "maxCarryForward": 7.0,
-    "minServiceMonths": 3,
-    "effectiveFrom": "2025-01-01T00:00:00Z",
-    "isActive": true
+    "leave_type_id": "678cf2a4b3945e0001ac4d60",
+    "leave_type_name": "Annual Leave",
+    "default_allowance": 22.0,
+    "accrual_type": "Monthly",
+    "accrual_rate": 1.83,
+    "max_carry_forward": 7.0,
+    "min_service_months": 3,
+    "effective_from": "2025-01-01T00:00:00Z",
+    "is_active": true
   },
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -247,10 +247,10 @@ Manages leave policy configurations that define rules for leave types including 
 ```json
 {
   "name": "Standard Annual Leave",
-  "defaultAllowance": 20.0,
-  "accrualType": "Yearly",
-  "maxCarryForward": 5.0,
-  "minServiceMonths": 6
+  "default_allowance": 20.0,
+  "accrual_type": "Yearly",
+  "max_carry_forward": 5.0,
+  "min_service_months": 6
 }
 ```
 
@@ -258,10 +258,10 @@ Manages leave policy configurations that define rules for leave types including 
 ```json
 {
   "name": "Sick Leave Policy",
-  "defaultAllowance": 10.0,
-  "accrualType": "Yearly",
-  "maxCarryForward": 0.0,
-  "minServiceMonths": 0
+  "default_allowance": 10.0,
+  "accrual_type": "Yearly",
+  "max_carry_forward": 0.0,
+  "min_service_months": 0
 }
 ```
 

@@ -29,55 +29,55 @@ Provides high-level statistics and summaries for administrative dashboards and m
 ```json
 {
   "data": {
-    "totalEmployees": 250,
-    "employeesCurrentlyOnLeave": 12,
-    "pendingApprovals": 8,
-    "approvedLeaveThisMonth": 45,
-    "totalDaysTakenThisMonth": 187.5,
-    "averageDaysPerEmployee": 0.75,
-    "upcomingLeaveNext7Days": 15,
-    "upcomingLeaveNext30Days": 52,
-    "leaveUtilizationRate": 58.3,
-    "departmentBreakdown": [
+    "total_employees": 250,
+    "employees_currently_on_leave": 12,
+    "pending_approvals": 8,
+    "approved_leave_this_month": 45,
+    "total_days_taken_this_month": 187.5,
+    "average_days_per_employee": 0.75,
+    "upcoming_leave_next7_days": 15,
+    "upcoming_leave_next30_days": 52,
+    "leave_utilization_rate": 58.3,
+    "department_breakdown": [
       {
         "department": "Engineering",
-        "totalEmployees": 75,
-        "onLeaveToday": 3,
-        "pendingApprovals": 2
+        "total_employees": 75,
+        "on_leave_today": 3,
+        "pending_approvals": 2
       },
       {
         "department": "Sales",
-        "totalEmployees": 50,
-        "onLeaveToday": 4,
-        "pendingApprovals": 3
+        "total_employees": 50,
+        "on_leave_today": 4,
+        "pending_approvals": 3
       },
       {
         "department": "Marketing",
-        "totalEmployees": 35,
-        "onLeaveToday": 2,
-        "pendingApprovals": 1
+        "total_employees": 35,
+        "on_leave_today": 2,
+        "pending_approvals": 1
       }
     ],
-    "leaveTypeUsage": [
+    "leave_type_usage": [
       {
-        "leaveTypeName": "Annual Leave",
-        "totalDays": 312.5,
-        "percentageOfTotal": 62.5
+        "leave_type_name": "Annual Leave",
+        "total_days": 312.5,
+        "percentage_of_total": 62.5
       },
       {
-        "leaveTypeName": "Sick Leave",
-        "totalDays": 125.0,
-        "percentageOfTotal": 25.0
+        "leave_type_name": "Sick Leave",
+        "total_days": 125.0,
+        "percentage_of_total": 25.0
       },
       {
-        "leaveTypeName": "Personal Leave",
-        "totalDays": 62.5,
-        "percentageOfTotal": 12.5
+        "leave_type_name": "Personal Leave",
+        "total_days": 62.5,
+        "percentage_of_total": 12.5
       }
     ]
   },
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -94,36 +94,36 @@ Provides high-level statistics and summaries for administrative dashboards and m
 {
   "data": [
     {
-      "employeeId": "678cf2a4b3945e0001ac4d40",
-      "employeeName": "Sarah Johnson",
+      "employee_id": "678cf2a4b3945e0001ac4d40",
+      "employee_name": "Sarah Johnson",
       "department": "Engineering",
-      "jobTitle": "Lead Software Engineer",
-      "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-      "leaveTypeName": "Annual Leave",
-      "leaveTypeColor": "#4CAF50",
-      "startDate": "2025-01-20T00:00:00Z",
-      "endDate": "2025-01-22T23:59:59Z",
-      "returnDate": "2025-01-23T00:00:00Z",
-      "daysRemaining": 2,
+      "job_title": "Lead Software Engineer",
+      "leave_type_id": "678cf2a4b3945e0001ac4d60",
+      "leave_type_name": "Annual Leave",
+      "leave_type_color": "#4CAF50",
+      "start_date": "2025-01-20T00:00:00Z",
+      "end_date": "2025-01-22T23:59:59Z",
+      "return_date": "2025-01-23T00:00:00Z",
+      "days_remaining": 2,
       "reason": "Personal vacation"
     },
     {
-      "employeeId": "678cf2a4b3945e0001ac4d42",
-      "employeeName": "Michael Chen",
+      "employee_id": "678cf2a4b3945e0001ac4d42",
+      "employee_name": "Michael Chen",
       "department": "Engineering",
-      "jobTitle": "Staff Software Engineer",
-      "leaveTypeId": "678cf2a4b3945e0001ac4d61",
-      "leaveTypeName": "Sick Leave",
-      "leaveTypeColor": "#FF9800",
-      "startDate": "2025-01-21T00:00:00Z",
-      "endDate": "2025-01-21T23:59:59Z",
-      "returnDate": "2025-01-22T00:00:00Z",
-      "daysRemaining": 1,
+      "job_title": "Staff Software Engineer",
+      "leave_type_id": "678cf2a4b3945e0001ac4d61",
+      "leave_type_name": "Sick Leave",
+      "leave_type_color": "#FF9800",
+      "start_date": "2025-01-21T00:00:00Z",
+      "end_date": "2025-01-21T23:59:59Z",
+      "return_date": "2025-01-22T00:00:00Z",
+      "days_remaining": 1,
       "reason": "Medical appointment"
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -146,46 +146,46 @@ Provides high-level statistics and summaries for administrative dashboards and m
   "data": [
     {
       "date": "2025-02-15T00:00:00Z",
-      "employeesStartingLeave": [
+      "employees_starting_leave": [
         {
-          "employeeId": "678cf2a4b3945e0001ac4d43",
-          "employeeName": "Emily Davis",
+          "employee_id": "678cf2a4b3945e0001ac4d43",
+          "employee_name": "Emily Davis",
           "department": "Marketing",
-          "leaveTypeName": "Annual Leave",
-          "leaveTypeColor": "#4CAF50",
-          "endDate": "2025-02-20T23:59:59Z",
-          "totalDays": 5
+          "leave_type_name": "Annual Leave",
+          "leave_type_color": "#4CAF50",
+          "end_date": "2025-02-20T23:59:59Z",
+          "total_days": 5
         }
       ],
-      "totalStartingLeave": 1
+      "total_starting_leave": 1
     },
     {
       "date": "2025-03-16T00:00:00Z",
-      "employeesStartingLeave": [
+      "employees_starting_leave": [
         {
-          "employeeId": "678cf2a4b3945e0001ac4d40",
-          "employeeName": "Sarah Johnson",
+          "employee_id": "678cf2a4b3945e0001ac4d40",
+          "employee_name": "Sarah Johnson",
           "department": "Engineering",
-          "leaveTypeName": "Annual Leave",
-          "leaveTypeColor": "#4CAF50",
-          "endDate": "2025-03-22T23:59:59Z",
-          "totalDays": 5
+          "leave_type_name": "Annual Leave",
+          "leave_type_color": "#4CAF50",
+          "end_date": "2025-03-22T23:59:59Z",
+          "total_days": 5
         },
         {
-          "employeeId": "678cf2a4b3945e0001ac4d44",
-          "employeeName": "David Wilson",
+          "employee_id": "678cf2a4b3945e0001ac4d44",
+          "employee_name": "David Wilson",
           "department": "Sales",
-          "leaveTypeName": "Personal Leave",
-          "leaveTypeColor": "#2196F3",
-          "endDate": "2025-03-17T23:59:59Z",
-          "totalDays": 2
+          "leave_type_name": "Personal Leave",
+          "leave_type_color": "#2196F3",
+          "end_date": "2025-03-17T23:59:59Z",
+          "total_days": 2
         }
       ],
-      "totalStartingLeave": 2
+      "total_starting_leave": 2
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -201,65 +201,65 @@ Provides high-level statistics and summaries for administrative dashboards and m
 ```json
 {
   "data": {
-    "totalPending": 8,
-    "urgentApprovals": 2,
-    "byDepartment": [
+    "total_pending": 8,
+    "urgent_approvals": 2,
+    "by_department": [
       {
         "department": "Engineering",
-        "pendingCount": 3,
-        "oldestRequestDays": 5
+        "pending_count": 3,
+        "oldest_request_days": 5
       },
       {
         "department": "Sales",
-        "pendingCount": 3,
-        "oldestRequestDays": 3
+        "pending_count": 3,
+        "oldest_request_days": 3
       },
       {
         "department": "Marketing",
-        "pendingCount": 2,
-        "oldestRequestDays": 2
+        "pending_count": 2,
+        "oldest_request_days": 2
       }
     ],
-    "byLeaveType": [
+    "by_leave_type": [
       {
-        "leaveTypeName": "Annual Leave",
-        "pendingCount": 5,
-        "totalDaysRequested": 25.0
+        "leave_type_name": "Annual Leave",
+        "pending_count": 5,
+        "total_days_requested": 25.0
       },
       {
-        "leaveTypeName": "Sick Leave",
-        "pendingCount": 2,
-        "totalDaysRequested": 4.0
+        "leave_type_name": "Sick Leave",
+        "pending_count": 2,
+        "total_days_requested": 4.0
       },
       {
-        "leaveTypeName": "Personal Leave",
-        "pendingCount": 1,
-        "totalDaysRequested": 3.0
+        "leave_type_name": "Personal Leave",
+        "pending_count": 1,
+        "total_days_requested": 3.0
       }
     ],
-    "oldestPendingRequests": [
+    "oldest_pending_requests": [
       {
-        "leaveRequestId": "678cf2a4b3945e0001ac4d70",
-        "employeeName": "Sarah Johnson",
+        "leave_request_id": "678cf2a4b3945e0001ac4d70",
+        "employee_name": "Sarah Johnson",
         "department": "Engineering",
-        "leaveTypeName": "Annual Leave",
-        "requestedDays": 5.0,
-        "submittedAt": "2025-01-15T10:00:00Z",
-        "daysAgo": 5
+        "leave_type_name": "Annual Leave",
+        "requested_days": 5.0,
+        "submitted_at": "2025-01-15T10:00:00Z",
+        "days_ago": 5
       },
       {
-        "leaveRequestId": "678cf2a4b3945e0001ac4d71",
-        "employeeName": "Michael Chen",
+        "leave_request_id": "678cf2a4b3945e0001ac4d71",
+        "employee_name": "Michael Chen",
         "department": "Engineering",
-        "leaveTypeName": "Sick Leave",
-        "requestedDays": 2.0,
-        "submittedAt": "2025-01-17T08:00:00Z",
-        "daysAgo": 3
+        "leave_type_name": "Sick Leave",
+        "requested_days": 2.0,
+        "submitted_at": "2025-01-17T08:00:00Z",
+        "days_ago": 3
       }
     ]
   },
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -272,7 +272,7 @@ Provides high-level statistics and summaries for administrative dashboards and m
 
 **Leave Utilization Rate:**
 ```
-Utilization Rate = (Total Days Taken / Total Days Allocated) × 100
+Utilization Rate = (Total Days Taken / Total Days Allocated) ï¿½ 100
 ```
 
 **Average Days Per Employee:**

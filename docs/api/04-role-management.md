@@ -1,6 +1,7 @@
 # Role Management API
 
 ## Overview
+
 Manages roles and permissions, including role creation, user role assignments, and role retrieval.
 
 **Base Path:** `/api/v1/role`
@@ -20,14 +21,15 @@ Creates a new role with a specific name and description.
 #### Request
 
 **Headers:**
+
 ```http
 Authorization: Bearer {your_jwt_token}
-X-Company-Id: 678cf2a0b3945e0001ac4d30
 X-Correlation-Id: {uuid}
 Content-Type: application/json
 ```
 
 **Body:**
+
 ```json
 {
   "name": "Employee.Manager",
@@ -44,11 +46,12 @@ Content-Type: application/json
 #### Response
 
 **Success Response:** `200 OK`
+
 ```json
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Role created successfully"
   }
 }
@@ -57,23 +60,25 @@ Content-Type: application/json
 **Error Responses:**
 
 **Duplicate Role:** `409 Conflict`
+
 ```json
 {
   "data": null,
   "status": {
-    "statusCode": 409,
+    "status_code": 409,
     "message": "A role with this name already exists",
-    "errorCode": "ERR_DUPLICATE_ROLE"
+    "error_code": "ERR_DUPLICATE_ROLE"
   }
 }
 ```
 
 **Invalid Role Format:** `400 Bad Request`
+
 ```json
 {
   "data": null,
   "status": {
-    "statusCode": 400,
+    "status_code": 400,
     "message": "Validation failed",
     "errors": [
       {
@@ -90,7 +95,6 @@ Content-Type: application/json
 ```bash
 curl -X POST https://api.domnertech.com/api/v1/role \
   -H "Authorization: Bearer eyJhbGc..." \
-  -H "X-Company-Id: 678cf2a0b3945e0001ac4d30" \
   -H "X-Correlation-Id: 550e8400-e29b-41d4-a716-446655440000" \
   -H "Content-Type: application/json" \
   -d '{
@@ -100,6 +104,7 @@ curl -X POST https://api.domnertech.com/api/v1/role \
 ```
 
 #### Notes
+
 - Role names follow the convention: `Resource.Permission`
 - Common permissions: `Read`, `Write`, `Admin`, `Manager`
 - Role names are case-sensitive
@@ -118,15 +123,16 @@ Retrieves all available roles in the system.
 #### Request
 
 **Headers:**
+
 ```http
 Authorization: Bearer {your_jwt_token}
-X-Company-Id: 678cf2a0b3945e0001ac4d30
 X-Correlation-Id: {uuid}
 ```
 
 #### Response
 
 **Success Response:** `200 OK`
+
 ```json
 {
   "data": [
@@ -232,7 +238,7 @@ X-Correlation-Id: {uuid}
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -249,11 +255,11 @@ X-Correlation-Id: {uuid}
 ```bash
 curl -X GET https://api.domnertech.com/api/v1/role \
   -H "Authorization: Bearer eyJhbGc..." \
-  -H "X-Company-Id: 678cf2a0b3945e0001ac4d30" \
   -H "X-Correlation-Id: 550e8400-e29b-41d4-a716-446655440000"
 ```
 
 #### Notes
+
 - Returns all system-defined roles
 - Roles are not tenant-specific (shared across all companies)
 - Results are not paginated as the role list is typically small
@@ -264,27 +270,28 @@ curl -X GET https://api.domnertech.com/api/v1/role \
 
 Retrieves all roles assigned to a specific user.
 
-**Endpoint:** `GET /api/v1/role/user-roles/{userId}`
+**Endpoint:** `GET /api/v1/role/user-roles/{user_id}`
 
 **Authorization:** Required - Role: `Role.Read`
 
 #### Request
 
 **Headers:**
+
 ```http
 Authorization: Bearer {your_jwt_token}
-X-Company-Id: 678cf2a0b3945e0001ac4d30
 X-Correlation-Id: {uuid}
 ```
 
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `userId` | string | Yes | User's unique identifier |
+| `user_id` | string | Yes | User's unique identifier |
 
 #### Response
 
 **Success Response:** `200 OK`
+
 ```json
 {
   "data": [
@@ -310,7 +317,7 @@ X-Correlation-Id: {uuid}
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -318,13 +325,14 @@ X-Correlation-Id: {uuid}
 **Error Responses:**
 
 **User Not Found:** `404 Not Found`
+
 ```json
 {
   "data": null,
   "status": {
-    "statusCode": 404,
+    "status_code": 404,
     "message": "User with ID '678cf2a4b3945e0001ac4d99' not found",
-    "errorCode": "ERR_USER_NOT_FOUND"
+    "error_code": "ERR_USER_NOT_FOUND"
   }
 }
 ```
@@ -334,33 +342,31 @@ X-Correlation-Id: {uuid}
 ```bash
 curl -X GET https://api.domnertech.com/api/v1/role/user-roles/678cf2a4b3945e0001ac4d3a \
   -H "Authorization: Bearer eyJhbGc..." \
-  -H "X-Company-Id: 678cf2a0b3945e0001ac4d30" \
   -H "X-Correlation-Id: 550e8400-e29b-41d4-a716-446655440000"
 ```
 
 #### Example JavaScript (Axios)
 
 ```javascript
-async function getUserRoles(userId) {
+async function getUserRoles(user_id) {
   const config = {
     headers: {
-      'Authorization': `Bearer ${getAuthToken()}`,
-      'X-Company-Id': '678cf2a0b3945e0001ac4d30',
-      'X-Correlation-Id': generateUUID()
-    }
+      Authorization: `Bearer ${getAuthToken()}`,
+      "X-Correlation-Id": generateUUID(),
+    },
   };
 
   try {
     const response = await axios.get(
-      `https://api.domnertech.com/api/v1/role/user-roles/${userId}`,
-      config
+      `https://api.domnertech.com/api/v1/role/user-roles/${user_id}`,
+      config,
     );
-    
+
     const roles = response.data.data;
     console.log(`User has ${roles.length} roles assigned`);
     return roles;
   } catch (error) {
-    console.error('Error fetching user roles:', error.response.data);
+    console.error("Error fetching user roles:", error.response.data);
     throw error;
   }
 }
@@ -379,35 +385,37 @@ Assigns a role to a user. If the user already has the role, it updates the assig
 #### Request
 
 **Headers:**
+
 ```http
 Authorization: Bearer {your_jwt_token}
-X-Company-Id: 678cf2a0b3945e0001ac4d30
 X-Correlation-Id: {uuid}
 Content-Type: application/json
 ```
 
 **Body:**
+
 ```json
 {
-  "userId": "678cf2a4b3945e0001ac4d3a",
-  "roleName": "LeaveRequest.Admin"
+  "user_id": "678cf2a4b3945e0001ac4d3a",
+  "role_name": "LeaveRequest.Admin"
 }
 ```
 
 **Request Schema:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `userId` | string | Yes | User's unique identifier |
-| `roleName` | string | Yes | Role name to assign (must exist) |
+| `user_id` | string | Yes | User's unique identifier |
+| `role_name` | string | Yes | Role name to assign (must exist) |
 
 #### Response
 
 **Success Response:** `200 OK`
+
 ```json
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "User role updated successfully"
   }
 }
@@ -416,25 +424,27 @@ Content-Type: application/json
 **Error Responses:**
 
 **User Not Found:** `404 Not Found`
+
 ```json
 {
   "data": null,
   "status": {
-    "statusCode": 404,
+    "status_code": 404,
     "message": "User with ID '678cf2a4b3945e0001ac4d99' not found",
-    "errorCode": "ERR_USER_NOT_FOUND"
+    "error_code": "ERR_USER_NOT_FOUND"
   }
 }
 ```
 
 **Role Not Found:** `404 Not Found`
+
 ```json
 {
   "data": null,
   "status": {
-    "statusCode": 404,
+    "status_code": 404,
     "message": "Role 'InvalidRole.Name' does not exist",
-    "errorCode": "ERR_ROLE_NOT_FOUND"
+    "error_code": "ERR_ROLE_NOT_FOUND"
   }
 }
 ```
@@ -444,68 +454,67 @@ Content-Type: application/json
 ```bash
 curl -X POST https://api.domnertech.com/api/v1/role/upsert-user-role \
   -H "Authorization: Bearer eyJhbGc..." \
-  -H "X-Company-Id: 678cf2a0b3945e0001ac4d30" \
   -H "X-Correlation-Id: 550e8400-e29b-41d4-a716-446655440000" \
   -H "Content-Type: application/json" \
   -d '{
-    "userId": "678cf2a4b3945e0001ac4d3a",
-    "roleName": "LeaveRequest.Admin"
+    "user_id": "678cf2a4b3945e0001ac4d3a",
+    "role_name": "LeaveRequest.Admin"
   }'
 ```
 
 #### Example JavaScript (Axios)
 
 ```javascript
-async function assignRoleToUser(userId, roleName) {
+async function assignRoleToUser(user_id, role_name) {
   const config = {
     headers: {
-      'Authorization': `Bearer ${getAuthToken()}`,
-      'X-Company-Id': '678cf2a0b3945e0001ac4d30',
-      'X-Correlation-Id': generateUUID(),
-      'Content-Type': 'application/json'
-    }
+      Authorization: `Bearer ${getAuthToken()}`,
+      "X-Correlation-Id": generateUUID(),
+      "Content-Type": "application/json",
+    },
   };
 
   const body = {
-    userId: userId,
-    roleName: roleName
+    user_id: user_id,
+    role_name: role_name,
   };
 
   try {
     const response = await axios.post(
-      'https://api.domnertech.com/api/v1/role/upsert-user-role',
+      "https://api.domnertech.com/api/v1/role/upsert-user-role",
       body,
-      config
+      config,
     );
-    
-    console.log(`Role ${roleName} assigned to user ${userId}`);
+
+    console.log(`Role ${role_name} assigned to user ${user_id}`);
     return response.data;
   } catch (error) {
-    console.error('Error assigning role:', error.response.data);
+    console.error("Error assigning role:", error.response.data);
     throw error;
   }
 }
 
 // Usage: Assign multiple roles to a user
-async function setupManagerPermissions(userId) {
+async function setupManagerPermissions(user_id) {
   const managerRoles = [
-    'Employee.Read',
-    'Employee.Write',
-    'LeaveRequest.Admin',
-    'LeaveApproval.Write',
-    'LeaveBalance.Read',
-    'LeaveBalance.Write'
+    "Employee.Read",
+    "Employee.Write",
+    "LeaveRequest.Admin",
+    "LeaveApproval.Write",
+    "LeaveBalance.Read",
+    "LeaveBalance.Write",
   ];
 
   for (const role of managerRoles) {
-    await assignRoleToUser(userId, role);
+    await assignRoleToUser(user_id, role);
   }
-  
-  console.log('Manager permissions configured');
+
+  console.log("Manager permissions configured");
 }
 ```
 
 #### Notes
+
 - This is an "upsert" operation - creates or updates the role assignment
 - If the user already has the role, the operation succeeds with no changes
 - Role assignments are immediate and effective on the next API request
@@ -520,16 +529,19 @@ async function setupManagerPermissions(userId) {
 Roles follow a hierarchical permission structure:
 
 #### Read Permissions
+
 - View-only access to resources
 - Cannot create, modify, or delete
 - Examples: `User.Read`, `Employee.Read`, `LeaveRequest.Read`
 
 #### Write Permissions
+
 - Full CRUD operations on resources
 - Typically includes Read permissions
 - Examples: `User.Write`, `Employee.Write`, `LeaveType.Write`
 
 #### Admin Permissions
+
 - Advanced administrative functions
 - Typically includes Read and Write permissions
 - Can manage resources across all users/departments
@@ -538,6 +550,7 @@ Roles follow a hierarchical permission structure:
 ### Standard Role Combinations
 
 #### Employee (Standard User)
+
 ```json
 [
   "Employee.Read",
@@ -550,6 +563,7 @@ Roles follow a hierarchical permission structure:
 ```
 
 #### Manager
+
 ```json
 [
   "Employee.Read",
@@ -565,6 +579,7 @@ Roles follow a hierarchical permission structure:
 ```
 
 #### HR Administrator
+
 ```json
 [
   "User.Read",
@@ -587,6 +602,7 @@ Roles follow a hierarchical permission structure:
 ```
 
 #### System Administrator
+
 ```json
 [
   "User.Read",
@@ -615,63 +631,73 @@ Roles follow a hierarchical permission structure:
 ## Complete Role Reference
 
 ### User Management Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
-| `User.Read` | View user accounts | HR, Managers |
+
+| Role         | Description                     | Common Users     |
+| ------------ | ------------------------------- | ---------------- |
+| `User.Read`  | View user accounts              | HR, Managers     |
 | `User.Write` | Create and modify user accounts | HR, System Admin |
 
 ### Employee Management Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
-| `Employee.Read` | View employee records | All users, HR, Managers |
-| `Employee.Write` | Create and modify employee records | HR, System Admin |
+
+| Role             | Description                        | Common Users            |
+| ---------------- | ---------------------------------- | ----------------------- |
+| `Employee.Read`  | View employee records              | All users, HR, Managers |
+| `Employee.Write` | Create and modify employee records | HR, System Admin        |
 
 ### Role Management Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
-| `Role.Read` | View roles and permissions | HR, System Admin |
-| `Role.Write` | Create roles and assign permissions | System Admin |
+
+| Role         | Description                         | Common Users     |
+| ------------ | ----------------------------------- | ---------------- |
+| `Role.Read`  | View roles and permissions          | HR, System Admin |
+| `Role.Write` | Create roles and assign permissions | System Admin     |
 
 ### Leave Type Management Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
-| `LeaveType.Read` | View leave types | All users |
-| `LeaveType.Write` | Create and modify leave types | HR |
+
+| Role              | Description                   | Common Users |
+| ----------------- | ----------------------------- | ------------ |
+| `LeaveType.Read`  | View leave types              | All users    |
+| `LeaveType.Write` | Create and modify leave types | HR           |
 
 ### Leave Request Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
-| `LeaveRequest.Read` | View own leave requests | All employees |
+
+| Role                 | Description                          | Common Users  |
+| -------------------- | ------------------------------------ | ------------- |
+| `LeaveRequest.Read`  | View own leave requests              | All employees |
 | `LeaveRequest.Write` | Create and modify own leave requests | All employees |
-| `LeaveRequest.Admin` | View and manage all leave requests | HR, Managers |
+| `LeaveRequest.Admin` | View and manage all leave requests   | HR, Managers  |
 
 ### Leave Approval Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
+
+| Role                  | Description                      | Common Users |
+| --------------------- | -------------------------------- | ------------ |
 | `LeaveApproval.Write` | Approve or reject leave requests | Managers, HR |
 
 ### Leave Balance Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
-| `LeaveBalance.Read` | View leave balances | All employees |
-| `LeaveBalance.Write` | Adjust leave balances | HR |
+
+| Role                 | Description           | Common Users  |
+| -------------------- | --------------------- | ------------- |
+| `LeaveBalance.Read`  | View leave balances   | All employees |
+| `LeaveBalance.Write` | Adjust leave balances | HR            |
 
 ### Leave Policy Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
-| `LeavePolicy.Read` | View leave policies | All employees |
-| `LeavePolicy.Write` | Create and modify leave policies | HR |
+
+| Role                | Description                      | Common Users  |
+| ------------------- | -------------------------------- | ------------- |
+| `LeavePolicy.Read`  | View leave policies              | All employees |
+| `LeavePolicy.Write` | Create and modify leave policies | HR            |
 
 ### Holiday Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
-| `Holiday.Read` | View holidays | All employees |
-| `Holiday.Write` | Create and modify holidays | HR |
+
+| Role            | Description                | Common Users  |
+| --------------- | -------------------------- | ------------- |
+| `Holiday.Read`  | View holidays              | All employees |
+| `Holiday.Write` | Create and modify holidays | HR            |
 
 ### Localization Roles
-| Role | Description | Common Users |
-|------|-------------|--------------|
-| `Localize.Read` | View localized messages | All users |
+
+| Role             | Description                          | Common Users |
+| ---------------- | ------------------------------------ | ------------ |
+| `Localize.Read`  | View localized messages              | All users    |
 | `Localize.Write` | Create and modify localized messages | System Admin |
 
 ---
@@ -679,18 +705,21 @@ Roles follow a hierarchical permission structure:
 ## Business Rules
 
 ### Role Assignment
+
 1. A user can have multiple roles assigned
 2. Role assignments are cumulative (all permissions are combined)
 3. There is no role hierarchy - each role is independent
 4. Removing a role immediately revokes its permissions
 
 ### Role Naming Convention
+
 - Format: `Resource.Permission`
 - Resource: The entity or feature (e.g., User, Employee, LeaveRequest)
 - Permission: The access level (e.g., Read, Write, Admin)
 - Case-sensitive
 
 ### Permission Checking
+
 - API endpoints check for specific role names
 - Users must have ALL required roles for an endpoint
 - Example: An endpoint requiring `[Employee.Write, LeaveRequest.Admin]` needs both roles
@@ -700,44 +729,47 @@ Roles follow a hierarchical permission structure:
 ## Common Use Cases
 
 ### Use Case 1: Onboard Employee with Standard Permissions
+
 ```javascript
 const employeeRoles = [
-  'Employee.Read',
-  'LeaveRequest.Read',
-  'LeaveRequest.Write',
-  'LeaveBalance.Read',
-  'LeaveType.Read',
-  'Holiday.Read'
+  "Employee.Read",
+  "LeaveRequest.Read",
+  "LeaveRequest.Write",
+  "LeaveBalance.Read",
+  "LeaveType.Read",
+  "Holiday.Read",
 ];
 
 for (const role of employeeRoles) {
-  await assignRoleToUser(newUserId, role);
+  await assignRoleToUser(newuser_id, role);
 }
 ```
 
 ### Use Case 2: Promote to Manager
+
 ```javascript
 const managerRoles = [
-  'LeaveRequest.Admin',
-  'LeaveApproval.Write',
-  'Employee.Write',
-  'LeaveBalance.Write'
+  "LeaveRequest.Admin",
+  "LeaveApproval.Write",
+  "Employee.Write",
+  "LeaveBalance.Write",
 ];
 
 for (const role of managerRoles) {
-  await assignRoleToUser(userId, role);
+  await assignRoleToUser(user_id, role);
 }
 ```
 
 ### Use Case 3: Check User Permissions
+
 ```javascript
-async function userHasPermission(userId, requiredRole) {
-  const userRoles = await getUserRoles(userId);
-  return userRoles.some(role => role.name === requiredRole);
+async function userHasPermission(user_id, requiredRole) {
+  const userRoles = await getUserRoles(user_id);
+  return userRoles.some((role) => role.name === requiredRole);
 }
 
 // Usage
-if (await userHasPermission(userId, 'LeaveApproval.Write')) {
+if (await userHasPermission(user_id, "LeaveApproval.Write")) {
   // User can approve leave requests
   showApproveButton();
 }
@@ -746,6 +778,7 @@ if (await userHasPermission(userId, 'LeaveApproval.Write')) {
 ---
 
 ## Related Endpoints
+
 - [User Management](./02-user-management.md) - Create users to assign roles to
 - [Authentication](./01-authentication.md) - Role-based access in JWT tokens
 

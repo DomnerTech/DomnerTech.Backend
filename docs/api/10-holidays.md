@@ -1,6 +1,7 @@
 # Holidays API
 
 ## Overview
+
 Manages public holidays and company-specific holidays used for leave calculations and calendar planning.
 
 **Base Path:** `/api/v1/holiday`
@@ -9,14 +10,14 @@ Manages public holidays and company-specific holidays used for leave calculation
 
 ## Endpoints Summary
 
-| Method | Endpoint | Description | Authorization |
-|--------|----------|-------------|---------------|
-| POST | `/holiday` | Create holiday | `Holiday.Write` |
-| POST | `/holiday/bulk` | Bulk create holidays | `Holiday.Write` |
-| PUT | `/holiday` | Update holiday | `Holiday.Write` |
-| DELETE | `/holiday/{id}` | Delete holiday | `Holiday.Write` |
-| GET | `/holiday/year/{year}` | Get holidays by year | `Holiday.Read` |
-| GET | `/holiday/upcoming` | Get upcoming holidays | `Holiday.Read` |
+| Method | Endpoint               | Description           | Authorization   |
+| ------ | ---------------------- | --------------------- | --------------- |
+| POST   | `/holiday`             | Create holiday        | `Holiday.Write` |
+| POST   | `/holiday/bulk`        | Bulk create holidays  | `Holiday.Write` |
+| PUT    | `/holiday`             | Update holiday        | `Holiday.Write` |
+| DELETE | `/holiday/{id}`        | Delete holiday        | `Holiday.Write` |
+| GET    | `/holiday/year/{year}` | Get holidays by year  | `Holiday.Read`  |
+| GET    | `/holiday/upcoming`    | Get upcoming holidays | `Holiday.Read`  |
 
 ---
 
@@ -33,8 +34,8 @@ Manages public holidays and company-specific holidays used for leave calculation
   "name": "Independence Day",
   "date": "2025-07-04T00:00:00Z",
   "description": "National Independence Day celebration",
-  "isRecurring": true,
-  "appliesToAllDepartments": true,
+  "is_recurring": true,
+  "applies_to_all_departments": true,
   "departments": []
 }
 ```
@@ -45,7 +46,7 @@ Manages public holidays and company-specific holidays used for leave calculation
 {
   "data": "678cf2a4b3945e0001ac4db0",
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Holiday created successfully"
   }
 }
@@ -68,22 +69,22 @@ Manages public holidays and company-specific holidays used for leave calculation
       "name": "New Year's Day",
       "date": "2025-01-01T00:00:00Z",
       "description": "New Year celebration",
-      "isRecurring": true,
-      "appliesToAllDepartments": true
+      "is_recurring": true,
+      "applies_to_all_departments": true
     },
     {
       "name": "Labor Day",
       "date": "2025-09-01T00:00:00Z",
       "description": "International Workers' Day",
-      "isRecurring": true,
-      "appliesToAllDepartments": true
+      "is_recurring": true,
+      "applies_to_all_departments": true
     },
     {
       "name": "Christmas Day",
       "date": "2025-12-25T00:00:00Z",
       "description": "Christmas celebration",
-      "isRecurring": true,
-      "appliesToAllDepartments": true
+      "is_recurring": true,
+      "applies_to_all_departments": true
     }
   ]
 }
@@ -95,7 +96,7 @@ Manages public holidays and company-specific holidays used for leave calculation
 {
   "data": 3,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "3 holidays created successfully"
   }
 }
@@ -115,8 +116,8 @@ Manages public holidays and company-specific holidays used for leave calculation
   "name": "Independence Day (US)",
   "date": "2025-07-04T00:00:00Z",
   "description": "United States Independence Day celebration",
-  "isRecurring": true,
-  "appliesToAllDepartments": true,
+  "is_recurring": true,
+  "applies_to_all_departments": true,
   "departments": []
 }
 ```
@@ -127,7 +128,7 @@ Manages public holidays and company-specific holidays used for leave calculation
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Holiday updated successfully"
   }
 }
@@ -145,7 +146,7 @@ Manages public holidays and company-specific holidays used for leave calculation
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Holiday deleted successfully"
   }
 }
@@ -169,8 +170,8 @@ Manages public holidays and company-specific holidays used for leave calculation
       "name": "New Year's Day",
       "date": "2025-01-01T00:00:00Z",
       "description": "New Year celebration",
-      "isRecurring": true,
-      "appliesToAllDepartments": true,
+      "is_recurring": true,
+      "applies_to_all_departments": true,
       "departments": []
     },
     {
@@ -178,8 +179,8 @@ Manages public holidays and company-specific holidays used for leave calculation
       "name": "Independence Day (US)",
       "date": "2025-07-04T00:00:00Z",
       "description": "United States Independence Day celebration",
-      "isRecurring": true,
-      "appliesToAllDepartments": true,
+      "is_recurring": true,
+      "applies_to_all_departments": true,
       "departments": []
     },
     {
@@ -187,8 +188,8 @@ Manages public holidays and company-specific holidays used for leave calculation
       "name": "Labor Day",
       "date": "2025-09-01T00:00:00Z",
       "description": "International Workers' Day",
-      "isRecurring": true,
-      "appliesToAllDepartments": true,
+      "is_recurring": true,
+      "applies_to_all_departments": true,
       "departments": []
     },
     {
@@ -196,13 +197,13 @@ Manages public holidays and company-specific holidays used for leave calculation
       "name": "Christmas Day",
       "date": "2025-12-25T00:00:00Z",
       "description": "Christmas celebration",
-      "isRecurring": true,
-      "appliesToAllDepartments": true,
+      "is_recurring": true,
+      "applies_to_all_departments": true,
       "departments": []
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -216,9 +217,10 @@ Manages public holidays and company-specific holidays used for leave calculation
 **Authorization:** Required - Role: `Holiday.Read`
 
 ### Query Parameters
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `count` | integer | No | Maximum holidays to return (default: 10) |
+
+| Parameter | Type    | Required | Description                              |
+| --------- | ------- | -------- | ---------------------------------------- |
+| `count`   | integer | No       | Maximum holidays to return (default: 10) |
 
 ### Response `200 OK`
 
@@ -230,20 +232,20 @@ Manages public holidays and company-specific holidays used for leave calculation
       "name": "Independence Day (US)",
       "date": "2025-07-04T00:00:00Z",
       "description": "United States Independence Day celebration",
-      "daysUntil": 165,
-      "isRecurring": true
+      "days_until": 165,
+      "is_recurring": true
     },
     {
       "id": "678cf2a4b3945e0001ac4db2",
       "name": "Labor Day",
       "date": "2025-09-01T00:00:00Z",
       "description": "International Workers' Day",
-      "daysUntil": 224,
-      "isRecurring": true
+      "days_until": 224,
+      "is_recurring": true
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -253,11 +255,13 @@ Manages public holidays and company-specific holidays used for leave calculation
 ## Holiday Configuration
 
 ### Recurring Holidays
+
 - `isRecurring: true` - Holiday repeats annually
 - System can auto-create for future years
 - Examples: New Year, Christmas, Independence Day
 
 ### Department-Specific Holidays
+
 - `appliesToAllDepartments: false` - Specify departments
 - `departments: ["Sales", "Marketing"]` - List of departments
 - Useful for regional offices or specific teams
@@ -267,16 +271,21 @@ Manages public holidays and company-specific holidays used for leave calculation
 ## Common Holiday Calendars
 
 ### US Holidays
+
 ```json
 [
-  {"name": "New Year's Day", "date": "01-01", "isRecurring": true},
-  {"name": "Martin Luther King Jr. Day", "date": "01-15", "isRecurring": true},
-  {"name": "Presidents' Day", "date": "02-19", "isRecurring": true},
-  {"name": "Memorial Day", "date": "05-27", "isRecurring": true},
-  {"name": "Independence Day", "date": "07-04", "isRecurring": true},
-  {"name": "Labor Day", "date": "09-02", "isRecurring": true},
-  {"name": "Thanksgiving", "date": "11-28", "isRecurring": true},
-  {"name": "Christmas Day", "date": "12-25", "isRecurring": true}
+  { "name": "New Year's Day", "date": "01-01", "is_recurring": true },
+  {
+    "name": "Martin Luther King Jr. Day",
+    "date": "01-15",
+    "is_recurring": true
+  },
+  { "name": "Presidents' Day", "date": "02-19", "is_recurring": true },
+  { "name": "Memorial Day", "date": "05-27", "is_recurring": true },
+  { "name": "Independence Day", "date": "07-04", "is_recurring": true },
+  { "name": "Labor Day", "date": "09-02", "is_recurring": true },
+  { "name": "Thanksgiving", "date": "11-28", "is_recurring": true },
+  { "name": "Christmas Day", "date": "12-25", "is_recurring": true }
 ]
 ```
 
@@ -293,6 +302,7 @@ Manages public holidays and company-specific holidays used for leave calculation
 ---
 
 ## Related Endpoints
+
 - [Leave Requests](./06-leave-requests.md) - Holidays affect day calculations
 - [Team Leave](./11-team-leave.md) - Holidays shown in team calendar
 

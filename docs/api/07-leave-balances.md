@@ -30,11 +30,11 @@ Creates initial leave balance for an employee for a specific leave type and year
 
 ```json
 {
-  "employeeId": "678cf2a4b3945e0001ac4d40",
-  "leaveTypeId": "678cf2a4b3945e0001ac4d60",
+  "employee_id": "678cf2a4b3945e0001ac4d40",
+  "leave_type_id": "678cf2a4b3945e0001ac4d60",
   "year": 2025,
-  "totalAllowance": 20.0,
-  "carryForward": 5.0
+  "total_allowance": 20.0,
+  "carry_forward": 5.0
 }
 ```
 
@@ -53,7 +53,7 @@ Creates initial leave balance for an employee for a specific leave type and year
 {
   "data": "678cf2a4b3945e0001ac4d80",
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Leave balance initialized successfully"
   }
 }
@@ -78,10 +78,10 @@ Manually adjusts an employee's leave balance (add or subtract days).
 
 ```json
 {
-  "employeeId": "678cf2a4b3945e0001ac4d40",
-  "leaveTypeId": "678cf2a4b3945e0001ac4d60",
+  "employee_id": "678cf2a4b3945e0001ac4d40",
+  "leave_type_id": "678cf2a4b3945e0001ac4d60",
   "year": 2025,
-  "adjustmentDays": 2.0,
+  "adjustment_days": 2.0,
   "reason": "Additional leave granted for exceptional performance"
 }
 ```
@@ -101,7 +101,7 @@ Manually adjusts an employee's leave balance (add or subtract days).
 {
   "data": true,
   "status": {
-    "statusCode": 200,
+    "status_code": 200,
     "message": "Leave balance adjusted successfully"
   }
 }
@@ -133,32 +133,32 @@ Retrieves leave balances for the authenticated user for a specific year.
 {
   "data": [
     {
-      "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-      "leaveTypeName": "Annual Leave",
-      "leaveTypeColor": "#4CAF50",
+      "leave_type_id": "678cf2a4b3945e0001ac4d60",
+      "leave_type_name": "Annual Leave",
+      "leave_type_color": "#4CAF50",
       "year": 2025,
-      "totalAllowance": 22.0,
+      "total_allowance": 22.0,
       "used": 3.0,
       "remaining": 19.0,
-      "carryForward": 5.0,
+      "carry_forward": 5.0,
       "pending": 5.0,
       "available": 14.0
     },
     {
-      "leaveTypeId": "678cf2a4b3945e0001ac4d61",
-      "leaveTypeName": "Sick Leave",
-      "leaveTypeColor": "#FF9800",
+      "leave_type_id": "678cf2a4b3945e0001ac4d61",
+      "leave_type_name": "Sick Leave",
+      "leave_type_color": "#FF9800",
       "year": 2025,
-      "totalAllowance": 10.0,
+      "total_allowance": 10.0,
       "used": 2.0,
       "remaining": 8.0,
-      "carryForward": 0.0,
+      "carry_forward": 0.0,
       "pending": 0.0,
       "available": 8.0
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
@@ -196,28 +196,28 @@ Retrieves leave balances for a specific employee (HR/Manager access).
 {
   "data": [
     {
-      "leaveTypeId": "678cf2a4b3945e0001ac4d60",
-      "leaveTypeName": "Annual Leave",
-      "leaveTypeColor": "#4CAF50",
+      "leave_type_id": "678cf2a4b3945e0001ac4d60",
+      "leave_type_name": "Annual Leave",
+      "leave_type_color": "#4CAF50",
       "year": 2025,
-      "totalAllowance": 22.0,
+      "total_allowance": 22.0,
       "used": 3.0,
       "remaining": 19.0,
-      "carryForward": 5.0,
+      "carry_forward": 5.0,
       "pending": 5.0,
       "available": 14.0,
-      "adjustmentHistory": [
+      "adjustment_history": [
         {
           "date": "2025-01-15T10:00:00Z",
-          "adjustmentDays": 2.0,
+          "adjustment_days": 2.0,
           "reason": "Performance bonus",
-          "adjustedBy": "HR Manager"
+          "adjusted_by": "HR Manager"
         }
       ]
     }
   ],
   "status": {
-    "statusCode": 200
+    "status_code": 200
   }
 }
 ```
