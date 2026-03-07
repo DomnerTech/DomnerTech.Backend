@@ -70,7 +70,8 @@ All authenticated requests require these headers:
 | `X-Company-Id` | Yes | Tenant/Company ID | `678cf2a0b3945e0001ac4d30` |
 | `X-Correlation-Id` | Yes | Request tracking ID | `uuid-v4-string` |
 | `Content-Type` | Yes | Request content type | `application/json` |
-| `Accept-Language` | No | Preferred language | `en`, `es`, `fr` |
+| `lang` | No | Preferred language | `en`, `es`, `fr` |
+| `platform` | No | Preferred platform | `chrome`, `safari`, `brave` |
 
 *Not required if using cookie-based authentication
 
