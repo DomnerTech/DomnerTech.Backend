@@ -1,6 +1,7 @@
 # Team Leave API
 
 ## Overview
+
 Provides team-level leave visibility, conflict detection, and department leave planning capabilities.
 
 **Base Path:** `/api/v1/team-leave`
@@ -9,12 +10,12 @@ Provides team-level leave visibility, conflict detection, and department leave p
 
 ## Endpoints Summary
 
-| Method | Endpoint | Description | Authorization |
-|--------|----------|-------------|---------------|
-| GET | `/team-leave/calendar` | Get team calendar | `LeaveRequest.Admin` |
-| POST | `/team-leave/check-conflicts` | Check leave conflicts | `LeaveRequest.Admin` |
-| GET | `/team-leave/stats/{department}` | Get team statistics | `LeaveRequest.Admin` |
-| GET | `/team-leave/upcoming/{department}` | Get upcoming leaves | `LeaveRequest.Admin` |
+| Method | Endpoint                            | Description           | Authorization        |
+| ------ | ----------------------------------- | --------------------- | -------------------- |
+| GET    | `/team-leave/calendar`              | Get team calendar     | `LeaveRequest.Admin` |
+| POST   | `/team-leave/check-conflicts`       | Check leave conflicts | `LeaveRequest.Admin` |
+| GET    | `/team-leave/stats/{department}`    | Get team statistics   | `LeaveRequest.Admin` |
+| GET    | `/team-leave/upcoming/{department}` | Get upcoming leaves   | `LeaveRequest.Admin` |
 
 ---
 
@@ -25,15 +26,17 @@ Provides team-level leave visibility, conflict detection, and department leave p
 **Authorization:** Required - Role: `LeaveRequest.Admin`
 
 ### Query Parameters
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `department` | string | Yes | Department name |
-| `startDate` | datetime | Yes | Calendar start date |
-| `endDate` | datetime | Yes | Calendar end date |
+
+| Parameter    | Type     | Required | Description         |
+| ------------ | -------- | -------- | ------------------- |
+| `department` | string   | Yes      | Department name     |
+| `start_date` | datetime | Yes      | Calendar start date |
+| `end_date`   | datetime | Yes      | Calendar end date   |
 
 ### Example Request
+
 ```
-GET /team-leave/calendar?department=Engineering&startDate=2025-03-01T00:00:00Z&endDate=2025-03-31T23:59:59Z
+GET /team-leave/calendar?department=Engineering&start_date=2025-03-01T00:00:00Z&end_date=2025-03-31T23:59:59Z
 ```
 
 ### Response `200 OK`
@@ -211,17 +214,21 @@ GET /team-leave/calendar?department=Engineering&startDate=2025-03-01T00:00:00Z&e
 ## Use Cases
 
 ### Planning Team Coverage
+
 Managers can view team calendar to ensure adequate coverage during busy periods.
 
 ### Conflict Prevention
+
 Check conflicts before approving leave to prevent understaffing.
 
 ### Resource Planning
+
 View upcoming leaves to plan project assignments and deadlines.
 
 ---
 
 ## Related Endpoints
+
 - [Leave Approvals](./09-leave-approvals.md) - Use conflict check before approving
 - [Leave Requests](./06-leave-requests.md) - View individual requests
 

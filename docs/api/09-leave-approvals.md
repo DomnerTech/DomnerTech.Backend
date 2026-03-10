@@ -10,12 +10,12 @@ Manages the approval workflow for leave requests including approving, rejecting,
 
 ## Endpoints Summary
 
-| Method | Endpoint                                   | Description           | Authorization         |
-| ------ | ------------------------------------------ | --------------------- | --------------------- |
-| POST   | `/leave-approval/approve`                  | Approve leave request | `LeaveApproval.Write` |
-| POST   | `/leave-approval/reject`                   | Reject leave request  | `LeaveApproval.Write` |
-| GET    | `/leave-approval/pending`                  | Get pending approvals | `LeaveApproval.Write` |
-| GET    | `/leave-approval/history/{leaveRequestId}` | Get approval history  | `LeaveApproval.Write` |
+| Method | Endpoint                                     | Description           | Authorization         |
+| ------ | -------------------------------------------- | --------------------- | --------------------- |
+| POST   | `/leave-approval/approve`                    | Approve leave request | `LeaveApproval.Write` |
+| POST   | `/leave-approval/reject`                     | Reject leave request  | `LeaveApproval.Write` |
+| GET    | `/leave-approval/pending`                    | Get pending approvals | `LeaveApproval.Write` |
+| GET    | `/leave-approval/history/{leave_request_id}` | Get approval history  | `LeaveApproval.Write` |
 
 ---
 
@@ -38,8 +38,8 @@ Approves a pending leave request.
 
 **Schema:**
 | Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `leaveRequestId` | string | Yes | Leave request ID to approve |
+|---------------------|---------|-----------|-----------------------------------|
+| `leave_request_id` | string | Yes | Leave request ID to approve |
 | `comments` | string | No | Approval comments (max 500 chars) |
 
 ### Response `200 OK`
@@ -84,8 +84,8 @@ Rejects a pending leave request with a reason.
 **Schema:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `leaveRequestId` | string | Yes | Leave request ID to reject |
-| `rejectionReason` | string | Yes | Reason for rejection (max 500 chars) |
+| `leave_request_id` | string | Yes | Leave request ID to reject |
+| `rejection_reason` | string | Yes | Reason for rejection (max 500 chars) |
 
 ### Response `200 OK`
 
@@ -187,15 +187,15 @@ Retrieves all leave requests pending approval for the current user.
 
 Retrieves complete approval history for a specific leave request.
 
-**Endpoint:** `GET /api/v1/leave-approval/history/{leaveRequestId}`
+**Endpoint:** `GET /api/v1/leave-approval/history/{leave_request_id}`
 
 **Authorization:** Required - Role: `LeaveApproval.Write`
 
 ### Path Parameters
 
-| Parameter        | Type   | Required | Description                       |
-| ---------------- | ------ | -------- | --------------------------------- |
-| `leaveRequestId` | string | Yes      | Leave request's unique identifier |
+| Parameter          | Type   | Required | Description                       |
+| ------------------ | ------ | -------- | --------------------------------- |
+| `leave_request_id` | string | Yes      | Leave request's unique identifier |
 
 ### Response `200 OK`
 
@@ -314,12 +314,12 @@ Employee ? Submit ? L1 Manager ? L2 Director ? L3 VP ? Approve
 ### Use Case 1: Batch Approval
 
 ```javascript
-async function batchApproveLeaves(leaveRequestIds) {
+async function batchApproveLeaves(leave_request_ids) {
   const results = [];
-  for (const id of leaveRequestIds) {
+  for (const id of leave_request_ids) {
     try {
       await approveLeave({
-        leaveRequestId: id,
+        leave_request_id: id,
         comments: "Batch approved",
       });
       results.push({ id, status: "success" });
@@ -334,9 +334,9 @@ async function batchApproveLeaves(leaveRequestIds) {
 ### Use Case 2: Approval with Validation
 
 ```javascript
-async function approveWithValidation(leaveRequestId) {
+async function approveWithValidation(leave_request_id) {
   // Get request details
-  const request = await getLeaveRequestById(leaveRequestId);
+  const request = await getLeaveRequestById(leave_request_id);
 
   // Check team availability
   const conflicts = await checkTeamLeaveConflicts({
@@ -352,7 +352,7 @@ async function approveWithValidation(leaveRequestId) {
 
   // Approve
   await approveLeave({
-    leaveRequestId: leaveRequestId,
+    leave_request_id: leave_request_id,
     comments: "Approved after team availability check",
   });
 }
@@ -361,18 +361,18 @@ async function approveWithValidation(leaveRequestId) {
 ### Use Case 3: Conditional Approval
 
 ```javascript
-async function conditionalApprove(leaveRequestId) {
-  const request = await getLeaveRequestById(leaveRequestId);
+async function conditionalApprove(leave_request_id) {
+  const request = await getLeaveRequestById(leave_request_id);
 
   // Auto-approve if <= 2 days
   if (request.totalDays <= 2) {
     await approveLeave({
-      leaveRequestId: leaveRequestId,
+      leave_request_id: leave_request_id,
       comments: "Auto-approved (?2 days)",
     });
   } else {
     // Requires manual review
-    await sendNotificationToManager(request.employeeId, leaveRequestId);
+    await sendNotificationToManager(request.employeeId, leave_request_id);
   }
 }
 ```

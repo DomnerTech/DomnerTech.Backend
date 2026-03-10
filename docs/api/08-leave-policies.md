@@ -1,6 +1,7 @@
 # Leave Policies API
 
 ## Overview
+
 Manages leave policy configurations that define rules for leave types including allowances, accrual, and carry-forward rules.
 
 **Base Path:** `/api/v1/leave-policy`
@@ -9,14 +10,14 @@ Manages leave policy configurations that define rules for leave types including 
 
 ## Endpoints Summary
 
-| Method | Endpoint | Description | Authorization |
-|--------|----------|-------------|---------------|
-| POST | `/leave-policy` | Create policy | `LeavePolicy.Write` |
-| PUT | `/leave-policy` | Update policy | `LeavePolicy.Write` |
-| DELETE | `/leave-policy/{id}` | Delete policy | `LeavePolicy.Write` |
-| GET | `/leave-policy/{id}` | Get policy by ID | `LeavePolicy.Read` |
-| GET | `/leave-policy` | Get active policies | `LeavePolicy.Read` |
-| GET | `/leave-policy/leave-type/{leaveTypeId}` | Get policy by leave type | `LeavePolicy.Read` |
+| Method | Endpoint                                 | Description              | Authorization       |
+| ------ | ---------------------------------------- | ------------------------ | ------------------- |
+| POST   | `/leave-policy`                          | Create policy            | `LeavePolicy.Write` |
+| PUT    | `/leave-policy`                          | Update policy            | `LeavePolicy.Write` |
+| DELETE | `/leave-policy/{id}`                     | Delete policy            | `LeavePolicy.Write` |
+| GET    | `/leave-policy/{id}`                     | Get policy by ID         | `LeavePolicy.Read`  |
+| GET    | `/leave-policy`                          | Get active policies      | `LeavePolicy.Read`  |
+| GET    | `/leave-policy/leave-type/{leaveTypeId}` | Get policy by leave type | `LeavePolicy.Read`  |
 
 ---
 
@@ -36,7 +37,7 @@ Manages leave policy configurations that define rules for leave types including 
   "accrual_type": "Yearly",
   "accrual_rate": 1.67,
   "max_carry_forward": 5.0,
-  "carryForwardExpiry Months": 3,
+  "carry_forward_expiry_months": 3,
   "min_service_months": 6,
   "effective_from": "2025-01-01T00:00:00Z",
   "effective_to": null
@@ -203,16 +204,19 @@ Manages leave policy configurations that define rules for leave types including 
 ### Accrual Types
 
 **Yearly Accrual:**
+
 - Entire allowance granted at start of year
 - Simple and straightforward
 - Common for most companies
 
 **Monthly Accrual:**
+
 - Days accrue monthly based on rate
 - Pro-rated for new employees
 - Formula: `accrualRate * monthsWorked`
 
 **Daily Accrual:**
+
 - Days accrue per working day
 - Most granular approach
 - Formula: `accrualRate * daysWorked`
@@ -244,6 +248,7 @@ Manages leave policy configurations that define rules for leave types including 
 ## Common Policies
 
 ### Standard Annual Leave
+
 ```json
 {
   "name": "Standard Annual Leave",
@@ -255,6 +260,7 @@ Manages leave policy configurations that define rules for leave types including 
 ```
 
 ### Sick Leave (No Carry Forward)
+
 ```json
 {
   "name": "Sick Leave Policy",
@@ -268,6 +274,7 @@ Manages leave policy configurations that define rules for leave types including 
 ---
 
 ## Related Endpoints
+
 - [Leave Types](./05-leave-types.md) - Define leave types
 - [Leave Balances](./07-leave-balances.md) - Policies determine initial balances
 

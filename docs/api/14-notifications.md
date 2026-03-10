@@ -1,6 +1,7 @@
 # Notifications API
 
 ## Overview
+
 Manages user notifications for leave-related events including request submissions, approvals, rejections, and reminders.
 
 **Base Path:** `/api/v1/notification`
@@ -9,13 +10,13 @@ Manages user notifications for leave-related events including request submission
 
 ## Endpoints Summary
 
-| Method | Endpoint | Description | Authorization |
-|--------|----------|-------------|---------------|
-| GET | `/notification` | Get my notifications (paginated) | Any authenticated user |
-| GET | `/notification/unread` | Get unread notifications | Any authenticated user |
-| GET | `/notification/unread/count` | Get unread count | Any authenticated user |
-| PUT | `/notification/{id}/read` | Mark as read | Any authenticated user |
-| PUT | `/notification/read-all` | Mark all as read | Any authenticated user |
+| Method | Endpoint                     | Description                      | Authorization          |
+| ------ | ---------------------------- | -------------------------------- | ---------------------- |
+| GET    | `/notification`              | Get my notifications (paginated) | Any authenticated user |
+| GET    | `/notification/unread`       | Get unread notifications         | Any authenticated user |
+| GET    | `/notification/unread/count` | Get unread count                 | Any authenticated user |
+| PUT    | `/notification/{id}/read`    | Mark as read                     | Any authenticated user |
+| PUT    | `/notification/read-all`     | Mark all as read                 | Any authenticated user |
 
 ---
 
@@ -24,13 +25,14 @@ Manages user notifications for leave-related events including request submission
 **Endpoint:** `GET /api/v1/notification`
 
 ### Query Parameters
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `cursor` | string | No | Pagination cursor |
-| `page_size` | integer | Yes | Items per page (1-100) |
-| `direction` | enum | Yes | `Forward` or `Backward` |
-| `sort_by` | string | Yes | `createdAt`, `isRead` |
-| `include_total_count` | boolean | Yes | Include total count |
+
+| Parameter             | Type    | Required | Description             |
+| --------------------- | ------- | -------- | ----------------------- |
+| `cursor`              | string  | No       | Pagination cursor       |
+| `page_size`           | integer | Yes      | Items per page (1-100)  |
+| `direction`           | enum    | Yes      | `Forward` or `Backward` |
+| `sort_by`             | string  | Yes      | `createdAt`, `isRead`   |
+| `include_total_count` | boolean | Yes      | Include total count     |
 
 ### Response `200 OK`
 
@@ -134,9 +136,10 @@ Manages user notifications for leave-related events including request submission
 **Endpoint:** `PUT /api/v1/notification/{id}/read`
 
 ### Path Parameters
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `id` | string | Yes | Notification ID |
+
+| Parameter | Type   | Required | Description     |
+| --------- | ------ | -------- | --------------- |
+| `id`      | string | Yes      | Notification ID |
 
 ### Response `200 OK`
 
@@ -175,28 +178,33 @@ Manages user notifications for leave-related events including request submission
 ### Employee Notifications
 
 **Leave Request Status:**
+
 - `LeaveRequestSubmitted` - Confirmation of submission
 - `LeaveRequestApproved` - Request approved
 - `LeaveRequestRejected` - Request rejected with reason
 - `LeaveRequestCancelled` - Request cancelled
 
 **Leave Balance:**
+
 - `LeaveBalanceInitialized` - Balance set for new year
 - `LeaveBalanceUpdated` - Manual adjustment made
 - `LeaveBalanceExpiring` - Carry-forward days expiring soon
 
 **Reminders:**
+
 - `LeaveStartingTomorrow` - Leave starts tomorrow reminder
 - `ReturnToWorkTomorrow` - Return to work tomorrow reminder
 
 ### Manager Notifications
 
 **Approval Requests:**
+
 - `PendingApproval` - New request awaiting approval
 - `ApprovalReminder` - Request pending for X days
 - `TeamLeaveConflict` - Too many team members on leave
 
 **Team Updates:**
+
 - `TeamMemberOnLeave` - Team member starting leave today
 - `TeamMemberReturned` - Team member returned from leave
 
@@ -205,16 +213,19 @@ Manages user notifications for leave-related events including request submission
 ## Notification Delivery Channels
 
 ### In-App Notifications
+
 - Delivered via this API
 - Badge count on navigation
 - Real-time updates via WebSocket
 
 ### Email Notifications
+
 - Configurable per user
 - Batched for non-urgent notifications
 - Immediate for urgent (approvals, rejections)
 
 ### Push Notifications (Mobile)
+
 - For mobile apps
 - Configurable in user preferences
 - Supports iOS and Android
@@ -250,20 +261,22 @@ Users can configure notification preferences:
 Connect to receive real-time notifications:
 
 ```javascript
-const ws = new WebSocket('wss://api.domnertech.com/ws/notifications');
+const ws = new WebSocket("wss://api.domnertech.com/ws/notifications");
 
 ws.onopen = () => {
   // Send authentication token
-  ws.send(JSON.stringify({
-    type: 'authenticate',
-    token: getAuthToken()
-  }));
+  ws.send(
+    JSON.stringify({
+      type: "authenticate",
+      token: getAuthToken(),
+    }),
+  );
 };
 
 ws.onmessage = (event) => {
   const notification = JSON.parse(event.data);
-  console.log('New notification:', notification);
-  
+  console.log("New notification:", notification);
+
   // Update UI
   displayNotification(notification);
   incrementBadgeCount();
@@ -276,12 +289,12 @@ Alternative to WebSocket for one-way notifications:
 
 ```javascript
 const eventSource = new EventSource(
-  'https://api.domnertech.com/api/v1/notification/stream',
+  "https://api.domnertech.com/api/v1/notification/stream",
   {
     headers: {
-      'Authorization': `Bearer ${getAuthToken()}`
-    }
-  }
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+  },
 );
 
 eventSource.onmessage = (event) => {
@@ -295,15 +308,16 @@ eventSource.onmessage = (event) => {
 ## Common Use Cases
 
 ### Use Case 1: Notification Bell
+
 ```javascript
 async function updateNotificationBell() {
   // Get unread count
   const count = await getUnreadCount();
-  
+
   // Update badge
-  document.getElementById('notificationBadge').textContent = count;
-  document.getElementById('notificationBadge').style.display = 
-    count > 0 ? 'block' : 'none';
+  document.getElementById("notificationBadge").textContent = count;
+  document.getElementById("notificationBadge").style.display =
+    count > 0 ? "block" : "none";
 }
 
 // Poll every 30 seconds
@@ -311,33 +325,38 @@ setInterval(updateNotificationBell, 30000);
 ```
 
 ### Use Case 2: Notification Panel
+
 ```javascript
 async function loadNotifications() {
   const response = await getNotifications({
     cursor: null,
     page_size: 20,
-    direction: 'Forward',
-    sort_by: 'createdAt',
-    include_total_count: true
+    direction: "Forward",
+    sort_by: "createdAt",
+    include_total_count: true,
   });
-  
+
   renderNotifications(response.items);
 }
 
 function renderNotifications(notifications) {
-  const container = document.getElementById('notificationList');
-  container.innerHTML = notifications.map(notif => `
-    <div class="notification ${notif.isRead ? 'read' : 'unread'}" 
+  const container = document.getElementById("notificationList");
+  container.innerHTML = notifications
+    .map(
+      (notif) => `
+    <div class="notification ${notif.isRead ? "read" : "unread"}" 
          data-id="${notif.id}">
       <h4>${notif.title}</h4>
       <p>${notif.message}</p>
       <small>${formatDate(notif.createdAt)}</small>
     </div>
-  `).join('');
-  
+  `,
+    )
+    .join("");
+
   // Add click handlers
-  container.querySelectorAll('.notification').forEach(elem => {
-    elem.addEventListener('click', () => {
+  container.querySelectorAll(".notification").forEach((elem) => {
+    elem.addEventListener("click", () => {
       markAsRead(elem.dataset.id);
       navigateToRelatedEntity(elem.dataset.id);
     });
@@ -346,17 +365,18 @@ function renderNotifications(notifications) {
 ```
 
 ### Use Case 3: Mark as Read on View
+
 ```javascript
 async function viewNotification(notificationId) {
   // Mark as read
   await markNotificationAsRead(notificationId);
-  
+
   // Update UI
   updateBadgeCount();
-  
+
   // Navigate to related entity
   const notification = await getNotificationById(notificationId);
-  if (notification.relatedEntityType === 'LeaveRequest') {
+  if (notification.relatedEntityType === "LeaveRequest") {
     navigateToLeaveRequest(notification.relatedEntityId);
   }
 }
@@ -375,6 +395,7 @@ async function viewNotification(notificationId) {
 ---
 
 ## Related Endpoints
+
 - [Leave Requests](./06-leave-requests.md) - Events trigger notifications
 - [Leave Approvals](./09-leave-approvals.md) - Approval/rejection notifications
 

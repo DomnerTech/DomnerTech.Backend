@@ -1,6 +1,7 @@
 # Admin Dashboard API
 
 ## Overview
+
 Provides high-level statistics and summaries for administrative dashboards and management views.
 
 **Base Path:** `/api/v1/admin-dashboard`
@@ -11,12 +12,12 @@ Provides high-level statistics and summaries for administrative dashboards and m
 
 ## Endpoints Summary
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/admin-dashboard/stats` | Dashboard statistics |
-| GET | `/admin-dashboard/employees-on-leave` | Current employees on leave |
-| GET | `/admin-dashboard/upcoming-leaves` | Upcoming approved leaves |
-| GET | `/admin-dashboard/pending-approvals` | Pending approval summary |
+| Method | Endpoint                              | Description                |
+| ------ | ------------------------------------- | -------------------------- |
+| GET    | `/admin-dashboard/stats`              | Dashboard statistics       |
+| GET    | `/admin-dashboard/employees-on-leave` | Current employees on leave |
+| GET    | `/admin-dashboard/upcoming-leaves`    | Upcoming approved leaves   |
+| GET    | `/admin-dashboard/pending-approvals`  | Pending approval summary   |
 
 ---
 
@@ -135,9 +136,10 @@ Provides high-level statistics and summaries for administrative dashboards and m
 **Endpoint:** `GET /api/v1/admin-dashboard/upcoming-leaves?days=30`
 
 ### Query Parameters
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `days` | integer | No | Number of days to look ahead (default: 30) |
+
+| Parameter | Type    | Required | Description                                |
+| --------- | ------- | -------- | ------------------------------------------ |
+| `days`    | integer | No       | Number of days to look ahead (default: 30) |
 
 ### Response `200 OK`
 
@@ -271,16 +273,19 @@ Provides high-level statistics and summaries for administrative dashboards and m
 ### Key Performance Indicators (KPIs)
 
 **Leave Utilization Rate:**
+
 ```
 Utilization Rate = (Total Days Taken / Total Days Allocated) � 100
 ```
 
 **Average Days Per Employee:**
+
 ```
 Average = Total Days Taken / Total Employees
 ```
 
 **Approval Efficiency:**
+
 ```
 Efficiency = Requests Approved within 24hrs / Total Requests
 ```
@@ -290,16 +295,19 @@ Efficiency = Requests Approved within 24hrs / Total Requests
 ## Use Cases
 
 ### Executive Dashboard
+
 - Quick overview of company-wide leave status
 - Identify departments with high utilization
 - Track pending approvals requiring attention
 
 ### Department Manager View
+
 - Monitor team leave patterns
 - Plan resource allocation
 - Identify coverage gaps
 
 ### HR Administration
+
 - Track policy compliance
 - Monitor approval workflows
 - Generate compliance reports
@@ -309,6 +317,7 @@ Efficiency = Requests Approved within 24hrs / Total Requests
 ## Refresh Intervals
 
 Recommended refresh intervals for real-time dashboards:
+
 - **Dashboard Statistics:** Every 5 minutes
 - **Employees on Leave:** Every 1 minute
 - **Pending Approvals:** Every 30 seconds
@@ -317,6 +326,7 @@ Recommended refresh intervals for real-time dashboards:
 ---
 
 ## Related Endpoints
+
 - [Leave Reports](./12-leave-reports.md) - Detailed analytics
 - [Team Leave](./11-team-leave.md) - Department-specific views
 - [Leave Approvals](./09-leave-approvals.md) - Process pending approvals
