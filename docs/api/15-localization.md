@@ -248,7 +248,7 @@ GET /localize/error-messages?error_code=ERR_INSUFFICIENT_BALANCE&cursor=null&pag
 
 1. Set up default translations for all error codes
 2. Use bulk upsert to add translations
-3. Test with `Accept-Language` header
+3. Test with `lang` header
 4. Update API documentation
 
 ---
@@ -308,25 +308,25 @@ var message = await errorMessageLocalize.ResolveAsync(
 
 ### Client-Side Detection
 
-The API detects the user's preferred language from the `Accept-Language` header:
+The API detects the user's preferred language from the `lang` header:
 
 ```http
 GET /api/v1/leave-request
-Accept-Language: es
+lang: es
 ```
 
 ### Priority Order
 
-1. `Accept-Language` header
+1. `lang` header
 2. User profile language preference
 3. Default language (English)
 
 ### Multiple Languages
 
-If `Accept-Language` includes multiple languages, the API chooses the first supported language:
+If `lang` includes multiple languages, the API chooses the first supported language:
 
 ```http
-Accept-Language: es-MX, es;q=0.9, en;q=0.8
+lang: es-MX, es;q=0.9, en;q=0.8
 ```
 
 Result: Spanish (es)
@@ -434,14 +434,7 @@ async function importTranslations(file) {
   const translations = JSON.parse(await file.text());
   await bulkUpsertErrorMessages({ error_messages: translations });
 }
-```
 
-    "status_code": 200
-
-}
-}
-
-```
 
 ### Example Request URLs
 
@@ -474,7 +467,7 @@ GET /localize/error-messages?error_code=ERR_INSUFFICIENT_BALANCE&cursor=null&pag
 
 1. Set up default translations for all error codes
 2. Use bulk upsert to add translations
-3. Test with `Accept-Language` header
+3. Test with `lang` header
 4. Update API documentation
 
 ---
@@ -535,25 +528,25 @@ var message = await errorMessageLocalize.ResolveAsync(
 
 ### Client-Side Detection
 
-The API detects the user's preferred language from the `Accept-Language` header:
+The API detects the user's preferred language from the `lang` header:
 
 ```http
 GET /api/v1/leave-request
-Accept-Language: es
+lang: es
 ```
 
 ### Priority Order
 
-1. `Accept-Language` header
+1. `lang` header
 2. User profile language preference
 3. Default language (English)
 
 ### Multiple Languages
 
-If `Accept-Language` includes multiple languages, the API chooses the first supported language:
+If `lang` includes multiple languages, the API chooses the first supported language:
 
 ```http
-Accept-Language: es-MX, es;q=0.9, en;q=0.8
+lang: es-MX, es;q=0.9, en;q=0.8
 ```
 
 Result: Spanish (es)
