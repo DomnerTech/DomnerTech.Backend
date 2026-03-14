@@ -27,7 +27,7 @@ public sealed class CreateLeavePolicyCommandHandler(
             {
                 Id = ObjectId.GenerateNewId(),
                 CompanyId = tenantService.CompanyId.ToObjectId(),
-                PolicyName = r.PolicyName,
+                PolicyName = r.Name,
                 LeaveTypeId = string.IsNullOrEmpty(r.LeaveTypeId) ? null : ObjectId.Parse(r.LeaveTypeId),
                 MinimumNoticeDays = r.MinimumNoticeDays,
                 MaxConsecutiveDays = r.MaxConsecutiveDays,

@@ -14,7 +14,7 @@ public sealed class UpdateLeavePolicyCommandValidator : AbstractValidator<Update
             .Must(id => ObjectId.TryParse(id, out _))
             .WithMessage("Invalid policy ID format");
 
-        RuleFor(x => x.Dto.PolicyName)
+        RuleFor(x => x.Dto.Name)
             .NotEmpty()
             .WithErrorCode(ErrorCodes.Leave.PolicyNameReq)
             .MaximumLength(100);

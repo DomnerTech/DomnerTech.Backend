@@ -8,7 +8,7 @@ public sealed class CreateLeavePolicyCommandValidator : AbstractValidator<Create
 {
     public CreateLeavePolicyCommandValidator()
     {
-        RuleFor(x => x.Dto.PolicyName)
+        RuleFor(x => x.Dto.Name)
             .NotEmpty()
             .WithErrorCode(ErrorCodes.Leave.PolicyNameReq)
             .MaximumLength(100);

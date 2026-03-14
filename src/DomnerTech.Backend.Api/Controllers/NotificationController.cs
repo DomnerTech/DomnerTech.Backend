@@ -11,7 +11,6 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// <summary>
 /// Controller for managing notifications.
 /// </summary>
-[Authorize]
 public sealed class NotificationController(
     ICommandQuery commandQuery,
     IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)

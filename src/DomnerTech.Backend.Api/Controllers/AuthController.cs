@@ -19,8 +19,10 @@ public sealed class AuthController(
         var res = await commandQuery.Send(
             new LoginCommand(req.Username, req.Pwd),
             HttpContext.RequestAborted);
+
         if (res.Status.StatusCode == StatusCodes.Status200OK)
             Response.SetCookie(AuthConstant.TokenName, res.Data.Token);
+        
         return await ReturnJson(res);
     }
 
@@ -28,12 +30,6 @@ public sealed class AuthController(
     public async Task<ActionResult<BaseResponse<bool>>> Logout()
     {
         Response.RemoveCookie(AuthConstant.TokenName);
-        return await Task.FromResult(new JsonResult(new BaseResponse<bool>
-        {
-            Data = true
-        })
-        {
-            StatusCode = 200
-        });
+        return await ReturnJson(new BaseResponse<bool>());
     }
 }

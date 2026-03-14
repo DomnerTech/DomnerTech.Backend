@@ -26,7 +26,7 @@ public sealed class UpdateLeavePolicyCommandHandler(
                 throw new NotFoundException("Leave policy not found");
             }
 
-            existing.PolicyName = r.PolicyName;
+            existing.PolicyName = r.Name;
             existing.MinimumNoticeDays = r.MinimumNoticeDays;
             existing.MaxConsecutiveDays = r.MaxConsecutiveDays;
             existing.IncludeWeekends = r.IncludeWeekends;

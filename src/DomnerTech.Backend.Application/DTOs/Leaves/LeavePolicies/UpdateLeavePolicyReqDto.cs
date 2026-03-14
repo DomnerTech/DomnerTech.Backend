@@ -13,7 +13,7 @@ public sealed record UpdateLeavePolicyReqDto
     /// <summary>
     /// Gets or sets the policy name.
     /// </summary>
-    public required string PolicyName { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the minimum notice period in days.

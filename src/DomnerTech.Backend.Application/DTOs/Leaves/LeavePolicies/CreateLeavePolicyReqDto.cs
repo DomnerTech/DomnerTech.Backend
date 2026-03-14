@@ -8,7 +8,7 @@ public sealed record CreateLeavePolicyReqDto
     /// <summary>
     /// Gets or sets the policy name.
     /// </summary>
-    public required string PolicyName { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the leave type ID this policy applies to (null for default policy).
