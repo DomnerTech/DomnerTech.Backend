@@ -51,7 +51,11 @@ public class RequiredHeadersMiddleware(
         // Validate language value
         if (!IsValidLanguage(languageHeader))
         {
-            logger.LogWarning("Invalid language header value: {LanguageValue}", languageHeader);
+            var sanitizedLanguageHeader = languageHeader
+                .Replace("\r", string.Empty)
+                .Replace("\n", string.Empty);
+
+            logger.LogWarning("Invalid language header value: {LanguageValue}", sanitizedLanguageHeader);
             await WriteErrorResponseJsonAsync(context, languageHeader);
             return;
         }
