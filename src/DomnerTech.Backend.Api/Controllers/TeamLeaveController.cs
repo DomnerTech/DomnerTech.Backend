@@ -26,8 +26,8 @@ public sealed class TeamLeaveController(
     [HttpGet("calendar"), Authorize(Roles = "LeaveRequest.Admin")]
     public async Task<ActionResult<BaseResponse<List<TeamLeaveCalendarDto>>>> GetTeamLeaveCalendar(
         [FromQuery] string department,
-        [FromQuery] DateTime startDate,
-        [FromQuery] DateTime endDate)
+        [FromQuery(Name = "start_date")] DateTime startDate,
+        [FromQuery(Name = "end_date")] DateTime endDate)
     {
         var result = await commandQuery.Send(new GetTeamLeaveCalendarQuery(department, startDate, endDate), HttpContext.RequestAborted);
         return await ReturnJson(result);
