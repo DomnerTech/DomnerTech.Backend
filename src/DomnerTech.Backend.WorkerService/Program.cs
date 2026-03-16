@@ -1,6 +1,7 @@
 using DomnerTech.Backend.Application;
 using DomnerTech.Backend.Infrastructure;
 using DomnerTech.Backend.WorkerService;
+using DomnerTech.Backend.WorkerService.Services;
 using DomnerTech.Backend.WorkerService.Workers;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -21,6 +22,7 @@ builder.Services.AddHostedService<LeaveAccrualWorker>();
 builder.Services.AddHostedService<LeaveCarryForwardWorker>();
 builder.Services.AddHostedService<LeaveExpiryWorker>();
 builder.Services.AddHostedService<LeaveNotificationWorker>();
+builder.Services.AddHostedService<StockAlertBackgroundService>();
 
 var host = builder.Build();
-host.Run();
+await host.RunAsync();

@@ -23,6 +23,11 @@ public static class HttpContextExtensions
         {
             return httpContext.User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value ?? string.Empty;
         }
+
+        public string GetUserId()
+        {
+            return httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimConstant.UserId)?.Value ?? string.Empty;
+        }
     }
 
     private static string GetCurrentLanguageInternal(string lang)
