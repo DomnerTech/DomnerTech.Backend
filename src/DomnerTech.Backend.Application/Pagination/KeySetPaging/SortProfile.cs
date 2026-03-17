@@ -2,7 +2,7 @@
 using System.Reflection;
 using DomnerTech.Backend.Application.Exceptions;
 
-namespace DomnerTech.Backend.Application.Pagination;
+namespace DomnerTech.Backend.Application.Pagination.KeySetPaging;
 
 public class SortProfile<T>
 {

@@ -1,4 +1,4 @@
-﻿namespace DomnerTech.Backend.Application.Pagination;
+﻿namespace DomnerTech.Backend.Application.Pagination.KeySetPaging;
 
 public interface ICursorSerializer
 {

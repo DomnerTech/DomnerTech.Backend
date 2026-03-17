@@ -1,7 +1,6 @@
 ﻿using DomnerTech.Backend.Application;
 using DomnerTech.Backend.Application.Caching;
 using DomnerTech.Backend.Application.Extensions;
-using DomnerTech.Backend.Application.Pagination;
 using DomnerTech.Backend.Domain.Entities;
 using DomnerTech.Backend.Infrastructure.Caching.Redis;
 using DomnerTech.Backend.Infrastructure.MongoDb;
@@ -11,8 +10,9 @@ using System.Reflection;
 using System.Security;
 using System.Text.Json;
 using DomnerTech.Backend.Application.Json;
+using DomnerTech.Backend.Application.Pagination.KeySetPaging;
 
-namespace DomnerTech.Backend.Infrastructure.Pagination;
+namespace DomnerTech.Backend.Infrastructure.Pagination.KeysetPaging;
 
 public sealed class MongoKeysetPaginator<T>(
     IMongoDbContextFactory dbContextFactory,
@@ -41,7 +41,7 @@ public sealed class MongoKeysetPaginator<T>(
         // Merge safely
         var filter = builder.And(tenantFilter, baseFilter);
         var fields = sortProfile.Resolve(request.SortKey);
-        filter = ApplyCursorFilter(request, serializer, tenantId, filter, builder, fields);
+        filter = ApplyCursorFilter(request, tenantId, filter, builder, fields);
 
         var sort = BuildSort(fields, request.Direction);
 
@@ -56,14 +56,14 @@ public sealed class MongoKeysetPaginator<T>(
         if (hasNext)
             items.RemoveAt(items.Count - 1);
 
-        //if (request.Direction == CursorDirection.Backward)
-        //    items.Reverse();
+        if (request.Direction == CursorDirection.Backward)
+            items.Reverse();
 
         var nextCursor = hasNext
             ? BuildCursor(tenantId, fields, items[^1])
             : null;
 
-        var prevCursor = !string.IsNullOrEmpty(request.Cursor)
+        var prevCursor = !string.IsNullOrEmpty(request.Cursor) && items.Count > 0
             ? BuildCursor(tenantId, fields, items[0])
             : null;
 
@@ -95,9 +95,8 @@ public sealed class MongoKeysetPaginator<T>(
         };
     }
 
-    private static FilterDefinition<T> ApplyCursorFilter(
+    private FilterDefinition<T> ApplyCursorFilter(
         KeysetPageRequest request,
-        ICursorSerializer serializer,
         ObjectId tenantId,
         FilterDefinition<T> filter,
         FilterDefinitionBuilder<T> builder,

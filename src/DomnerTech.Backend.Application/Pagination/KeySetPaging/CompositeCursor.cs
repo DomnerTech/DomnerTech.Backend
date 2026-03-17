@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 
-namespace DomnerTech.Backend.Application.Pagination;
+namespace DomnerTech.Backend.Application.Pagination.KeySetPaging;
 
 public sealed class CompositeCursor
 {

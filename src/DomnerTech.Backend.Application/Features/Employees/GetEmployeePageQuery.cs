@@ -2,7 +2,7 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.Abstractions;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Employees;
-using DomnerTech.Backend.Application.Pagination;
+using DomnerTech.Backend.Application.Pagination.KeySetPaging;
 
 namespace DomnerTech.Backend.Application.Features.Employees;
 

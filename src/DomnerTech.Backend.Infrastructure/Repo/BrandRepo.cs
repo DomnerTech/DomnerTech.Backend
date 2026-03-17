@@ -30,42 +30,13 @@ public sealed class BrandRepo(
 
     public async Task<BrandEntity?> GetByIdAsync(ObjectId id, CancellationToken cancellationToken = default)
     {
-        var filter = Builders<BrandEntity>.Filter.And(
-            Builders<BrandEntity>.Filter.Eq(x => x.Id, id),
-            Builders<BrandEntity>.Filter.Eq(x => x.IsDeleted, false)
-        );
-        return await Collection.Find(TenantFilter() & filter).FirstOrDefaultAsync(cancellationToken);
-    }
-
-    public async Task<BrandEntity?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
-    {
-        var filter = Builders<BrandEntity>.Filter.And(
-            Builders<BrandEntity>.Filter.Eq(x => x.Slug, slug),
-            Builders<BrandEntity>.Filter.Eq(x => x.IsDeleted, false)
-        );
+        var filter = Builders<BrandEntity>.Filter.Eq(x => x.Id, id);
         return await Collection.Find(TenantFilter() & filter).FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<List<BrandEntity>> GetAllActiveAsync(CancellationToken cancellationToken = default)
     {
-        var filter = Builders<BrandEntity>.Filter.And(
-            Builders<BrandEntity>.Filter.Eq(x => x.IsActive, true),
-            Builders<BrandEntity>.Filter.Eq(x => x.IsDeleted, false)
-        );
-        return await Collection.Find(TenantFilter() & filter)
-            .SortBy(x => x.DisplayOrder)
-            .ThenBy(x => x.Name)
-            .ToListAsync(cancellationToken);
-    }
-
-    public async Task DeleteAsync(ObjectId id, ObjectId deletedBy, CancellationToken cancellationToken = default)
-    {
-        var filter = Builders<BrandEntity>.Filter.Eq(x => x.Id, id);
-        var update = Builders<BrandEntity>.Update
-            .Set(x => x.IsDeleted, true)
-            .Set(x => x.DeletedBy, deletedBy)
-            .Set(x => x.UpdatedAt, DateTime.UtcNow);
-        
-        await Collection.UpdateOneAsync(TenantFilter() & filter, update, cancellationToken: cancellationToken);
+        var filter = Builders<BrandEntity>.Filter.Eq(x => x.IsActive, true);
+        return await Collection.Find(TenantFilter() & filter).ToListAsync(cancellationToken);
     }
 }

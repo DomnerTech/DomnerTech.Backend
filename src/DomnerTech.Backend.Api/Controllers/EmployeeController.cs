@@ -3,7 +3,7 @@ using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Employees;
 using DomnerTech.Backend.Application.Features.Employees;
 using DomnerTech.Backend.Application.IRepo;
-using DomnerTech.Backend.Application.Pagination;
+using DomnerTech.Backend.Application.Pagination.KeySetPaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

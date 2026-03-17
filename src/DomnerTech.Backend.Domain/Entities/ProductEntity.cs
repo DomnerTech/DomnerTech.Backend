@@ -146,9 +146,17 @@ public sealed class ProductEntity : IBaseEntity, ITenantEntity, IAuditEntity, IS
     /// </summary>
     public List<ObjectId>? WarehouseIds { get; set; }
 
+    [Filterable(alias: "createdAt")]
+    [Sortable(alias: "createdAt", order: 3)]
     public DateTime CreatedAt { get; set; }
+
+    [Filterable(alias: "updatedAt")]
+    [Sortable(alias: "updatedAt", order: 4)]
     public DateTime UpdatedAt { get; set; }
+
     public ObjectId? UpdatedBy { get; set; }
     public ObjectId? DeletedBy { get; set; }
+
+    [Filterable(alias: "isDeleted")]
     public bool IsDeleted { get; set; }
 }

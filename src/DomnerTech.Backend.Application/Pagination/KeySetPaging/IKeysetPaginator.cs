@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace DomnerTech.Backend.Application.Pagination;
+namespace DomnerTech.Backend.Application.Pagination.KeySetPaging;
 
 public interface IKeysetPaginator<T>
 {

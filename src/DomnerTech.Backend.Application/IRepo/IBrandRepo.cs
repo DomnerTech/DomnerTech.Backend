@@ -22,19 +22,9 @@ public interface IBrandRepo : IBaseRepo
     /// Gets a brand by ID.
     /// </summary>
     Task<BrandEntity?> GetByIdAsync(ObjectId id, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Gets a brand by slug.
-    /// </summary>
-    Task<BrandEntity?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
-
+    
     /// <summary>
     /// Gets all active brands.
     /// </summary>
     Task<List<BrandEntity>> GetAllActiveAsync(CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Soft deletes a brand.
-    /// </summary>
-    Task DeleteAsync(ObjectId id, ObjectId deletedBy, CancellationToken cancellationToken = default);
 }

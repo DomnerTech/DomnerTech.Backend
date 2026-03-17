@@ -1,10 +1,12 @@
 using Bas24.CommandQuery;
+using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Products;
-using DomnerTech.Backend.Application.Errors;
-using DomnerTech.Backend.Application.IRepo;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+using DomnerTech.Backend.Application.Extensions;
+using DomnerTech.Backend.Application.Pagination.KeySetPaging;
+using DomnerTech.Backend.Application.Services;
+using DomnerTech.Backend.Domain.Entities;
+using MongoDB.Driver;
 
 namespace DomnerTech.Backend.Application.Features.Brands.Handlers;
 
@@ -12,50 +14,26 @@ namespace DomnerTech.Backend.Application.Features.Brands.Handlers;
 /// Handler for getting all brands.
 /// </summary>
 public sealed class GetAllBrandsQueryHandler(
-    ILogger<GetAllBrandsQueryHandler> logger,
-    IBrandRepo brandRepo) : IRequestHandler<GetAllBrandsQuery, BaseResponse<List<BrandDto>>>
+    IKeysetPaginator<BrandEntity> paginator,
+    ITenantService tenantService) : IRequestHandler<GetAllBrandsQuery, BaseResponse<KeysetPageResult<BrandDto>>>
 {
-    public async Task<BaseResponse<List<BrandDto>>> Handle(GetAllBrandsQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<KeysetPageResult<BrandDto>>> Handle(GetAllBrandsQuery request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var brands = await brandRepo.GetAllActiveAsync(cancellationToken);
+        var tenantId = tenantService.CompanyId.ToObjectId();
+        var pagingFilter = request.ActiveOnly 
+            ? Builders<BrandEntity>.Filter.Eq(i => i.IsActive, true)
+            : Builders<BrandEntity>.Filter.Empty;
 
-            var dtos = brands.Select(b => new BrandDto
-            {
-                Id = b.Id.ToString(),
-                Name = b.Name,
-                Description = b.Description,
-                Slug = b.Slug,
-                LogoUrl = b.LogoUrl,
-                WebsiteUrl = b.WebsiteUrl,
-                IsActive = b.IsActive,
-                DisplayOrder = b.DisplayOrder,
-                CreatedAt = b.CreatedAt,
-                UpdatedAt = b.UpdatedAt
-            }).ToList();
+        var paging = await paginator.PaginateAsync(
+            DatabaseNameConstant.DatabaseName,
+            tenantId,
+            request,
+            pagingFilter,
+            cancellationToken);
 
-            return new BaseResponse<List<BrandDto>>
-            {
-                Data = dtos
-            };
-        }
-        catch (OperationCanceledException)
+        return new BaseResponse<KeysetPageResult<BrandDto>>
         {
-            throw;
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Error getting brands: {Error}", e.Message);
-        }
-
-        return new BaseResponse<List<BrandDto>>
-        {
-            Status = new ResponseStatus
-            {
-                StatusCode = StatusCodes.Status500InternalServerError,
-                ErrorCode = ErrorCodes.SystemError
-            }
+            Data = paging.ToDto(i => i.ToDto())
         };
     }
 }

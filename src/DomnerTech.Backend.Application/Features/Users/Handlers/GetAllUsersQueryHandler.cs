@@ -3,7 +3,7 @@ using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Users;
 using DomnerTech.Backend.Application.Extensions;
-using DomnerTech.Backend.Application.Pagination;
+using DomnerTech.Backend.Application.Pagination.KeySetPaging;
 using DomnerTech.Backend.Application.Services;
 using DomnerTech.Backend.Domain.Entities;
 using MongoDB.Driver;

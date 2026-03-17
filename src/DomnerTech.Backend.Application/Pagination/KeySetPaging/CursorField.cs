@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DomnerTech.Backend.Application.Pagination;
+namespace DomnerTech.Backend.Application.Pagination.KeySetPaging;
 
 public sealed class CursorField<T>(Expression<Func<T, object>> fieldFunc, bool descending = true)
 {

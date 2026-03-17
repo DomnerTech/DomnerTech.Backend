@@ -1,6 +1,7 @@
 ﻿using DomnerTech.Backend.Application.Caching;
 using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.IRepo;
+using DomnerTech.Backend.Application.Pagination.OffsetPaging;
 using DomnerTech.Backend.Application.Services;
 using DomnerTech.Backend.Domain.Entities;
 using DomnerTech.Backend.Infrastructure.MongoDb;
@@ -65,5 +66,13 @@ public sealed class UserRepo(
         await Task.WhenAll(
             redisCache.RemoveAsync($":users:{id}"),
             redisCache.RemoveAsync($":users:username:{username}"));
+    }
+
+    public Task<OffsetPageResponse<TDto>> GetPagedAsync<TEntity, TDto>(
+        OffsetPageRequest request,
+        Func<TEntity, TDto>? projection = null,
+        CancellationToken cancellationToken = default) where TEntity : class where TDto : class
+    {
+        throw new NotImplementedException();
     }
 }

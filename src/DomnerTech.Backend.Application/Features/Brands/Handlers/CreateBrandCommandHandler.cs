@@ -25,21 +25,6 @@ public sealed class CreateBrandCommandHandler(
         {
             var dto = request.Dto;
 
-            // Check if slug already exists
-            var existingBrand = await brandRepo.GetBySlugAsync(dto.Slug, cancellationToken);
-            if (existingBrand != null)
-            {
-                return new BaseResponse<string>
-                {
-                    Status = new ResponseStatus
-                    {
-                        StatusCode = StatusCodes.Status409Conflict,
-                        ErrorCode = ErrorCodes.SystemError,
-                        Desc = "Brand with this slug already exists"
-                    }
-                };
-            }
-
             var now = DateTime.UtcNow;
             var brandId = ObjectId.GenerateNewId();
 
@@ -49,19 +34,13 @@ public sealed class CreateBrandCommandHandler(
                 CompanyId = tenantService.CompanyId.ToObjectId(),
                 Name = dto.Name,
                 Description = dto.Description,
-                Slug = dto.Slug,
                 LogoUrl = dto.LogoUrl,
-                WebsiteUrl = dto.WebsiteUrl,
                 IsActive = true,
-                DisplayOrder = dto.DisplayOrder,
                 CreatedAt = now,
-                UpdatedAt = now,
-                IsDeleted = false
+                UpdatedAt = now
             };
 
             await brandRepo.CreateAsync(entity, cancellationToken);
-
-            logger.LogInformation("Brand created successfully: {BrandId} - {Slug}", brandId, dto.Slug);
 
             return new BaseResponse<string>
             {
