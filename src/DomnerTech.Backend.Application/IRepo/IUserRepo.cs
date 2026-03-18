@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace DomnerTech.Backend.Application.IRepo;
 
-public interface IUserRepo : IBaseRepo, IBasePagedRepo
+public interface IUserRepo : IBaseRepo
 {
     Task<ObjectId> CreateAsync(UserEntity entity, CancellationToken cancellationToken = default);
     Task<UserEntity?> GetByIdAsync(ObjectId id, CancellationToken cancellationToken = default);

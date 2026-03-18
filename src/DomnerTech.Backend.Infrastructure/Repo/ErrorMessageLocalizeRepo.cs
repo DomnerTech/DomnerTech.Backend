@@ -2,7 +2,6 @@
 using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.Errors;
 using DomnerTech.Backend.Application.IRepo;
-using DomnerTech.Backend.Application.Services;
 using DomnerTech.Backend.Domain.Entities;
 using DomnerTech.Backend.Infrastructure.MongoDb;
 using MongoDB.Bson;
@@ -12,11 +11,9 @@ namespace DomnerTech.Backend.Infrastructure.Repo;
 
 public sealed class ErrorMessageLocalizeRepo(
     IMongoDbContextFactory contextFactory,
-    ITenantService tenant,
     IRedisCache redisCache) :
     BaseRepo<ErrorMessageLocalizeEntity>(
-        contextFactory.Create(DatabaseNameConstant.DatabaseName).Database,
-        tenant),
+        contextFactory.Create(DatabaseNameConstant.DatabaseName).Database),
     IErrorMessageLocalizeRepo
 {
     private const string CacheKey = ":error-messages-localize";

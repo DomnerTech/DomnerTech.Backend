@@ -19,6 +19,7 @@ public static class DependencyInjection
             cfg.RegisterAssembly(Assembly.GetExecutingAssembly());
             cfg.AddBehavior(typeof(LoggingPipelineBehavior<,>));
             cfg.AddBehavior(typeof(ValidationBehavior<,>));
+            cfg.Lifetime = ServiceLifetime.Scoped;
         });
 
         var appAssembly = typeof(IApplicationAssemblyMarker).Assembly;

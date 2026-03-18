@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace DomnerTech.Backend.Application.IRepo;
 
-public interface IErrorMessageLocalizeRepo : IBaseRepo
+public interface IErrorMessageLocalizeRepo
 {
     Task<string> ResolveAsync(string errorCode, string lang, CancellationToken cancellationToken = default);
     Task<ObjectId> CreateAsync(ErrorMessageLocalizeEntity entity, CancellationToken cancellationToken = default);

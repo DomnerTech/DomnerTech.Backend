@@ -175,17 +175,17 @@ public static class PaginationExtensions
         {
             return filter.Operator switch
             {
-                FilterOperator.Equal => BuildEqualFilter(builder, fieldName, filter.Value, propertyType, attribute),
-                FilterOperator.NotEqual => BuildNotEqualFilter(builder, fieldName, filter.Value, propertyType, attribute),
-                FilterOperator.Contains => BuildContainsFilter(builder, fieldName, filter.Value, attribute),
-                FilterOperator.StartsWith => BuildStartsWithFilter(builder, fieldName, filter.Value, attribute),
-                FilterOperator.EndsWith => BuildEndsWithFilter(builder, fieldName, filter.Value, attribute),
-                FilterOperator.GreaterThan => BuildComparisonFilter(builder, fieldName, filter.Value, propertyType, attribute, ">"),
-                FilterOperator.GreaterThanOrEqual => BuildComparisonFilter(builder, fieldName, filter.Value, propertyType, attribute, ">="),
-                FilterOperator.LessThan => BuildComparisonFilter(builder, fieldName, filter.Value, propertyType, attribute, "<"),
-                FilterOperator.LessThanOrEqual => BuildComparisonFilter(builder, fieldName, filter.Value, propertyType, attribute, "<="),
+                FilterOperator.Eq => BuildEqualFilter(builder, fieldName, filter.Value, propertyType, attribute),
+                FilterOperator.Ne => BuildNotEqualFilter(builder, fieldName, filter.Value, propertyType, attribute),
+                FilterOperator.Ct => BuildContainsFilter(builder, fieldName, filter.Value, attribute),
+                FilterOperator.Sw => BuildStartsWithFilter(builder, fieldName, filter.Value, attribute),
+                FilterOperator.Ew => BuildEndsWithFilter(builder, fieldName, filter.Value, attribute),
+                FilterOperator.Gt => BuildComparisonFilter(builder, fieldName, filter.Value, propertyType, attribute, ">"),
+                FilterOperator.Gte => BuildComparisonFilter(builder, fieldName, filter.Value, propertyType, attribute, ">="),
+                FilterOperator.Lt => BuildComparisonFilter(builder, fieldName, filter.Value, propertyType, attribute, "<"),
+                FilterOperator.Lte => BuildComparisonFilter(builder, fieldName, filter.Value, propertyType, attribute, "<="),
                 FilterOperator.In => BuildInFilter(builder, fieldName, filter.Value, propertyType, attribute),
-                FilterOperator.NotIn => BuildNotInFilter(builder, fieldName, filter.Value, propertyType, attribute),
+                FilterOperator.Nin => BuildNotInFilter(builder, fieldName, filter.Value, propertyType, attribute),
                 _ => null
             };
         }

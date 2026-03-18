@@ -2,28 +2,25 @@
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Users;
 using DomnerTech.Backend.Application.Features.Users;
-using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Application.Pagination.KeySetPaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api.Controllers;
 
-public sealed class UserController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class UserController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     [HttpGet("get-me")]
     public async Task<ActionResult<BaseResponse<UserDto>>> GetMe()
     {
-        var user = await commandQuery.Send(new GetUserQuery(UserReqId), HttpContext.RequestAborted);
+        var user = await _commandQuery.Send(new GetUserQuery(UserReqId), HttpContext.RequestAborted);
         return await ReturnJson(user);
     }
 
     [HttpPost, Authorize(Roles = "User.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> CreateUser([FromBody] CreateUserDto r)
     {
-        var result = await commandQuery.Send(new CreateUserCommand(r.Username, r.Pwd), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new CreateUserCommand(r.Username, r.Pwd), HttpContext.RequestAborted);
         return await ReturnJson(result  );
     }
 
@@ -51,7 +48,7 @@ public sealed class UserController(
         [FromQuery(Name = "sort_by")] string sortBy,
         [FromQuery(Name = "include_total_count")] bool includeTotalCount)
     {
-        var result = await commandQuery.Send(new GetAllUsersQuery
+        var result = await _commandQuery.Send(new GetAllUsersQuery
         {
             Cursor = cursor,
             Direction = direction,

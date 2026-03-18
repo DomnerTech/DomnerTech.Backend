@@ -2,7 +2,6 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Leaves.LeavePolicies;
 using DomnerTech.Backend.Application.Features.LeavePolicies;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +10,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// <summary>
 /// Controller for managing leave policies.
 /// </summary>
-public sealed class LeavePolicyController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class LeavePolicyController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     /// <summary>
     /// Creates a new leave policy.
@@ -21,7 +18,7 @@ public sealed class LeavePolicyController(
     [HttpPost, Authorize(Roles = "LeavePolicy.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateLeavePolicy([FromBody] CreateLeavePolicyReqDto req)
     {
-        var result = await commandQuery.Send(new CreateLeavePolicyCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new CreateLeavePolicyCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -31,7 +28,7 @@ public sealed class LeavePolicyController(
     [HttpPut, Authorize(Roles = "LeavePolicy.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> UpdateLeavePolicy([FromBody] UpdateLeavePolicyReqDto req)
     {
-        var result = await commandQuery.Send(new UpdateLeavePolicyCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new UpdateLeavePolicyCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -41,7 +38,7 @@ public sealed class LeavePolicyController(
     [HttpDelete("{id}"), Authorize(Roles = "LeavePolicy.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> DeleteLeavePolicy([FromRoute] string id)
     {
-        var result = await commandQuery.Send(new DeleteLeavePolicyCommand(id), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new DeleteLeavePolicyCommand(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -51,7 +48,7 @@ public sealed class LeavePolicyController(
     [HttpGet("{id}"), Authorize(Roles = "LeavePolicy.Read")]
     public async Task<ActionResult<BaseResponse<LeavePolicyDto>>> GetLeavePolicyById([FromRoute] string id)
     {
-        var result = await commandQuery.Send(new GetLeavePolicyByIdQuery(id), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetLeavePolicyByIdQuery(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -61,7 +58,7 @@ public sealed class LeavePolicyController(
     [HttpGet, Authorize(Roles = "LeavePolicy.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeavePolicyDto>>>> GetActivePolicies()
     {
-        var result = await commandQuery.Send(new GetActivePoliciesQuery(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetActivePoliciesQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -71,7 +68,7 @@ public sealed class LeavePolicyController(
     [HttpGet("leave-type/{leaveTypeId}"), Authorize(Roles = "LeavePolicy.Read")]
     public async Task<ActionResult<BaseResponse<LeavePolicyDto>>> GetPolicyByLeaveType([FromRoute] string leaveTypeId)
     {
-        var result = await commandQuery.Send(new GetPolicyByLeaveTypeQuery(leaveTypeId), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetPolicyByLeaveTypeQuery(leaveTypeId), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

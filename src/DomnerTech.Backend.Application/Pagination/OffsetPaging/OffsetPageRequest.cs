@@ -3,7 +3,7 @@ namespace DomnerTech.Backend.Application.Pagination.OffsetPaging;
 /// <summary>
 /// Request model for offset-based pagination with sorting and filtering.
 /// </summary>
-public sealed class OffsetPageRequest
+public class OffsetPageRequest
 {
     /// <summary>
     /// Gets or sets the page number (1-based).

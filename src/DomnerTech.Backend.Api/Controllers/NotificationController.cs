@@ -2,8 +2,6 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Notifications;
 using DomnerTech.Backend.Application.Features.Notifications;
-using DomnerTech.Backend.Application.IRepo;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api.Controllers;
@@ -11,9 +9,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// <summary>
 /// Controller for managing notifications.
 /// </summary>
-public sealed class NotificationController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class NotificationController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     /// <summary>
     /// Gets the current user's notifications.
@@ -22,7 +18,7 @@ public sealed class NotificationController(
     [HttpGet]
     public async Task<ActionResult<BaseResponse<List<NotificationDto>>>> GetMyNotifications([FromQuery] int limit = 50)
     {
-        var result = await commandQuery.Send(new GetMyNotificationsQuery(limit), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetMyNotificationsQuery(limit), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -32,7 +28,7 @@ public sealed class NotificationController(
     [HttpGet("unread")]
     public async Task<ActionResult<BaseResponse<List<NotificationDto>>>> GetUnreadNotifications()
     {
-        var result = await commandQuery.Send(new GetUnreadNotificationsQuery(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetUnreadNotificationsQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -42,7 +38,7 @@ public sealed class NotificationController(
     [HttpGet("unread/count")]
     public async Task<ActionResult<BaseResponse<int>>> GetUnreadCount()
     {
-        var result = await commandQuery.Send(new GetUnreadCountQuery(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetUnreadCountQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -52,7 +48,7 @@ public sealed class NotificationController(
     [HttpPut("{id}/read")]
     public async Task<ActionResult<BaseResponse<bool>>> MarkAsRead([FromRoute] string id)
     {
-        var result = await commandQuery.Send(new MarkNotificationAsReadCommand(id), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new MarkNotificationAsReadCommand(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -62,7 +58,7 @@ public sealed class NotificationController(
     [HttpPut("read-all")]
     public async Task<ActionResult<BaseResponse<bool>>> MarkAllAsRead()
     {
-        var result = await commandQuery.Send(new MarkAllAsReadCommand(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new MarkAllAsReadCommand(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

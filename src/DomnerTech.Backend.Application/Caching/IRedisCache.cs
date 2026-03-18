@@ -1,9 +1,8 @@
-﻿using DomnerTech.Backend.Application.IRepo;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace DomnerTech.Backend.Application.Caching;
 
-public interface IRedisCache : IBaseRepo
+public interface IRedisCache
 {
     Task SetObjectAsync<T>(
         string key,

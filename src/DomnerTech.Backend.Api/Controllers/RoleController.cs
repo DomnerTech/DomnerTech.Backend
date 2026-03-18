@@ -2,20 +2,17 @@
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Roles;
 using DomnerTech.Backend.Application.Features.Roles;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api.Controllers;
 
-public sealed class RoleController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class RoleController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     [HttpPost, Authorize(Roles = "Role.Write")]
     public async Task<ActionResult> CreateRole([FromBody] CreateRoleReqDto req)
     {
-        var res = await commandQuery.Send(
+        var res = await _commandQuery.Send(
             new CreateRoleCommand(req.Name, req.Desc),
             HttpContext.RequestAborted);
         return await ReturnJson(res);
@@ -24,14 +21,14 @@ public sealed class RoleController(
     [HttpGet, Authorize(Roles = "Role.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<RoleDto>>>> GetAllRoles()
     {
-        var res = await commandQuery.Send(new GetAllRolesQuery(), HttpContext.RequestAborted);
+        var res = await _commandQuery.Send(new GetAllRolesQuery(), HttpContext.RequestAborted);
         return await ReturnJson(res );
     }
 
     [HttpGet("user-roles/{userId}"), Authorize(Roles = "Role.Read")]
     public async Task<ActionResult> GetUserRoles(string userId)
     {
-        var res = await commandQuery.Send(
+        var res = await _commandQuery.Send(
             new GetUserRolesQuery(userId),
             HttpContext.RequestAborted);
         return await ReturnJson(res);
@@ -40,7 +37,7 @@ public sealed class RoleController(
     [HttpPost("upsert-user-role"), Authorize(Roles = "Role.Write")]
     public async Task<ActionResult> UpsertUserRole([FromBody] UpsertUserRoleReqDto r)
     {
-        var res = await commandQuery.Send(
+        var res = await _commandQuery.Send(
             new UpsertUserRoleCommand(r.UserId, r.RoleName),
             HttpContext.RequestAborted);
         return await ReturnJson(res);

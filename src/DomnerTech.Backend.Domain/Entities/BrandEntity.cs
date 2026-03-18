@@ -15,7 +15,7 @@ public sealed class BrandEntity : IBaseEntity, ITenantEntity
     /// <summary>
     /// Gets or sets the brand name.
     /// </summary>
-    [Sortable(alias: "name", order: 2)]
+    [Filterable(alias: "name")]
     public required string Name { get; set; }
 
     /// <summary>

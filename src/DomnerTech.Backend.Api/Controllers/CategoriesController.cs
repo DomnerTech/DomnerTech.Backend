@@ -2,7 +2,6 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Products;
 using DomnerTech.Backend.Application.Features.Categories;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +10,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// <summary>
 /// Controller for managing product categories.
 /// </summary>
-public sealed class CategoriesController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class CategoriesController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     /// <summary>
     /// Creates a new product category.
@@ -24,12 +21,9 @@ public sealed class CategoriesController(
     /// Supports multi-language names and descriptions.
     /// </remarks>
     [HttpPost, Authorize(Roles = "Category.Write")]
-    [ProducesResponseType(typeof(BaseResponse<string>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(BaseResponse<string>), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(BaseResponse<string>), StatusCodes.Status409Conflict)]
     public async Task<ActionResult<BaseResponse<string>>> CreateCategory([FromBody] CreateCategoryReqDto req)
     {
-        var result = await commandQuery.Send(new CreateCategoryCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new CreateCategoryCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -42,7 +36,7 @@ public sealed class CategoriesController(
     public async Task<ActionResult<BaseResponse<List<CategoryDto>>>> GetAllCategories(
         [FromQuery(Name = "active_only")] bool activeOnly = true)
     {
-        var result = await commandQuery.Send(new GetAllCategoriesQuery(activeOnly), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetAllCategoriesQuery(activeOnly), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

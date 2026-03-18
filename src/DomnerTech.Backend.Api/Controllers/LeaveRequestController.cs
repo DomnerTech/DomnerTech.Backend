@@ -2,7 +2,6 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Leaves.LeaveRequests;
 using DomnerTech.Backend.Application.Features.LeaveRequests;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +10,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// <summary>
 /// Controller for managing leave requests.
 /// </summary>
-public sealed class LeaveRequestController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class LeaveRequestController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     /// <summary>
     /// Creates a new leave request.
@@ -25,7 +22,7 @@ public sealed class LeaveRequestController(
     [HttpPost, Authorize(Roles = "LeaveRequest.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateLeaveRequest([FromBody] CreateLeaveRequestReqDto req)
     {
-        var result = await commandQuery.Send(new CreateLeaveRequestCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new CreateLeaveRequestCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -39,7 +36,7 @@ public sealed class LeaveRequestController(
     [HttpPut, Authorize(Roles = "LeaveRequest.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> UpdateLeaveRequest([FromBody] UpdateLeaveRequestReqDto req)
     {
-        var result = await commandQuery.Send(new UpdateLeaveRequestCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new UpdateLeaveRequestCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -53,7 +50,7 @@ public sealed class LeaveRequestController(
     [HttpPost("cancel"), Authorize(Roles = "LeaveRequest.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> CancelLeaveRequest([FromBody] CancelLeaveRequestReqDto req)
     {
-        var result = await commandQuery.Send(new CancelLeaveRequestCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new CancelLeaveRequestCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -67,7 +64,7 @@ public sealed class LeaveRequestController(
     [HttpGet("{id}"), Authorize(Roles = "LeaveRequest.Read")]
     public async Task<ActionResult<BaseResponse<LeaveRequestDetailDto>>> GetLeaveRequestById([FromRoute] string id)
     {
-        var result = await commandQuery.Send(new GetLeaveRequestByIdQuery(id), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetLeaveRequestByIdQuery(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -80,7 +77,7 @@ public sealed class LeaveRequestController(
     [HttpGet("my"), Authorize(Roles = "LeaveRequest.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveRequestDto>>>> GetMyLeaveRequests()
     {
-        var result = await commandQuery.Send(new GetMyLeaveRequestsQuery(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetMyLeaveRequestsQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -94,7 +91,7 @@ public sealed class LeaveRequestController(
     [HttpGet("status/{status}"), Authorize(Roles = "LeaveRequest.Admin")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveRequestDto>>>> GetLeaveRequestsByStatus([FromRoute] string status)
     {
-        var result = await commandQuery.Send(new GetLeaveRequestsByStatusQuery(status), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetLeaveRequestsByStatusQuery(status), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

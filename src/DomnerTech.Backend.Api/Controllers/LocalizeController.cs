@@ -2,22 +2,19 @@
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Localizes.ErrorMessages;
 using DomnerTech.Backend.Application.Features.Localizes;
-using DomnerTech.Backend.Application.IRepo;
 using DomnerTech.Backend.Application.Pagination.KeySetPaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api.Controllers;
 
-public sealed class LocalizeController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class LocalizeController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     [HttpPost("error-messages/upsert"), Authorize(Roles = "Localize.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> ErrorMessageLocalizeUpsert(
         [FromBody] ErrorMessageLocalizeUpsertReqDto r)
     {
-        var res = await commandQuery.Send(
+        var res = await _commandQuery.Send(
             new ErrorMessageLocalizeUpsertCommand(r.Key, r.Messages),
             HttpContext.RequestAborted);
         return await ReturnJson(res);
@@ -27,7 +24,7 @@ public sealed class LocalizeController(
             [FromBody] List<ErrorMessageLocalizeUpsertReqDto> rs)
     {
         var tasks = rs.Select(async r =>
-            await commandQuery.Send(new ErrorMessageLocalizeUpsertCommand(r.Key, r.Messages),
+            await _commandQuery.Send(new ErrorMessageLocalizeUpsertCommand(r.Key, r.Messages),
                 HttpContext.RequestAborted));
         await Task.WhenAll(tasks);
         return await ReturnJson(new BaseResponse<bool>
@@ -59,7 +56,7 @@ public sealed class LocalizeController(
         [FromQuery(Name = "sort_by")] string sortBy,
         [FromQuery(Name = "include_total_count")] bool includeTotalCount)
     {
-        var res = await commandQuery.Send(new GetErrorMessagePageQuery
+        var res = await _commandQuery.Send(new GetErrorMessagePageQuery
         {
             Cursor = cursor,
             Direction = direction,

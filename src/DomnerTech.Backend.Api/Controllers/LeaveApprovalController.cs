@@ -2,7 +2,6 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Leaves.LeaveApprovals;
 using DomnerTech.Backend.Application.Features.LeaveApprovals;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +10,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// <summary>
 /// Controller for managing leave approvals.
 /// </summary>
-public sealed class LeaveApprovalController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class LeaveApprovalController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     /// <summary>
     /// Approves a leave request.
@@ -24,7 +21,7 @@ public sealed class LeaveApprovalController(
     [HttpPost("approve"), Authorize(Roles = "LeaveApproval.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> ApproveLeave([FromBody] ApproveLeaveReqDto req)
     {
-        var result = await commandQuery.Send(new ApproveLeaveCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new ApproveLeaveCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -37,7 +34,7 @@ public sealed class LeaveApprovalController(
     [HttpPost("reject"), Authorize(Roles = "LeaveApproval.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> RejectLeave([FromBody] RejectLeaveReqDto req)
     {
-        var result = await commandQuery.Send(new RejectLeaveCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new RejectLeaveCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -49,7 +46,7 @@ public sealed class LeaveApprovalController(
     [HttpGet("pending"), Authorize(Roles = "LeaveApproval.Write")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveApprovalDto>>>> GetPendingApprovals()
     {
-        var result = await commandQuery.Send(new GetPendingApprovalsQuery(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetPendingApprovalsQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -62,7 +59,7 @@ public sealed class LeaveApprovalController(
     [HttpGet("history/{leaveRequestId}"), Authorize(Roles = "LeaveApproval.Write")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveApprovalDto>>>> GetApprovalHistory([FromRoute] string leaveRequestId)
     {
-        var result = await commandQuery.Send(new GetLeaveApprovalHistoryQuery(leaveRequestId), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetLeaveApprovalHistoryQuery(leaveRequestId), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

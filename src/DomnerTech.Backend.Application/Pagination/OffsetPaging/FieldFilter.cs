@@ -13,7 +13,7 @@ public sealed class FieldFilter
     /// <summary>
     /// Gets or sets the filter operator.
     /// </summary>
-    public FilterOperator Operator { get; set; } = FilterOperator.Equal;
+    public FilterOperator Operator { get; set; } = FilterOperator.Eq;
 
     /// <summary>
     /// Gets or sets the value to filter by.

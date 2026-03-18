@@ -1,5 +1,8 @@
+using System.Linq.Expressions;
 using DomnerTech.Backend.Application.Constants;
+using DomnerTech.Backend.Application.DTOs.Brands;
 using DomnerTech.Backend.Application.IRepo;
+using DomnerTech.Backend.Application.Pagination.OffsetPaging;
 using DomnerTech.Backend.Application.Services;
 using DomnerTech.Backend.Domain.Entities;
 using DomnerTech.Backend.Infrastructure.MongoDb;
@@ -13,7 +16,8 @@ namespace DomnerTech.Backend.Infrastructure.Repo;
 /// </summary>
 public sealed class BrandRepo(
     IMongoDbContextFactory contextFactory,
-    ITenantService tenant)
+    ITenantService tenant,
+    IOffsetPaginator<BrandEntity, BrandDto> paginator)
     : BaseRepo<BrandEntity>(contextFactory.Create(DatabaseNameConstant.DatabaseName).Database, tenant), IBrandRepo
 {
     public async Task<ObjectId> CreateAsync(BrandEntity entity, CancellationToken cancellationToken = default)
@@ -38,5 +42,19 @@ public sealed class BrandRepo(
     {
         var filter = Builders<BrandEntity>.Filter.Eq(x => x.IsActive, true);
         return await Collection.Find(TenantFilter() & filter).ToListAsync(cancellationToken);
+    }
+
+    public async Task<OffsetPageResponse<BrandDto>> GetPagedAsync(
+        OffsetPageRequest request,
+        Expression<Func<BrandEntity, BrandDto>>? projection = null,
+        CancellationToken cancellationToken = default)
+    {
+        var paged = await paginator.GetPageAsync(
+            collection: Collection,
+            request: request,
+            baseFilter: TenantFilter(),
+            projection: projection,
+            cancellationToken: cancellationToken);
+        return paged;
     }
 }

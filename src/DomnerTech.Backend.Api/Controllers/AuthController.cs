@@ -3,20 +3,17 @@ using DomnerTech.Backend.Application.Constants;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Auth;
 using DomnerTech.Backend.Application.Features.Auth;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DomnerTech.Backend.Api.Controllers;
 
-public sealed class AuthController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class AuthController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     [HttpPost("login"), AllowAnonymous]
     public async Task<ActionResult<BaseResponse<LoginResDto>>> Login([FromBody] LoginReqDto req)
     {
-        var res = await commandQuery.Send(
+        var res = await _commandQuery.Send(
             new LoginCommand(req.Username, req.Pwd),
             HttpContext.RequestAborted);
 

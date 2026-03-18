@@ -2,7 +2,6 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Leaves.LeaveTypes;
 using DomnerTech.Backend.Application.Features.LeaveTypes;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +10,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// <summary>
 /// Controller for managing leave types.
 /// </summary>
-public sealed class LeaveTypeController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class LeaveTypeController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     /// <summary>
     /// Creates a new leave type.
@@ -26,7 +23,7 @@ public sealed class LeaveTypeController(
     [HttpPost, Authorize(Roles = "LeaveType.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateLeaveType([FromBody] CreateLeaveTypeReqDto req)
     {
-        var result = await commandQuery.Send(new CreateLeaveTypeCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new CreateLeaveTypeCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -41,7 +38,7 @@ public sealed class LeaveTypeController(
     [HttpPut, Authorize(Roles = "LeaveType.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> UpdateLeaveType([FromBody] UpdateLeaveTypeReqDto req)
     {
-        var result = await commandQuery.Send(new UpdateLeaveTypeCommand(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new UpdateLeaveTypeCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -55,7 +52,7 @@ public sealed class LeaveTypeController(
     [HttpDelete("{id}"), Authorize(Roles = "LeaveType.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> DeleteLeaveType([FromRoute] string id)
     {
-        var result = await commandQuery.Send(new DeleteLeaveTypeCommand(id), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new DeleteLeaveTypeCommand(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -69,7 +66,7 @@ public sealed class LeaveTypeController(
     [HttpGet, Authorize(Roles = "LeaveType.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveTypeDto>>>> GetAllLeaveTypes()
     {
-        var result = await commandQuery.Send(new GetAllLeaveTypesQuery(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetAllLeaveTypesQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -83,7 +80,7 @@ public sealed class LeaveTypeController(
     [HttpGet("{id}"), Authorize(Roles = "LeaveType.Read")]
     public async Task<ActionResult<BaseResponse<LeaveTypeDto>>> GetLeaveTypeById([FromRoute] string id)
     {
-        var result = await commandQuery.Send(new GetLeaveTypeByIdQuery(id), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetLeaveTypeByIdQuery(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

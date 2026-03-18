@@ -8,47 +8,47 @@ public enum FilterOperator
     /// <summary>
     /// Exact match (field = value).
     /// </summary>
-    Equal,
+    Eq,
 
     /// <summary>
     /// Not equal (field != value).
     /// </summary>
-    NotEqual,
+    Ne,
 
     /// <summary>
     /// Contains (for strings - case-insensitive).
     /// </summary>
-    Contains,
+    Ct,
 
     /// <summary>
     /// Starts with (for strings - case-insensitive).
     /// </summary>
-    StartsWith,
+    Sw,
 
     /// <summary>
     /// Ends with (for strings - case-insensitive).
     /// </summary>
-    EndsWith,
+    Ew,
 
     /// <summary>
     /// Greater than (field > value).
     /// </summary>
-    GreaterThan,
+    Gt,
 
     /// <summary>
     /// Greater than or equal (field >= value).
     /// </summary>
-    GreaterThanOrEqual,
+    Gte,
 
     /// <summary>
     /// Less than.
     /// </summary>
-    LessThan,
+    Lt,
 
     /// <summary>
     /// Less than or equal.
     /// </summary>
-    LessThanOrEqual,
+    Lte,
 
     /// <summary>
     /// In array (field in [value1, value2, ...]).
@@ -58,5 +58,5 @@ public enum FilterOperator
     /// <summary>
     /// Not in array (field not in [value1, value2, ...]).
     /// </summary>
-    NotIn
+    Nin
 }

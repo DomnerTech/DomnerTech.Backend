@@ -2,7 +2,6 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Leaves.TeamLeave;
 using DomnerTech.Backend.Application.Features.TeamLeave;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +10,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// <summary>
 /// Controller for team leave visibility and management.
 /// </summary>
-public sealed class TeamLeaveController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class TeamLeaveController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     /// <summary>
     /// Gets team leave calendar for a date range.
@@ -29,7 +26,7 @@ public sealed class TeamLeaveController(
         [FromQuery(Name = "start_date")] DateTime startDate,
         [FromQuery(Name = "end_date")] DateTime endDate)
     {
-        var result = await commandQuery.Send(new GetTeamLeaveCalendarQuery(department, startDate, endDate), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetTeamLeaveCalendarQuery(department, startDate, endDate), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -43,7 +40,7 @@ public sealed class TeamLeaveController(
     public async Task<ActionResult<BaseResponse<List<TeamLeaveConflictDto>>>> CheckTeamLeaveConflicts(
         [FromBody] CheckTeamLeaveConflictReqDto req)
     {
-        var result = await commandQuery.Send(new CheckTeamLeaveConflictQuery(req), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new CheckTeamLeaveConflictQuery(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -56,7 +53,7 @@ public sealed class TeamLeaveController(
     [HttpGet("stats/{department}"), Authorize(Roles = "LeaveRequest.Admin")]
     public async Task<ActionResult<BaseResponse<TeamLeaveStatsDto>>> GetTeamLeaveStats([FromRoute] string department)
     {
-        var result = await commandQuery.Send(new GetTeamLeaveStatsQuery(department), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetTeamLeaveStatsQuery(department), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -69,7 +66,7 @@ public sealed class TeamLeaveController(
     [HttpGet("upcoming/{department}"), Authorize(Roles = "LeaveRequest.Admin")]
     public async Task<ActionResult<BaseResponse<List<TeamLeaveCalendarDto>>>> GetUpcomingTeamLeave([FromRoute] string department)
     {
-        var result = await commandQuery.Send(new GetUpcomingTeamLeaveQuery(department), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetUpcomingTeamLeaveQuery(department), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

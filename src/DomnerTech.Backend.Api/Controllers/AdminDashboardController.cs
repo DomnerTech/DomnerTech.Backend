@@ -2,7 +2,6 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Leaves.Dashboard;
 using DomnerTech.Backend.Application.Features.Dashboard;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +11,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// Controller for admin dashboard.
 /// </summary>
 [Authorize(Roles = "LeaveRequest.Admin")]
-public sealed class AdminDashboardController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class AdminDashboardController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     /// <summary>
     /// Gets admin dashboard statistics.
@@ -23,7 +20,7 @@ public sealed class AdminDashboardController(
     [HttpGet("stats")]
     public async Task<ActionResult<BaseResponse<AdminDashboardStatsDto>>> GetDashboardStats()
     {
-        var result = await commandQuery.Send(new GetAdminDashboardStatsQuery(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetAdminDashboardStatsQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -34,7 +31,7 @@ public sealed class AdminDashboardController(
     [HttpGet("employees-on-leave")]
     public async Task<ActionResult<BaseResponse<List<EmployeeOnLeaveDto>>>> GetEmployeesOnLeave()
     {
-        var result = await commandQuery.Send(new GetEmployeesOnLeaveQuery(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetEmployeesOnLeaveQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -46,7 +43,7 @@ public sealed class AdminDashboardController(
     [HttpGet("upcoming-leaves")]
     public async Task<ActionResult<BaseResponse<List<UpcomingLeaveDto>>>> GetUpcomingLeaves([FromQuery] int days = 30)
     {
-        var result = await commandQuery.Send(new GetUpcomingLeavesQuery(days), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetUpcomingLeavesQuery(days), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -57,7 +54,7 @@ public sealed class AdminDashboardController(
     [HttpGet("pending-approvals")]
     public async Task<ActionResult<BaseResponse<List<PendingApprovalSummaryDto>>>> GetPendingApprovals()
     {
-        var result = await commandQuery.Send(new GetPendingApprovalsSummaryQuery(), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetPendingApprovalsSummaryQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

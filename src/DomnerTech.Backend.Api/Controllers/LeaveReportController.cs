@@ -2,7 +2,6 @@ using Bas24.CommandQuery;
 using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.DTOs.Leaves.Reports;
 using DomnerTech.Backend.Application.Features.Reports;
-using DomnerTech.Backend.Application.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +11,7 @@ namespace DomnerTech.Backend.Api.Controllers;
 /// Controller for leave reports and analytics.
 /// </summary>
 [Authorize(Roles = "LeaveRequest.Admin")]
-public sealed class LeaveReportController(
-    ICommandQuery commandQuery,
-    IErrorMessageLocalizeRepo errorMessageLocalizeRepo) : BaseApiController(errorMessageLocalizeRepo)
+public sealed class LeaveReportController(ICommandQuery commandQuery) : BaseApiController(commandQuery)
 {
     /// <summary>
     /// Generates leave usage report.
@@ -27,7 +24,7 @@ public sealed class LeaveReportController(
         [FromQuery] int year,
         [FromQuery] string? department = null)
     {
-        var result = await commandQuery.Send(new GetLeaveUsageReportQuery(year, department), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetLeaveUsageReportQuery(year, department), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -40,7 +37,7 @@ public sealed class LeaveReportController(
     public async Task<ActionResult<BaseResponse<List<DepartmentLeaveStatsDto>>>> GetDepartmentStats(
         [FromQuery] string? department = null)
     {
-        var result = await commandQuery.Send(new GetDepartmentStatsQuery(department), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetDepartmentStatsQuery(department), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -52,7 +49,7 @@ public sealed class LeaveReportController(
     [HttpGet("trends")]
     public async Task<ActionResult<BaseResponse<List<LeaveTrendDto>>>> GetLeaveTrend([FromQuery] int year)
     {
-        var result = await commandQuery.Send(new GetLeaveTrendQuery(year), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetLeaveTrendQuery(year), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -67,7 +64,7 @@ public sealed class LeaveReportController(
         [FromRoute] string employeeId,
         [FromQuery] int year)
     {
-        var result = await commandQuery.Send(new GetEmployeeLeaveSummaryQuery(employeeId, year), HttpContext.RequestAborted);
+        var result = await _commandQuery.Send(new GetEmployeeLeaveSummaryQuery(employeeId, year), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

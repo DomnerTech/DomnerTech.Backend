@@ -1,4 +1,4 @@
-namespace DomnerTech.Backend.Application.DTOs.Products;
+namespace DomnerTech.Backend.Application.DTOs.Brands;
 
 /// <summary>
 /// DTO for creating a brand.

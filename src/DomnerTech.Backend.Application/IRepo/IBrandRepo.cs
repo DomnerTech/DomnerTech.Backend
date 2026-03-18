@@ -1,3 +1,4 @@
+using DomnerTech.Backend.Application.DTOs.Brands;
 using DomnerTech.Backend.Domain.Entities;
 using MongoDB.Bson;
 
@@ -6,7 +7,7 @@ namespace DomnerTech.Backend.Application.IRepo;
 /// <summary>
 /// Repository interface for Brand entity operations.
 /// </summary>
-public interface IBrandRepo : IBaseRepo
+public interface IBrandRepo : IBaseRepo, IBasePagedRepo<BrandEntity, BrandDto>
 {
     /// <summary>
     /// Creates a new brand.
