@@ -16,17 +16,17 @@ public enum FilterOperator
     NotEqual,
 
     /// <summary>
-    /// Contains (for strings - case insensitive).
+    /// Contains (for strings - case-insensitive).
     /// </summary>
     Contains,
 
     /// <summary>
-    /// Starts with (for strings - case insensitive).
+    /// Starts with (for strings - case-insensitive).
     /// </summary>
     StartsWith,
 
     /// <summary>
-    /// Ends with (for strings - case insensitive).
+    /// Ends with (for strings - case-insensitive).
     /// </summary>
     EndsWith,
 
@@ -41,12 +41,12 @@ public enum FilterOperator
     GreaterThanOrEqual,
 
     /// <summary>
-    /// Less than (field < value).
+    /// Less than.
     /// </summary>
     LessThan,
 
     /// <summary>
-    /// Less than or equal (field <= value).
+    /// Less than or equal.
     /// </summary>
     LessThanOrEqual,
 

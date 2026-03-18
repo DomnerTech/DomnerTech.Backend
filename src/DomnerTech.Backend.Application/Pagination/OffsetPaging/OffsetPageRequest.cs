@@ -5,26 +5,23 @@ namespace DomnerTech.Backend.Application.Pagination.OffsetPaging;
 /// </summary>
 public sealed class OffsetPageRequest
 {
-    private int _pageNumber = 1;
-    private int _pageSize = 20;
-
     /// <summary>
     /// Gets or sets the page number (1-based).
     /// Minimum: 1, Maximum: 1000.
     /// </summary>
     public int PageNumber
     {
-        get => _pageNumber;
+        get;
         set
         {
-            _pageNumber = value switch
+            field = value switch
             {
                 >= 1 and <= 1000 => value,
                 < 1 => 1,
                 _ => 1000
             };
         }
-    }
+    } = 1;
 
     /// <summary>
     /// Gets or sets the page size (number of items per page).
@@ -32,14 +29,14 @@ public sealed class OffsetPageRequest
     /// </summary>
     public int PageSize
     {
-        get => _pageSize;
-        set => _pageSize = value switch
+        get;
+        set => field = value switch
         {
             >= 1 and <= 100 => value,
             < 1 => 1,
             _ => 100
         };
-    }
+    } = 20;
 
     /// <summary>
     /// Gets or sets the sort expression.

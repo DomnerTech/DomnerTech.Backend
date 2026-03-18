@@ -1,4 +1,7 @@
+using System.Linq.Expressions;
+using DomnerTech.Backend.Application.DTOs;
 using DomnerTech.Backend.Application.Pagination.OffsetPaging;
+using DomnerTech.Backend.Domain.Entities;
 using MongoDB.Driver;
 
 namespace DomnerTech.Backend.Infrastructure.Pagination.OffsetPaging;
@@ -7,7 +10,9 @@ namespace DomnerTech.Backend.Infrastructure.Pagination.OffsetPaging;
 /// MongoDB implementation of offset-based pagination.
 /// Optimized for high-performance queries on large datasets.
 /// </summary>
-public sealed class MongoOffsetPaginator : IOffsetPaginator
+public sealed class MongoOffsetPaginator<TEntity, TDto> : IOffsetPaginator<TEntity, TDto>
+    where TEntity : IBaseEntity
+    where TDto : IBaseDto
 {
     /// <summary>
     /// Applies pagination to a MongoDB query with filtering and sorting.
@@ -20,14 +25,12 @@ public sealed class MongoOffsetPaginator : IOffsetPaginator
     /// <param name="projection">Projection function to map entity to DTO. If null, TEntity must be TDto.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Paginated response with items and metadata.</returns>
-    public async Task<OffsetPageResponse<TDto>> GetPageAsync<TEntity, TDto>(
+    public async Task<OffsetPageResponse<TDto>> GetPageAsync(
         IMongoCollection<TEntity> collection,
         OffsetPageRequest request,
         FilterDefinition<TEntity>? baseFilter = null,
-        Func<TEntity, TDto>? projection = null,
+        Expression<Func<TEntity, TDto>>? projection = null,
         CancellationToken cancellationToken = default)
-        where TEntity : class
-        where TDto : class
     {
         // Start with base filter or empty filter
         var filter = baseFilter ?? Builders<TEntity>.Filter.Empty;
@@ -56,10 +59,11 @@ public sealed class MongoOffsetPaginator : IOffsetPaginator
         List<TDto> items;
         if (projection != null)
         {
-            items = [.. entities.Select(projection)];
+            items = [.. entities.Select(projection.Compile())];
         }
         else if (typeof(TEntity) == typeof(TDto))
         {
+            // ReSharper disable once SuspiciousTypeConversion.Global
             items = [.. entities.Cast<TDto>()];
         }
         else

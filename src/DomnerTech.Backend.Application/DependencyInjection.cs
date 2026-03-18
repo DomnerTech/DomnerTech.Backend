@@ -6,7 +6,6 @@ using Elastic.Apm.DiagnosticSource;
 using Elastic.Apm.Instrumentations.SqlClient;
 using Elastic.Apm.MongoDb;
 using FluentValidation;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DomnerTech.Backend.Application;

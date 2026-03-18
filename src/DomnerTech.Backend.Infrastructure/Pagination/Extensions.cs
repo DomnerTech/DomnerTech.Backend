@@ -17,7 +17,7 @@ public static class Extensions
         services.AddSingleton(typeof(SortProfile<>));
 
         // Offset pagination (new)
-        services.AddScoped<IOffsetPaginator, MongoOffsetPaginator>();
+        services.AddScoped(typeof(IOffsetPaginator<,>), typeof(MongoOffsetPaginator<,>));
         services.AddSingleton<FieldValidationService>();
 
         return services;
