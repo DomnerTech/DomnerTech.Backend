@@ -14,7 +14,7 @@ public sealed class LocalizeController(ICommandQuery commandQuery) : BaseApiCont
     public async Task<ActionResult<BaseResponse<bool>>> ErrorMessageLocalizeUpsert(
         [FromBody] ErrorMessageLocalizeUpsertReqDto r)
     {
-        var res = await _commandQuery.Send(
+        var res = await CommandQuery.Send(
             new ErrorMessageLocalizeUpsertCommand(r.Key, r.Messages),
             HttpContext.RequestAborted);
         return await ReturnJson(res);
@@ -24,7 +24,7 @@ public sealed class LocalizeController(ICommandQuery commandQuery) : BaseApiCont
             [FromBody] List<ErrorMessageLocalizeUpsertReqDto> rs)
     {
         var tasks = rs.Select(async r =>
-            await _commandQuery.Send(new ErrorMessageLocalizeUpsertCommand(r.Key, r.Messages),
+            await CommandQuery.Send(new ErrorMessageLocalizeUpsertCommand(r.Key, r.Messages),
                 HttpContext.RequestAborted));
         await Task.WhenAll(tasks);
         return await ReturnJson(new BaseResponse<bool>
@@ -56,7 +56,7 @@ public sealed class LocalizeController(ICommandQuery commandQuery) : BaseApiCont
         [FromQuery(Name = "sort_by")] string sortBy,
         [FromQuery(Name = "include_total_count")] bool includeTotalCount)
     {
-        var res = await _commandQuery.Send(new GetErrorMessagePageQuery
+        var res = await CommandQuery.Send(new GetErrorMessagePageQuery
         {
             Cursor = cursor,
             Direction = direction,

@@ -19,7 +19,7 @@ public sealed class BrandsController(ICommandQuery commandQuery) : BaseApiContro
     [HttpPost, Authorize(Roles = "Brand.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateBrand([FromBody] CreateBrandReqDto req)
     {
-        var result = await _commandQuery.Send(new CreateBrandCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateBrandCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -30,7 +30,7 @@ public sealed class BrandsController(ICommandQuery commandQuery) : BaseApiContro
     [HttpPost("page"), Authorize(Roles = "Brand.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<BrandDto>>>> GetAllBrands([FromBody] GetAllBrandsReqDto req)
     {
-        var result = await _commandQuery.Send(new GetAllBrandsQuery
+        var result = await CommandQuery.Send(new GetAllBrandsQuery
         {
             PageSize = req.PageSize,
             IncludeTotalCount = req.IncludeTotalCount,

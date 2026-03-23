@@ -24,7 +24,7 @@ public sealed class ProductsController(ICommandQuery commandQuery) : BaseApiCont
     [HttpPost, Authorize(Roles = "Product.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateProduct([FromBody] CreateProductReqDto req)
     {
-        var result = await _commandQuery.Send(new CreateProductCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateProductCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -37,7 +37,7 @@ public sealed class ProductsController(ICommandQuery commandQuery) : BaseApiCont
         [FromRoute] string productId,
         [FromBody] CreateProductReqDto req)
     {
-        var result = await _commandQuery.Send(new UpdateProductCommand(productId, req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new UpdateProductCommand(productId, req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -48,7 +48,7 @@ public sealed class ProductsController(ICommandQuery commandQuery) : BaseApiCont
     [HttpDelete("{productId}"), Authorize(Roles = "Product.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> DeleteProduct([FromRoute] string productId)
     {
-        var result = await _commandQuery.Send(new DeleteProductCommand(productId), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new DeleteProductCommand(productId), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -59,7 +59,7 @@ public sealed class ProductsController(ICommandQuery commandQuery) : BaseApiCont
     [HttpGet("{productId}"), Authorize(Roles = "Product.Read")]
     public async Task<ActionResult<BaseResponse<ProductDto>>> GetProduct([FromRoute] string productId)
     {
-        var result = await _commandQuery.Send(new GetProductByIdQuery(productId), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetProductByIdQuery(productId), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -75,7 +75,7 @@ public sealed class ProductsController(ICommandQuery commandQuery) : BaseApiCont
         [FromQuery(Name = "page_number")] int pageNumber = 1,
         [FromQuery(Name = "page_size")] int pageSize = 20)
     {
-        var result = await _commandQuery.Send(
+        var result = await CommandQuery.Send(
             new GetAllProductsQuery(categoryId, brandId, status, pageNumber, pageSize),
             HttpContext.RequestAborted);
         return await ReturnJson(result);
@@ -89,7 +89,7 @@ public sealed class ProductsController(ICommandQuery commandQuery) : BaseApiCont
     public async Task<ActionResult<BaseResponse<List<ProductDto>>>> SearchProducts(
         [FromQuery(Name = "q")] string searchTerm)
     {
-        var result = await _commandQuery.Send(new SearchProductsQuery(searchTerm), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new SearchProductsQuery(searchTerm), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

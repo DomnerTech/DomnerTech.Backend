@@ -13,14 +13,14 @@ public sealed class UserController(ICommandQuery commandQuery) : BaseApiControll
     [HttpGet("get-me")]
     public async Task<ActionResult<BaseResponse<UserDto>>> GetMe()
     {
-        var user = await _commandQuery.Send(new GetUserQuery(UserReqId), HttpContext.RequestAborted);
+        var user = await CommandQuery.Send(new GetUserQuery(UserReqId), HttpContext.RequestAborted);
         return await ReturnJson(user);
     }
 
     [HttpPost, Authorize(Roles = "User.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> CreateUser([FromBody] CreateUserDto r)
     {
-        var result = await _commandQuery.Send(new CreateUserCommand(r.Username, r.Pwd), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateUserCommand(r.Username, r.Pwd), HttpContext.RequestAborted);
         return await ReturnJson(result  );
     }
 
@@ -48,7 +48,7 @@ public sealed class UserController(ICommandQuery commandQuery) : BaseApiControll
         [FromQuery(Name = "sort_by")] string sortBy,
         [FromQuery(Name = "include_total_count")] bool includeTotalCount)
     {
-        var result = await _commandQuery.Send(new GetAllUsersQuery
+        var result = await CommandQuery.Send(new GetAllUsersQuery
         {
             Cursor = cursor,
             Direction = direction,

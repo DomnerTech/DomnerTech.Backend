@@ -23,7 +23,7 @@ public sealed class InventoryController(ICommandQuery commandQuery) : BaseApiCon
     [HttpPost("adjust"), Authorize(Roles = "Inventory.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> AdjustStock([FromBody] AdjustStockReqDto req)
     {
-        var result = await _commandQuery.Send(new AdjustStockCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new AdjustStockCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -44,7 +44,7 @@ public sealed class InventoryController(ICommandQuery commandQuery) : BaseApiCon
         [FromQuery(Name = "variant_id")] string? variantId = null,
         [FromQuery(Name = "expires_at")] DateTime? expiresAt = null)
     {
-        var result = await _commandQuery.Send(
+        var result = await CommandQuery.Send(
             new ReserveStockCommand(productId, warehouseId, quantity, orderId, variantId, expiresAt),
             HttpContext.RequestAborted);
         return await ReturnJson(result);
@@ -60,7 +60,7 @@ public sealed class InventoryController(ICommandQuery commandQuery) : BaseApiCon
     [HttpPost("transfer"), Authorize(Roles = "Inventory.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateStockTransfer([FromBody] CreateStockTransferReqDto req)
     {
-        var result = await _commandQuery.Send(new CreateStockTransferCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateStockTransferCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -74,7 +74,7 @@ public sealed class InventoryController(ICommandQuery commandQuery) : BaseApiCon
         [FromQuery(Name = "warehouse_id")] string? warehouseId = null,
         [FromQuery(Name = "variant_id")] string? variantId = null)
     {
-        var result = await _commandQuery.Send(
+        var result = await CommandQuery.Send(
             new GetStockByProductQuery(productId, warehouseId, variantId),
             HttpContext.RequestAborted);
         return await ReturnJson(result);
@@ -88,7 +88,7 @@ public sealed class InventoryController(ICommandQuery commandQuery) : BaseApiCon
     public async Task<ActionResult<BaseResponse<List<StockDto>>>> GetLowStockItems(
         [FromQuery(Name = "warehouse_id")] string? warehouseId = null)
     {
-        var result = await _commandQuery.Send(new GetLowStockItemsQuery(warehouseId), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetLowStockItemsQuery(warehouseId), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

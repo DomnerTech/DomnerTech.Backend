@@ -23,7 +23,7 @@ public sealed class CategoriesController(ICommandQuery commandQuery) : BaseApiCo
     [HttpPost, Authorize(Roles = "Category.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateCategory([FromBody] CreateCategoryReqDto req)
     {
-        var result = await _commandQuery.Send(new CreateCategoryCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateCategoryCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -36,7 +36,7 @@ public sealed class CategoriesController(ICommandQuery commandQuery) : BaseApiCo
     public async Task<ActionResult<BaseResponse<List<CategoryDto>>>> GetAllCategories(
         [FromQuery(Name = "active_only")] bool activeOnly = true)
     {
-        var result = await _commandQuery.Send(new GetAllCategoriesQuery(activeOnly), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetAllCategoriesQuery(activeOnly), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

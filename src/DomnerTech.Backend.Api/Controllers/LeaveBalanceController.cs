@@ -18,7 +18,7 @@ public sealed class LeaveBalanceController(ICommandQuery commandQuery) : BaseApi
     [HttpPost, Authorize(Roles = "LeaveBalance.Write")]
     public async Task<ActionResult<BaseResponse<string>>> InitializeLeaveBalance([FromBody] InitializeLeaveBalanceReqDto req)
     {
-        var result = await _commandQuery.Send(new InitializeLeaveBalanceCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new InitializeLeaveBalanceCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -28,7 +28,7 @@ public sealed class LeaveBalanceController(ICommandQuery commandQuery) : BaseApi
     [HttpPost("adjust"), Authorize(Roles = "LeaveBalance.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> AdjustLeaveBalance([FromBody] AdjustLeaveBalanceReqDto req)
     {
-        var result = await _commandQuery.Send(new AdjustLeaveBalanceCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new AdjustLeaveBalanceCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -38,7 +38,7 @@ public sealed class LeaveBalanceController(ICommandQuery commandQuery) : BaseApi
     [HttpGet("my"), Authorize(Roles = "LeaveBalance.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>>> GetMyLeaveBalances([FromQuery] int year)
     {
-        var result = await _commandQuery.Send(new GetMyLeaveBalancesQuery(year), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetMyLeaveBalancesQuery(year), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -48,7 +48,7 @@ public sealed class LeaveBalanceController(ICommandQuery commandQuery) : BaseApi
     [HttpGet("employee/{employeeId}"), Authorize(Roles = "LeaveBalance.Write")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveBalanceSummaryDto>>>> GetEmployeeLeaveBalances([FromRoute] string employeeId, [FromQuery] int year)
     {
-        var result = await _commandQuery.Send(new GetEmployeeLeaveBalancesQuery(employeeId, year), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetEmployeeLeaveBalancesQuery(employeeId, year), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

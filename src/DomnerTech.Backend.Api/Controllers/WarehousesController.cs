@@ -19,7 +19,7 @@ public sealed class WarehousesController(ICommandQuery commandQuery) : BaseApiCo
     [HttpPost, Authorize(Roles = "Warehouse.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateWarehouse([FromBody] CreateWarehouseReqDto req)
     {
-        var result = await _commandQuery.Send(new CreateWarehouseCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateWarehouseCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -31,7 +31,7 @@ public sealed class WarehousesController(ICommandQuery commandQuery) : BaseApiCo
     public async Task<ActionResult<BaseResponse<List<WarehouseDto>>>> GetAllWarehouses(
         [FromQuery(Name = "active_only")] bool activeOnly = true)
     {
-        var result = await _commandQuery.Send(new GetAllWarehousesQuery(activeOnly), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetAllWarehousesQuery(activeOnly), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

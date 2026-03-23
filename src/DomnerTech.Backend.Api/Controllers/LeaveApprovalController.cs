@@ -21,7 +21,7 @@ public sealed class LeaveApprovalController(ICommandQuery commandQuery) : BaseAp
     [HttpPost("approve"), Authorize(Roles = "LeaveApproval.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> ApproveLeave([FromBody] ApproveLeaveReqDto req)
     {
-        var result = await _commandQuery.Send(new ApproveLeaveCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new ApproveLeaveCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -34,7 +34,7 @@ public sealed class LeaveApprovalController(ICommandQuery commandQuery) : BaseAp
     [HttpPost("reject"), Authorize(Roles = "LeaveApproval.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> RejectLeave([FromBody] RejectLeaveReqDto req)
     {
-        var result = await _commandQuery.Send(new RejectLeaveCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new RejectLeaveCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -46,7 +46,7 @@ public sealed class LeaveApprovalController(ICommandQuery commandQuery) : BaseAp
     [HttpGet("pending"), Authorize(Roles = "LeaveApproval.Write")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveApprovalDto>>>> GetPendingApprovals()
     {
-        var result = await _commandQuery.Send(new GetPendingApprovalsQuery(), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetPendingApprovalsQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -59,7 +59,7 @@ public sealed class LeaveApprovalController(ICommandQuery commandQuery) : BaseAp
     [HttpGet("history/{leaveRequestId}"), Authorize(Roles = "LeaveApproval.Write")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveApprovalDto>>>> GetApprovalHistory([FromRoute] string leaveRequestId)
     {
-        var result = await _commandQuery.Send(new GetLeaveApprovalHistoryQuery(leaveRequestId), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetLeaveApprovalHistoryQuery(leaveRequestId), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

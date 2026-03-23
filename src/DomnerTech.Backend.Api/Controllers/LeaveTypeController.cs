@@ -23,7 +23,7 @@ public sealed class LeaveTypeController(ICommandQuery commandQuery) : BaseApiCon
     [HttpPost, Authorize(Roles = "LeaveType.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateLeaveType([FromBody] CreateLeaveTypeReqDto req)
     {
-        var result = await _commandQuery.Send(new CreateLeaveTypeCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateLeaveTypeCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -38,7 +38,7 @@ public sealed class LeaveTypeController(ICommandQuery commandQuery) : BaseApiCon
     [HttpPut, Authorize(Roles = "LeaveType.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> UpdateLeaveType([FromBody] UpdateLeaveTypeReqDto req)
     {
-        var result = await _commandQuery.Send(new UpdateLeaveTypeCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new UpdateLeaveTypeCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -52,7 +52,7 @@ public sealed class LeaveTypeController(ICommandQuery commandQuery) : BaseApiCon
     [HttpDelete("{id}"), Authorize(Roles = "LeaveType.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> DeleteLeaveType([FromRoute] string id)
     {
-        var result = await _commandQuery.Send(new DeleteLeaveTypeCommand(id), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new DeleteLeaveTypeCommand(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -66,7 +66,7 @@ public sealed class LeaveTypeController(ICommandQuery commandQuery) : BaseApiCon
     [HttpGet, Authorize(Roles = "LeaveType.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeaveTypeDto>>>> GetAllLeaveTypes()
     {
-        var result = await _commandQuery.Send(new GetAllLeaveTypesQuery(), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetAllLeaveTypesQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -80,7 +80,7 @@ public sealed class LeaveTypeController(ICommandQuery commandQuery) : BaseApiCon
     [HttpGet("{id}"), Authorize(Roles = "LeaveType.Read")]
     public async Task<ActionResult<BaseResponse<LeaveTypeDto>>> GetLeaveTypeById([FromRoute] string id)
     {
-        var result = await _commandQuery.Send(new GetLeaveTypeByIdQuery(id), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetLeaveTypeByIdQuery(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

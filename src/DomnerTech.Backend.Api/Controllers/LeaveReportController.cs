@@ -24,7 +24,7 @@ public sealed class LeaveReportController(ICommandQuery commandQuery) : BaseApiC
         [FromQuery] int year,
         [FromQuery] string? department = null)
     {
-        var result = await _commandQuery.Send(new GetLeaveUsageReportQuery(year, department), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetLeaveUsageReportQuery(year, department), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -37,7 +37,7 @@ public sealed class LeaveReportController(ICommandQuery commandQuery) : BaseApiC
     public async Task<ActionResult<BaseResponse<List<DepartmentLeaveStatsDto>>>> GetDepartmentStats(
         [FromQuery] string? department = null)
     {
-        var result = await _commandQuery.Send(new GetDepartmentStatsQuery(department), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetDepartmentStatsQuery(department), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -49,7 +49,7 @@ public sealed class LeaveReportController(ICommandQuery commandQuery) : BaseApiC
     [HttpGet("trends")]
     public async Task<ActionResult<BaseResponse<List<LeaveTrendDto>>>> GetLeaveTrend([FromQuery] int year)
     {
-        var result = await _commandQuery.Send(new GetLeaveTrendQuery(year), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetLeaveTrendQuery(year), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -64,7 +64,7 @@ public sealed class LeaveReportController(ICommandQuery commandQuery) : BaseApiC
         [FromRoute] string employeeId,
         [FromQuery] int year)
     {
-        var result = await _commandQuery.Send(new GetEmployeeLeaveSummaryQuery(employeeId, year), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetEmployeeLeaveSummaryQuery(employeeId, year), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

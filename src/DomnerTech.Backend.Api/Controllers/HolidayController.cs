@@ -22,7 +22,7 @@ public sealed class HolidayController(ICommandQuery commandQuery) : BaseApiContr
     [HttpPost, Authorize(Roles = "Holiday.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateHoliday([FromBody] CreateHolidayReqDto req)
     {
-        var result = await _commandQuery.Send(new CreateHolidayCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateHolidayCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -36,7 +36,7 @@ public sealed class HolidayController(ICommandQuery commandQuery) : BaseApiContr
     [HttpPost("bulk"), Authorize(Roles = "Holiday.Write")]
     public async Task<ActionResult<BaseResponse<int>>> BulkCreateHolidays([FromBody] BulkCreateHolidaysReqDto req)
     {
-        var result = await _commandQuery.Send(new BulkCreateHolidaysCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new BulkCreateHolidaysCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -50,7 +50,7 @@ public sealed class HolidayController(ICommandQuery commandQuery) : BaseApiContr
     [HttpPut, Authorize(Roles = "Holiday.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> UpdateHoliday([FromBody] UpdateHolidayReqDto req)
     {
-        var result = await _commandQuery.Send(new UpdateHolidayCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new UpdateHolidayCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -64,7 +64,7 @@ public sealed class HolidayController(ICommandQuery commandQuery) : BaseApiContr
     [HttpDelete("{id}"), Authorize(Roles = "Holiday.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> DeleteHoliday([FromRoute] string id)
     {
-        var result = await _commandQuery.Send(new DeleteHolidayCommand(id), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new DeleteHolidayCommand(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -79,7 +79,7 @@ public sealed class HolidayController(ICommandQuery commandQuery) : BaseApiContr
     [HttpGet("year/{year}"), Authorize(Roles = "Holiday.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<HolidayDto>>>> GetHolidaysByYear([FromRoute] int year)
     {
-        var result = await _commandQuery.Send(new GetHolidaysByYearQuery(year), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetHolidaysByYearQuery(year), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -93,7 +93,7 @@ public sealed class HolidayController(ICommandQuery commandQuery) : BaseApiContr
     [HttpGet("upcoming"), Authorize(Roles = "Holiday.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<HolidayDto>>>> GetUpcomingHolidays([FromQuery] int count = 10)
     {
-        var result = await _commandQuery.Send(new GetUpcomingHolidaysQuery(count), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetUpcomingHolidaysQuery(count), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

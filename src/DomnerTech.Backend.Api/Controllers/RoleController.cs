@@ -12,7 +12,7 @@ public sealed class RoleController(ICommandQuery commandQuery) : BaseApiControll
     [HttpPost, Authorize(Roles = "Role.Write")]
     public async Task<ActionResult> CreateRole([FromBody] CreateRoleReqDto req)
     {
-        var res = await _commandQuery.Send(
+        var res = await CommandQuery.Send(
             new CreateRoleCommand(req.Name, req.Desc),
             HttpContext.RequestAborted);
         return await ReturnJson(res);
@@ -21,14 +21,14 @@ public sealed class RoleController(ICommandQuery commandQuery) : BaseApiControll
     [HttpGet, Authorize(Roles = "Role.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<RoleDto>>>> GetAllRoles()
     {
-        var res = await _commandQuery.Send(new GetAllRolesQuery(), HttpContext.RequestAborted);
+        var res = await CommandQuery.Send(new GetAllRolesQuery(), HttpContext.RequestAborted);
         return await ReturnJson(res );
     }
 
     [HttpGet("user-roles/{userId}"), Authorize(Roles = "Role.Read")]
     public async Task<ActionResult> GetUserRoles(string userId)
     {
-        var res = await _commandQuery.Send(
+        var res = await CommandQuery.Send(
             new GetUserRolesQuery(userId),
             HttpContext.RequestAborted);
         return await ReturnJson(res);
@@ -37,7 +37,7 @@ public sealed class RoleController(ICommandQuery commandQuery) : BaseApiControll
     [HttpPost("upsert-user-role"), Authorize(Roles = "Role.Write")]
     public async Task<ActionResult> UpsertUserRole([FromBody] UpsertUserRoleReqDto r)
     {
-        var res = await _commandQuery.Send(
+        var res = await CommandQuery.Send(
             new UpsertUserRoleCommand(r.UserId, r.RoleName),
             HttpContext.RequestAborted);
         return await ReturnJson(res);

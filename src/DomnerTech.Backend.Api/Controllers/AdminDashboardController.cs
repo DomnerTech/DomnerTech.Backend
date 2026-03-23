@@ -20,7 +20,7 @@ public sealed class AdminDashboardController(ICommandQuery commandQuery) : BaseA
     [HttpGet("stats")]
     public async Task<ActionResult<BaseResponse<AdminDashboardStatsDto>>> GetDashboardStats()
     {
-        var result = await _commandQuery.Send(new GetAdminDashboardStatsQuery(), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetAdminDashboardStatsQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -31,7 +31,7 @@ public sealed class AdminDashboardController(ICommandQuery commandQuery) : BaseA
     [HttpGet("employees-on-leave")]
     public async Task<ActionResult<BaseResponse<List<EmployeeOnLeaveDto>>>> GetEmployeesOnLeave()
     {
-        var result = await _commandQuery.Send(new GetEmployeesOnLeaveQuery(), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetEmployeesOnLeaveQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -43,7 +43,7 @@ public sealed class AdminDashboardController(ICommandQuery commandQuery) : BaseA
     [HttpGet("upcoming-leaves")]
     public async Task<ActionResult<BaseResponse<List<UpcomingLeaveDto>>>> GetUpcomingLeaves([FromQuery] int days = 30)
     {
-        var result = await _commandQuery.Send(new GetUpcomingLeavesQuery(days), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetUpcomingLeavesQuery(days), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -54,7 +54,7 @@ public sealed class AdminDashboardController(ICommandQuery commandQuery) : BaseA
     [HttpGet("pending-approvals")]
     public async Task<ActionResult<BaseResponse<List<PendingApprovalSummaryDto>>>> GetPendingApprovals()
     {
-        var result = await _commandQuery.Send(new GetPendingApprovalsSummaryQuery(), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetPendingApprovalsSummaryQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

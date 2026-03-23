@@ -18,7 +18,7 @@ public sealed class LeavePolicyController(ICommandQuery commandQuery) : BaseApiC
     [HttpPost, Authorize(Roles = "LeavePolicy.Write")]
     public async Task<ActionResult<BaseResponse<string>>> CreateLeavePolicy([FromBody] CreateLeavePolicyReqDto req)
     {
-        var result = await _commandQuery.Send(new CreateLeavePolicyCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateLeavePolicyCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -28,7 +28,7 @@ public sealed class LeavePolicyController(ICommandQuery commandQuery) : BaseApiC
     [HttpPut, Authorize(Roles = "LeavePolicy.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> UpdateLeavePolicy([FromBody] UpdateLeavePolicyReqDto req)
     {
-        var result = await _commandQuery.Send(new UpdateLeavePolicyCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new UpdateLeavePolicyCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -38,7 +38,7 @@ public sealed class LeavePolicyController(ICommandQuery commandQuery) : BaseApiC
     [HttpDelete("{id}"), Authorize(Roles = "LeavePolicy.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> DeleteLeavePolicy([FromRoute] string id)
     {
-        var result = await _commandQuery.Send(new DeleteLeavePolicyCommand(id), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new DeleteLeavePolicyCommand(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -48,7 +48,7 @@ public sealed class LeavePolicyController(ICommandQuery commandQuery) : BaseApiC
     [HttpGet("{id}"), Authorize(Roles = "LeavePolicy.Read")]
     public async Task<ActionResult<BaseResponse<LeavePolicyDto>>> GetLeavePolicyById([FromRoute] string id)
     {
-        var result = await _commandQuery.Send(new GetLeavePolicyByIdQuery(id), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetLeavePolicyByIdQuery(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -58,7 +58,7 @@ public sealed class LeavePolicyController(ICommandQuery commandQuery) : BaseApiC
     [HttpGet, Authorize(Roles = "LeavePolicy.Read")]
     public async Task<ActionResult<BaseResponse<IEnumerable<LeavePolicyDto>>>> GetActivePolicies()
     {
-        var result = await _commandQuery.Send(new GetActivePoliciesQuery(), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetActivePoliciesQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -68,7 +68,7 @@ public sealed class LeavePolicyController(ICommandQuery commandQuery) : BaseApiC
     [HttpGet("leave-type/{leaveTypeId}"), Authorize(Roles = "LeavePolicy.Read")]
     public async Task<ActionResult<BaseResponse<LeavePolicyDto>>> GetPolicyByLeaveType([FromRoute] string leaveTypeId)
     {
-        var result = await _commandQuery.Send(new GetPolicyByLeaveTypeQuery(leaveTypeId), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetPolicyByLeaveTypeQuery(leaveTypeId), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

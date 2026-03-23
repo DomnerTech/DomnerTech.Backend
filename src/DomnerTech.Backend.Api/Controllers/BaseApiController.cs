@@ -14,14 +14,14 @@ namespace DomnerTech.Backend.Api.Controllers;
 [Authorize]
 public class BaseApiController(ICommandQuery commandQuery) : ControllerBase
 {
-    protected ICommandQuery _commandQuery = commandQuery;
+    protected ICommandQuery CommandQuery = commandQuery;
     protected string UserReqId => User.Claims.FirstOrDefault(c => c.Type == ClaimConstant.UserId)?.Value ?? string.Empty;
     protected string CompanyId => User.Claims.FirstOrDefault(c => c.Type == ClaimConstant.CompanyId)?.Value ?? string.Empty;
     protected async Task<JsonResult> ReturnJson<T>(BaseResponse<T> obj)
     {
         if (!obj.IsSuccess)
         {
-            obj.Status.Desc = await _commandQuery.Send(new ResolveErrorLocalizeCommand(obj.Status.ErrorCode, HttpContext.GetCurrentLanguage()));
+            obj.Status.Desc = await CommandQuery.Send(new ResolveErrorLocalizeCommand(obj.Status.ErrorCode, HttpContext.GetCurrentLanguage()));
         }
 
         return new JsonResult(obj)

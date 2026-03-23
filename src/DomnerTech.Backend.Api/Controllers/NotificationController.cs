@@ -18,7 +18,7 @@ public sealed class NotificationController(ICommandQuery commandQuery) : BaseApi
     [HttpGet]
     public async Task<ActionResult<BaseResponse<List<NotificationDto>>>> GetMyNotifications([FromQuery] int limit = 50)
     {
-        var result = await _commandQuery.Send(new GetMyNotificationsQuery(limit), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetMyNotificationsQuery(limit), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -28,7 +28,7 @@ public sealed class NotificationController(ICommandQuery commandQuery) : BaseApi
     [HttpGet("unread")]
     public async Task<ActionResult<BaseResponse<List<NotificationDto>>>> GetUnreadNotifications()
     {
-        var result = await _commandQuery.Send(new GetUnreadNotificationsQuery(), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetUnreadNotificationsQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -38,7 +38,7 @@ public sealed class NotificationController(ICommandQuery commandQuery) : BaseApi
     [HttpGet("unread/count")]
     public async Task<ActionResult<BaseResponse<int>>> GetUnreadCount()
     {
-        var result = await _commandQuery.Send(new GetUnreadCountQuery(), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetUnreadCountQuery(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -48,7 +48,7 @@ public sealed class NotificationController(ICommandQuery commandQuery) : BaseApi
     [HttpPut("{id}/read")]
     public async Task<ActionResult<BaseResponse<bool>>> MarkAsRead([FromRoute] string id)
     {
-        var result = await _commandQuery.Send(new MarkNotificationAsReadCommand(id), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new MarkNotificationAsReadCommand(id), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -58,7 +58,7 @@ public sealed class NotificationController(ICommandQuery commandQuery) : BaseApi
     [HttpPut("read-all")]
     public async Task<ActionResult<BaseResponse<bool>>> MarkAllAsRead()
     {
-        var result = await _commandQuery.Send(new MarkAllAsReadCommand(), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new MarkAllAsReadCommand(), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

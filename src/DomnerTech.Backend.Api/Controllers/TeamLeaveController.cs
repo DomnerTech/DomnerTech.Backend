@@ -26,7 +26,7 @@ public sealed class TeamLeaveController(ICommandQuery commandQuery) : BaseApiCon
         [FromQuery(Name = "start_date")] DateTime startDate,
         [FromQuery(Name = "end_date")] DateTime endDate)
     {
-        var result = await _commandQuery.Send(new GetTeamLeaveCalendarQuery(department, startDate, endDate), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetTeamLeaveCalendarQuery(department, startDate, endDate), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -40,7 +40,7 @@ public sealed class TeamLeaveController(ICommandQuery commandQuery) : BaseApiCon
     public async Task<ActionResult<BaseResponse<List<TeamLeaveConflictDto>>>> CheckTeamLeaveConflicts(
         [FromBody] CheckTeamLeaveConflictReqDto req)
     {
-        var result = await _commandQuery.Send(new CheckTeamLeaveConflictQuery(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CheckTeamLeaveConflictQuery(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -53,7 +53,7 @@ public sealed class TeamLeaveController(ICommandQuery commandQuery) : BaseApiCon
     [HttpGet("stats/{department}"), Authorize(Roles = "LeaveRequest.Admin")]
     public async Task<ActionResult<BaseResponse<TeamLeaveStatsDto>>> GetTeamLeaveStats([FromRoute] string department)
     {
-        var result = await _commandQuery.Send(new GetTeamLeaveStatsQuery(department), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetTeamLeaveStatsQuery(department), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -66,7 +66,7 @@ public sealed class TeamLeaveController(ICommandQuery commandQuery) : BaseApiCon
     [HttpGet("upcoming/{department}"), Authorize(Roles = "LeaveRequest.Admin")]
     public async Task<ActionResult<BaseResponse<List<TeamLeaveCalendarDto>>>> GetUpcomingTeamLeave([FromRoute] string department)
     {
-        var result = await _commandQuery.Send(new GetUpcomingTeamLeaveQuery(department), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new GetUpcomingTeamLeaveQuery(department), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 }

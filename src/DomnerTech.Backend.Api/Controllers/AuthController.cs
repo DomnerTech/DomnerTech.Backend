@@ -13,7 +13,7 @@ public sealed class AuthController(ICommandQuery commandQuery) : BaseApiControll
     [HttpPost("login"), AllowAnonymous]
     public async Task<ActionResult<BaseResponse<LoginResDto>>> Login([FromBody] LoginReqDto req)
     {
-        var res = await _commandQuery.Send(
+        var res = await CommandQuery.Send(
             new LoginCommand(req.Username, req.Pwd),
             HttpContext.RequestAborted);
 

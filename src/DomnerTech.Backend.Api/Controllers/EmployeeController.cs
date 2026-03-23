@@ -13,7 +13,7 @@ public sealed class EmployeeController(ICommandQuery commandQuery) : BaseApiCont
     [HttpPost, Authorize(Roles = "Employee.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> CreateEmployee([FromBody] CreateEmployeeReqDto req)
     {
-        var result = await _commandQuery.Send(new CreateEmployeeCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new CreateEmployeeCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -28,7 +28,7 @@ public sealed class EmployeeController(ICommandQuery commandQuery) : BaseApiCont
     [HttpPut, Authorize(Roles = "Employee.Write")]
     public async Task<ActionResult<BaseResponse<bool>>> UpdateEmployee([FromBody] UpdateEmployeeReqDto req)
     {
-        var result = await _commandQuery.Send(new UpdateEmployeeCommand(req), HttpContext.RequestAborted);
+        var result = await CommandQuery.Send(new UpdateEmployeeCommand(req), HttpContext.RequestAborted);
         return await ReturnJson(result);
     }
 
@@ -55,7 +55,7 @@ public sealed class EmployeeController(ICommandQuery commandQuery) : BaseApiCont
         [FromQuery(Name = "sort_by")] string sortBy,
         [FromQuery(Name = "include_total_count")] bool includeTotalCount)
     {
-        var res = await _commandQuery.Send(new GetEmployeePageQuery
+        var res = await CommandQuery.Send(new GetEmployeePageQuery
         {
             Cursor = cursor,
             Direction = direction,
